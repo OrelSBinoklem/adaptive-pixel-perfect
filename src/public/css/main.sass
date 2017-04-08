@@ -1,0 +1,1006 @@
+.shab__main-menu-container
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    width: 120px
+    padding: 5px
+    box-sizing: border-box
+    z-index: 1
+
+.shab__main-menu-container >,
+.pmv__pages-window,
+.shab__main-menu-bottom-section,
+.pp__screenshots-files-menu-scrollwrap,
+.pp__resolutions-list-resolution-content,
+.pp__screenshot-content >,
+.pp__screenshots-menu-top-panel,
+.pp__resolutions-menu
+    .btn
+        border: none
+        border-radius: 0
+        box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5)
+    .form-control
+        border-radius: 0
+
+.pp__resolutions-screenshots-btn-size
+    border: none
+    border-radius: 0
+    box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5)
+
+.shab__main-menu-bottom-section
+    position: absolute
+    left: 0
+    bottom: 0
+    right: 0
+    padding: 5px
+    background-color: rgba(255,255,255,0.8)
+
+.shab__btn-open-groups-session
+    .caret
+        border-top: 0
+        border-bottom: 4px dashed
+
+.shab__add-group-session
+    display: none
+    position: absolute
+    bottom: 5px
+    right: 0
+
+.shab__session-groups-list.open
+    .shab__add-group-session
+        display: inline-block
+
+.shab__session-groups-list
+    position: relative
+    margin-bottom: 5px
+    border-bottom: 1px dashed #999
+    &.open
+        padding-bottom: 33px
+
+.shab__session-groups-list-item
+    display: none
+    position: relative
+    ~ .shab__session-groups-list-item
+        margin-top: 5px
+    &.active
+        display: block
+
+.shab__session-groups-list.open .shab__session-groups-list-item
+    display: block
+
+.shab__session-groups-list.open
+    .shab__session-groups-list-item
+        height: 40px
+
+.shab__session-groups-list-btn
+    font-weight: bold
+    text-align: left
+    &.active
+        box-shadow: inset 2px 0 0 0 #000
+
+.shab__session-groups-btn-drag
+    display: none
+
+.shab__session-groups-list.open .shab__session-groups-list-item:hover .shab__session-groups-btn-drag
+    display: inline-block
+    position: absolute
+    top: 0
+    right: 0
+    box-shadow: none
+
+.shab__session-groups-list .placeholder
+    margin-top: 5px
+    outline: #4183C4 dashed 1px
+
+.shab__main-menu-container .shab__session-groups-synchro-params-btn
+    display: none
+    position: absolute
+    left: 0
+    top: 20px
+    box-shadow: 0 2px 2px -1px rgba(0,0,0,0.5)
+    width: 22px
+    height: 20px
+    &.active
+        box-shadow: inset 0 -2px 0 0 #000
+    &[data-param="resolutions"]
+        left: 22px
+    &[data-param="iframe"]
+        left: 44px
+
+.shab__main-menu-container .shab__session-groups-delete-btn
+    display: none
+    position: absolute
+    right: 0
+    top: 20px
+    box-shadow: 0 2px 2px -1px rgba(0,0,0,0.5)
+    width: 22px
+    height: 20px
+    &.active
+        box-shadow: inset 0 -2px 0 0 #000
+
+.shab__session-groups-list.open
+    .shab__session-groups-synchro-params-btn, .shab__session-groups-delete-btn
+        display: inline-block
+
+#shab-add-group-session .form-group
+    margin-bottom: 0
+
+.shab__global-settings
+    display: none
+    position: fixed
+    top: 52px
+    left: 56px
+    z-index: 21
+    > .panel
+        box-shadow: -1px 1px 5px rgba(0,0,0,0.3)
+
+.pmv
+
+    &__select-page-open-list
+        margin-top: 30px
+        .caret
+            margin-left: 2px
+            border-left: 4px dashed
+            border-right: 0
+            border-top: 4px solid transparent
+            border-bottom: 4px solid transparent
+        &.active ~ .pmv__pages-window
+            display: block
+    &__pages
+        &-window
+            display: none
+            position: absolute
+            //+5 бордер правого контейнера
+            left: 125px
+            top: 0
+            bottom: 0
+            //+16 ширина скролла
+            width: 336px
+            box-shadow: 1px 0 5px 0 rgba(0,0,0,0.5), inset -16px 0 0 0 #ddd
+            background-color: #fff
+        &-top-menu
+            position: absolute
+            top: 0
+            left: 0
+            right: 16px
+            height: 45px
+            padding: 5px
+            box-sizing: border-box
+            border-bottom: 1px dashed #999
+        &-btn
+            &-collapsed.btn
+                display: none
+                position: absolute
+                top: 0
+                left: 0
+                box-shadow: none
+            &-page-group
+                position: absolute
+                top: 0
+                left: 100%
+                padding-left: 5px
+            &-delete-nested.btn, &-delete.btn, &-edit.btn
+                display: none
+                position: absolute
+                top: 0
+                right: 0
+                box-shadow: none
+            &-delete-nested.btn
+                right: 66px
+            &-delete.btn
+                right: 44px
+            &-edit.btn
+                right: 22px
+            &-drag.btn
+                display: none
+                position: absolute
+                top: 0
+                right: 0
+                box-shadow: none
+        &-item
+            margin-top: 5px
+            &-content
+                position: relative
+                &:hover
+                     > .pmv__pages-btn-drag,  > .pmv__pages-btn-delete, .pmv__pages-btn-edit
+                        display: block
+        &-sortable
+            padding: 5px
+            ul
+                width: 250px
+                ul
+                    margin-left: 30px
+            &-scrollwrap
+                position: absolute
+                top: 45px
+                left: 0
+                right: 16px
+                bottom: 0
+                .mCSB_outside+.mCSB_scrollTools
+                    right: -16px
+                    background-color: #fff
+            .placeholder
+                margin-top: 5px
+                outline: 1px dashed #4183C4
+            .btn
+                font-weight: bold
+                text-align: left
+                word-wrap: break-word
+                white-space: pre-wrap
+                &.active
+                    box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5), inset 0 -2px 0 0 #c00
+    &__add-page-group
+        position: absolute
+        top: 0
+        right: 0
+        padding: 5px
+
+.have-nested
+    > * > .pmv__pages-btn
+        &-page, &-group
+            padding-left: 25px
+    > * > .pmv__pages-btn-collapsed
+            display: inline-block
+    &.collapsed
+        > * > .pmv__pages-btn-collapsed
+            .glyphicon-minus
+                display: none
+            .glyphicon-plus
+                display: inline-block
+
+.pmv__pages-btn-collapsed
+    .glyphicon-plus
+        display: none
+
+.pmv__modal-urn, .pmv__modal-name
+    &-exists, &-empty
+        display: none
+.pmv__modal-empty
+    display: none
+
+#modal-pmv-add-page-href
+    .modal-body
+        padding-bottom: 0
+
+#shab__page-or-group-update
+    .shab__page-or-group__name
+        display: none
+
+.pp__select-resolution
+    position: relative
+    z-index: 2
+    margin: 6px 5px
+
+.shab-global-settings-generator
+    position: relative
+    z-index: 1
+    margin: 6px 5px
+
+.shab__top-menu .select-page .delete:hover,
+.shab__top-menu .select-group .delete:hover
+    color: #c00
+
+.pmv__update-iframe-btn
+    position: absolute
+    top: 86px
+    right: 5px
+    z-index: 1
+
+#loading
+    position: fixed
+    left: 0
+    top: 0
+    width: 0
+    height: 0
+    z-index: 1002
+    display: table!important
+    table-layout: fixed
+    background-color: rgba(0,0,0,0.7)
+    overflow: hidden
+    opacity: 0
+    -moz-transition: opacity .5s ease-in-out
+    -webkit-transition: opacity .5s ease-in-out
+    transition: opacity .5s ease-in-out
+    &, *
+        box-sizing: content-box
+    &.show
+      opacity: 1
+    .wrap
+        display: table-cell
+        text-align: center
+        vertical-align: middle
+    .content
+        position: relative
+        top: 50px
+        display: inline-block
+    .circle
+        -moz-border-bottom-colors: none
+        -moz-border-left-colors: none
+        -moz-border-right-colors: none
+        -moz-border-top-colors: none
+        -ms-animation: spinPulse 1s infinite ease-in-out 0s
+        animation: 1s ease-in-out 0s normal none infinite running spinPulse
+        background-color: rgba(0, 0, 0, 0)
+        border-color: rgba(0, 183, 229, 0.9) rgba(0, 0, 0, 0)
+        border-image: none
+        border-radius: 100px
+        border-style: solid
+        border-width: 10px
+        box-shadow: 0 0 70px #2187e7, 0 0 70px #2187e7
+        height: 100px
+        margin: 0 auto
+        opacity: 0.9
+        width: 100px
+    .circle1
+        -moz-border-bottom-colors: none
+        -moz-border-left-colors: none
+        -moz-border-right-colors: none
+        -moz-border-top-colors: none
+        -ms-animation: spinoffPulse 1s infinite linear 0s
+        animation: 1s linear 0s normal none infinite running spinoffPulse
+        background-color: rgba(0, 0, 0, 0)
+        border-color: rgba(0, 183, 229, 0.9) rgba(0, 0, 0, 0)
+        border-image: none
+        border-radius: 100px
+        border-style: solid
+        border-width: 10px
+        box-shadow: 0 0 30px #2187e7, 0 0 30px #2187e7
+        height: 60px
+        margin: 0 auto
+        opacity: 0.9
+        position: relative
+        top: -100px
+        width: 60px
+
+@-ms-keyframes spinPulse
+    0%
+        -ms-transform: rotate(160deg)
+        opacity: 0
+        box-shadow: 0 0 1px #2187e7
+        //можно попробовать 2 задать
+    50%
+        -ms-transform: rotate(145deg)
+        opacity: 1
+    100%
+        -ms-transform: rotate(-320deg)
+        opacity: 0
+
+@keyframes spinPulse
+    0%
+        transform: rotate(160deg)
+        opacity: 0
+        box-shadow: 0 0 1px #2187e7
+        //можно попробовать 2 задать
+    50%
+        transform: rotate(145deg)
+        opacity: 1
+    100%
+        transform: rotate(-320deg)
+        opacity: 0
+
+@-ms-keyframes spinoffPulse
+    0%
+        -ms-transform: rotate(0deg)
+    100%
+        -ms-transform: rotate(360deg)
+
+@keyframes spinoffPulse
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+
+/********************************************/
+/*Пиксель перфект*/
+/********************************************/
+.mnif
+    &__navigator-window
+        height: 110px
+
+.pp__resolutions-menu
+    margin-top: 5px
+    border-top: 1px dashed #999
+
+.pp__resolutions-list
+    margin-top: 5px
+    &-item
+        margin-bottom: 5px
+        &-content
+            position: relative
+    .pp__resolution-name-btn
+        text-align: left
+        font-weight: bold
+        &-w, &-h
+            width: 36px
+            display: inline-block
+        &-w
+            margin-left: 10px
+            text-align: right
+    .pp__resolutions-open-screenshots-btn
+        position: absolute
+        right: 0
+        top: 0
+        box-shadow: 0 2px 2px -1px rgba(0,0,0,0.5)
+        width: 22px
+        height: 20px
+        font-size: 9px
+
+.pp__btn-open-screenshots
+    margin-top: 15px
+
+.pp__screenshots-menu-window
+    display: none
+    position: absolute
+    left: 125px
+    top: 0
+    bottom: 0
+    width: 483px
+    box-shadow: inset -16px 0 0 0 #ddd
+    background-color: #fff
+    &.open
+        display: block
+
+.pp__screenshots-menu-top-panel
+    position: absolute
+    top: 0
+    left: 0
+    right: 16px
+    height: 45px
+    padding: 5px
+    box-sizing: border-box
+    border-bottom: 1px dashed #999
+
+.pp__screenshots-menu-scrollwrap
+    position: absolute
+    left: 0
+    right: 16px
+    top: 45px
+    bottom: 0
+    .mCSB_outside+.mCSB_scrollTools
+        right: -16px
+        background-color: #fff
+
+.pp__add-resolution-btn
+    position: absolute
+    top: 5px
+    right: 5px
+
+.pp__resolutions-screenshots-list
+    padding: 5px
+    .placeholder
+        margin-top: 5px
+        outline: 1px dashed #4183C4
+
+.pp__resolutions-list-resolution
+    .pp__resolutionforscreen-name-btn
+        width: 110px
+        margin-top: 5px
+        text-align: left
+        font-weight: bold
+        &-w, &-h
+            width: 36px
+            display: inline-block
+        &-w
+            margin-left: 10px
+            text-align: right
+    .pp__resolutions-drag-btn, .pp__resolutions-delete-btn
+        display: none
+        position: absolute
+        right: 0
+        top: 0
+        box-shadow: none
+        width: 22px
+        height: 20px
+    .pp__resolutions-delete-btn
+        right: 22px
+
+.pp__resolutions-list-resolution-content
+    position: relative
+    width: 110px
+    &:hover
+        .pp__resolutions-drag-btn, .pp__resolutions-delete-btn
+            display: block
+
+//скриншоты
+.pp__resolutions-list-screenshots
+    margin-top: 5px
+    margin-left: 30px
+    min-height: 5px
+    .btn
+        font-weight: bold
+        text-align: left
+        word-wrap: break-word
+        white-space: pre-wrap
+
+.pp__screenshot-name-btn
+    margin-top: 5px
+    &-w, &-h
+        display: inline-block
+        width: 36px
+    &-w
+        text-align: right
+    &.active
+        box-shadow: inset 2px 0 0 0 #000, 1px 1px 4px 0 rgba(0,0,0,0.5)
+
+.pp__resolutions-screenshots
+    &-btn-size.btn
+        margin: 0 -5px 0 5px
+        box-shadow: 0 -1px 0 0 #fff, 0 1px 0 0 #fff, -1px 0 0 0 #333
+        float: right
+        padding: 0 0 0 5px
+        background: #fff
+    &-delete-btn.btn, &-drag-btn.btn, &-btn-deviation.btn
+        display: none
+        position: absolute
+        right: 0
+        top: 0
+        box-shadow: none
+        width: 22px
+        height: 20px
+    &-drag-btn.btn
+        right: 22px
+    &-delete-btn.btn
+        right: 44px
+
+.pp__screenshot-content
+    position: relative
+    &:hover
+        .pp__resolutions-screenshots
+            &-delete-btn.btn, &-drag-btn.btn, &-btn-deviation.btn
+                display: block
+
+.pp__deviation
+    display: none
+    position: absolute
+    top: 15px
+    right: 117px
+    width: 264px
+    z-index: 1
+    &.open
+        display: block
+    .btn-group-table > .btn-group > .btn,
+    .pp__deviation-fixed-or-static.btn-group-vertical .btn
+        border-radius: 0
+        -webkit-box-shadow: none
+        box-shadow: none
+    .btn-group-table .btn-group ~ .btn-group .btn
+        border-top-width: 0
+    .btn-group-table .btn-group .btn ~ .btn
+        border-left-width: 0
+    .row-otklonenie
+        &-1, &-2
+            .ui-spinner
+                margin: 0
+                padding: 0
+                border: none
+                border-radius: 0
+            .ui-spinner-button
+                display: none
+            .ui-spinner-input
+                margin: 0
+
+.pp__deviation-static .btn-group ~ .btn-group .btn
+    border-style: dashed
+.sm-scrin .pp__deviation-relative
+    width: 100%
+.pp__deviation
+    &-fixed-or-static
+        width: 100%
+        .btn
+            text-align: center
+            font-weight: normal
+    .row-otklonenie-1,
+    .row-otklonenie-2
+        padding-top: 15px
+.pp__deviation-col
+    &-left
+        position: relative
+        padding-right: 8px
+    &-right
+        position: relative
+        padding-left: 7px
+.row-name-px-percent
+    .pp__deviation-col-left:after
+        content: ""
+        position: absolute
+        bottom: 0
+        right: -7px
+        width: 15px
+        border-bottom: 1px solid #999
+    .pp__deviation-col-left:before
+        content: ""
+        position: absolute
+        top: 100%
+        right: 0
+        height: 90px
+        border-right: 1px solid #999
+    p
+        margin-top: 15px
+        margin-bottom: 0
+        padding-bottom: 5px
+        text-align: center
+        font-weight: bold
+        border-bottom: 1px solid #999
+.pp__deviation .panel-body
+    padding: 15px
+
+/*Список файлов скриншотов*/
+.pp__screenshots-files
+    &-menu-scrollwrap
+        display: none
+        position: absolute
+        //125+336  +  147
+        left: 608px
+        top: 0
+        bottom: 0
+        width: 336px
+        box-shadow: inset -16px 0 0 0 #ddd
+        background-color: #fff
+        padding: 5px 21px 5px 5px
+        z-index: 1
+        &.open
+            display: block
+        .mCSB_outside+.mCSB_scrollTools
+            right: 0
+            background-color: #fff
+        &-shadow
+            display: none
+            position: absolute
+            left: 934px
+            top: 0
+            bottom: 0
+            width: 10px
+            box-shadow: 1px 0 5px 0 rgba(0,0,0,0.5)
+        &.open + &-shadow
+            display: block
+
+.pp
+    &__verstka-design
+        margin-top: 15px
+        .btn
+            padding-left: 0
+            padding-right: 0
+    &__screenshots
+        &-btn
+            &-collapsed.btn, &-add-screenshot.btn
+                display: none
+                position: absolute
+                top: 0
+                left: 0
+                width: 22px
+                height: 20px
+                box-shadow: none
+            &-add-screenshot.btn
+                left: auto
+                right: 0
+            &-file
+                //padding-right: 97px
+            &-size
+                &.btn
+                    margin: 0 -5px 0 5px
+                    //box-shadow: -1px 0 0 0 #333, 0 1px 0 0 #333, -1px 1px 0 0 #333
+                    box-shadow: 0 -1px 0 0 #fff, 0 1px 0 0 #fff, -1px 0 0 0 #333
+                    float: right
+                    padding: 0 0 0 5px
+                    background: #fff
+                &-w, &-h
+                    display: inline-block
+                    width: 36px
+                &-w
+                    text-align: right
+        &-item
+            z-index: 3
+            margin-top: 5px
+            width: 250px
+            &-content
+                position: relative
+                &:hover >
+                    .pp__screenshots-btn-add-screenshot.btn
+                        display: block
+        &-files-menu-scrollwrap
+            ul
+                width: 250px
+                ul
+                    margin-left: 30px
+            .placeholder
+                margin-top: 5px
+                outline: 1px dashed #4183C4
+            .btn
+                font-weight: bold
+                text-align: left
+                word-wrap: break-word
+                white-space: pre-wrap
+                &.active
+                    box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5), inset 0 -2px 0 0 #c00
+
+.have-nested
+    > * > .pp__screenshots-btn
+        &-folder
+            padding-left: 25px
+    > * > .pp__screenshots-btn-collapsed
+        display: inline-block
+    &.collapsed
+        > * > .pp__screenshots-btn-collapsed
+            .glyphicon-minus
+                display: none
+            .glyphicon-plus
+                display: inline-block
+
+.pp__screenshots-btn-collapsed
+    .glyphicon-plus
+        display: none
+
+//Миниатюрка
+.pp__screenshot-thumbnail
+    &-scrollwrap
+        display: none
+        position: absolute
+        //125+336+336  +  147
+        left: 944px
+        top: 0
+        bottom: 0
+        width: 336px
+        box-shadow: inset -16px 0 0 0 #ddd
+        background: url("../js/mylib/pixel-perfect/img/fon-for-png.png")
+        z-index: 1
+        &.open
+            display: block
+        .mCSB_outside+.mCSB_scrollTools
+            right: 0
+            background-color: #fff
+        &-shadow
+            display: none
+            position: absolute
+            left: 1270px
+            top: 0
+            bottom: 0
+            width: 10px
+            box-shadow: 1px 0 5px 0 rgba(0,0,0,0.5)
+        &.open + &-shadow
+            display: block
+
+#pp__modal-add-resolution
+    .pp__modal-val
+        &-exists, &-not-digit
+            margin-bottom: 0
+            display: none
+
+.pp__modal-add-resolution-errors
+    margin-bottom: 0
+
+/*Для выподающего списка групп*/
+
+.shab-right-column
+    position: fixed
+    top: 0
+    left: 120px
+    right: 0
+    bottom: 0
+    overflow: hidden
+    box-sizing: border-box
+    border-left: 5px solid #000
+    -moz-user-select: none
+    -khtml-user-select: none
+    -webkit-user-select: none
+    -o-user-select: none
+    -ms-user-select: none
+    user-select: none
+
+#wrap_iframe
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    overflow: hidden
+    -moz-user-select: none
+    -khtml-user-select: none
+    -webkit-user-select: none
+    -o-user-select: none
+    -ms-user-select: none
+    user-select: none
+
+#wrap_iframe .pp_wrap-hidden-scroll
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
+#PP_iframe
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
+.shab-general-window
+    position: fixed
+    left: 0
+    top: 0
+    width: 480px
+    bottom: 0
+    z-index: 20
+    box-sizing: border-box
+
+.shab-general-window__top
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    height: 126px
+    background-color: #fff
+    z-index: 11
+
+.shab-general-window__bottom
+    position: absolute
+    left: 0
+    right: 0
+    top: 126px
+    bottom: 0
+    border-top: 5px solid #000
+    box-sizing: border-box
+
+.shab-general-window__bottom > .wrap
+    width: 100%
+    height: 100%
+    position: relative
+
+/*Для выподающего списка групп 'конец'*/
+
+.clear
+    clear: both
+
+/*для теста*/
+
+.shab-general-window__bottom .wrap pre
+    position: absolute
+    width: 100%
+    left: 0
+    top: 47px
+    right: 0
+    bottom: 0
+    background-color: white
+    overflow: auto
+    z-index: 100000
+
+/*LESS*/
+/*Класс "fa" - дополнительные иконки*/
+
+/*Посветка кнопок "btn-toggle-one-color" и атрибут каждой кнопке ""*/
+
+/*Селекты - плагин "selectpicker"*/
+
+/*Класс "btn-group-table" чтоб расположить кнопки в виде таблицы*/
+
+.btn-group-table > .btn-group:last-child:not(:first-child) > .btn
+    border-top-left-radius: 0
+    border-top-right-radius: 0
+
+.btn-group-table > .btn-group:not(:first-child):not(:last-child):not(.dropdown-toggle) > .btn
+    border-radius: 0
+
+.btn-group-table > .btn-group:first-child:not(:last-child):not(.dropdown-toggle) > .btn
+    border-bottom-left-radius: 0
+    border-bottom-right-radius: 0
+
+/*инпут с ошибкой*/
+
+.input-error
+    border-color: #a94442
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+
+.input-error:focus
+    border-color: #843534
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483
+/*Многоуровневое dropdown меню*/
+.dropdown-submenu
+    position: relative
+
+.dropdown-submenu > .dropdown-menu
+    top: 0
+    left: 100%
+    margin-top: -6px
+    margin-left: -1px
+    -webkit-border-radius: 0 6px 6px 6px
+    -moz-border-radius: 0 6px 6px 6px
+    border-radius: 0 6px 6px 6px
+
+.shab-ls__item-document:nth-of-type(n + 9) > .dropdown-menu
+    margin-top: auto
+    margin-bottom: -6px
+    top: auto
+    bottom: 0
+    -webkit-border-radius: 6px 6px 6px 0
+    -moz-border-radius: 6px 6px 6px 0
+    border-radius: 6px 6px 6px 0
+
+.dropdown-submenu:hover>.dropdown-menu
+    display: block
+
+.dropdown-submenu>a:after
+    display: block
+    content: " "
+    float: right
+    width: 0
+    height: 0
+    border-color: transparent
+    border-style: solid
+    border-width: 5px 0 5px 5px
+    border-left-color: #ccc
+    margin-top: 5px
+    margin-right: -10px
+
+.dropdown-submenu:hover>a:after
+    border-left-color: #fff
+
+.dropdown-submenu.pull-left
+    float: none
+
+.dropdown-submenu.pull-left>.dropdown-menu
+    left: -100%
+    margin-left: 10px
+    -webkit-border-radius: 6px 0 6px 6px
+    -moz-border-radius: 6px 0 6px 6px
+    border-radius: 6px 0 6px 6px
+
+/*Чёрная кнопка*/
+.btn-inverse.active
+    color: rgba(255, 255, 255, 0.75)
+
+.btn-inverse
+    color: #fff
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25)
+    background-color: #363636
+    *background-color: #222
+    background-image: -moz-linear-gradient(top, #444, #222)
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#444), to(#222))
+    background-image: -webkit-linear-gradient(top, #444, #222)
+    background-image: -o-linear-gradient(top, #444, #222)
+    background-image: linear-gradient(to bottom, #444, #222)
+    background-repeat: repeat-x
+    border-color: #222 #222 #000
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff444444', endColorstr='#ff222222', GradientType=0)
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)
+
+.btn-inverse:hover,
+.btn-inverse:focus,
+.btn-inverse:active,
+.btn-inverse.active,
+.btn-inverse.disabled,
+.btn-inverse[disabled]
+    color: #fff
+    background-color: #222
+    background-color: #151515
+
+.btn-inverse:active,
+.btn-inverse.active
+    background-color: #080808
+
+.btn-group.open .btn-inverse.dropdown-toggle
+    background-color: #222
+
+.btn-inverse .caret
+    border-top-color: #fff
+    border-bottom-color: #fff
+
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus
+    outline: none
+
+.btn-yellow
+    background-color: #ffff00
+
+.btn-yellow:hover,
+.btn-yellow:focus,
+.btn-yellow:active,
+.btn-yellow.active,
+.btn-yellow.disabled,
+.btn-yellow[disabled]
+    background-color: #ee0
+
+.btn-yellow.active.focus, .btn-yellow.active:focus, .btn-yellow.focus, .btn-yellow:active.focus, .btn-yellow:active:focus
+    background-color: #dd0

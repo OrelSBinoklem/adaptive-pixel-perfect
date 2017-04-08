@@ -1,0 +1,21 @@
+=rif-w-h()
+    background: transparent
+    border-radius: 0
+    width: 75px
+    text-align: right
+    box-shadow: none
+    color: #000
+    border-color: #adadad
+
+.rif-show-dimensions
+    display: none
+    position: absolute
+    opacity: 0.7
+    box-sizing: border-box
+    &.panel-primary
+        border-radius: 0
+    .rif
+        &-width, &-height
+            +rif-w-h()
+            &:hover, &:active
+                +rif-w-h()
