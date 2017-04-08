@@ -1,8 +1,12 @@
 {
   "name": "adaptive-pixel-perfect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pixel perfect for multiple resolutions",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OrelSBinoklem/adaptive-pixel-perfect.git"
+  },
   "directories": {
     "test": "tests"
   },
@@ -18,7 +22,7 @@
     "pixelperfect",
     "browsersync"
   ],
-  "author": "OrelSBinoklem",
+  "author": "orel-s-binoklem",
   "license": "MIT",
   "dependencies": {
     "del": "^2.2.2",
