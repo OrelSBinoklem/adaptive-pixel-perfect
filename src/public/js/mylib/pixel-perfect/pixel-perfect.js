@@ -1,7 +1,7 @@
 (function($){//Модули: malihu-custom-scrollbar
 
 var defaultOptions = {
-    dirScrins: "design-screenshots",
+    dirScrins: "a-pp-design-screenshots",
     nameIFrame: "PP_iframe"
 };
 

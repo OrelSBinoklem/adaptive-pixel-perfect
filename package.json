@@ -1,6 +1,6 @@
 {
   "name": "adaptive-pixel-perfect",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Pixel perfect for multiple resolutions",
   "main": "index.js",
   "repository": {
@@ -13,7 +13,8 @@
   "files": [
     "index.js",
     "lib",
-    "public"
+    "public",
+    "default-settings"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -37,7 +38,9 @@
     "through2": "^2.0.3"
   },
   "devDependencies": {
-    "browser-sync": "~2.13.0",
+    "browser-sync": "^2.18.8",
+    "express-http-proxy": "^0.11.0",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean-css": "^2.0.13",
     "gulp-concat": "^2.6.1",

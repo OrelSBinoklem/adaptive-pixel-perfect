@@ -5,6 +5,11 @@ var crossModulesFunctions = {};
 jQuery(function($) {
     var session;
     var socket = io.connect('/');
+    var browserSyncPort = undefined;
+
+    socket.once("browserSyncPort", function(bsp) {
+        browserSyncPort = bsp;
+    });
 
     socket.once('session.load', function (data) {
         session = new modules.sessionModel(data, socket);
@@ -1148,7 +1153,7 @@ jQuery(function($) {
         /****************************************************/
         (function() {
             pixelPerfect = new modules.pixelPerfect($("#wrap_iframe .pmv-fitting-wrap"), {
-                dirScrins: "design-screenshots",
+                dirScrins: "a-pp-design-screenshots",
                 nameIFrame: "PP_iframe"
             });
 
@@ -1902,7 +1907,6 @@ jQuery(function($) {
             $(".pp__screenshots-files-menu-scrollwrap").on("mouseenter", " .pp__screenshots-item[data-type='file']", function(){
                 $(".pp__screenshot-thumbnail")
                     .empty()
-                    .append('<img src="'+("/design-screenshots/design-thumbnails/"+$(this).attr("data-urn"))+'" width="320" height="auto" />');
                 $(".pp__screenshot-thumbnail-scrollwrap").addClass("open");
                 $(".pp__screenshots-files-menu-scrollwrap").addClass("shadow-hidden");
             });
@@ -1922,6 +1926,18 @@ jQuery(function($) {
                 }
             });
         })();
+
+        //Рероутим скрипт browserSync
+        pageManagerVisualizator.$container.on("pmv.load.iframe", function() {
+            if(browserSyncPort !== undefined) {
+                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("script[src]").each(function() {
+                    console.log($(this).attr("src"));
+                    if(/^\/browser-sync\/browser-sync-client.js\?v=/gim.test($(this).attr("src"))) {
+                        $(this).attr("src", $(this).attr("src").replace(/^\/browser-sync\/browser-sync-client.js\?v=/gim, "http://localhost:"+browserSyncPort+"/browser-sync/browser-sync-client.js?v="));
+                    }
+                });
+            }
+        });
 
         //Первое применение сессии
         crossModulesFunctions["session.applyAllParamsLocalSession"](false);

@@ -156,8 +156,6 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
         $container.append('<div class="pmv-outer-wrap"><div class="pmv-fitting-wrap"></div></div>');
         $container.append('<div class="pmv-container-bl"></div><div class="pmv-container-bb"></div><div class="pmv-container-br"></div>');
         //Получем список страниц
-        ____.localSession = sessionModel.getLocalSessionParams();
-        options.pageList = {};
     }
     
     this.selectPage = function(href) {
@@ -183,67 +181,6 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     
     this._destroyIFrame = function() {
         $( '#'+(____._options.nameIFrame) ).remove();
-    }
-    
-    this._saveSession = function() {
-        /*if( "$session" in ____ ) {
-            //Сохраняем страницы (синхронизируем pageList и xml)
-                var $pages = ____.$session.find( " pages" );
-                var pre_href;
-                //вставляем которых нет в xml
-                for(var href in ____._options.pageList) {
-                    var page = ____._options.pageList[href];
-                    
-                    var $page = $pages.find( "page[href='"+(href)+"']" );
-                    if( $page.size() ) {
-                        $page.attr( "active", page.active );
-                    } else {
-                        if( pre_href ) {
-                            var $page = $pages.find( "page[href='"+(pre_href)+"']" );
-                            $page.after( '<page href="'+(href)+'" active="'+(page.active)+'" />' );
-                        } else {
-                            $pages.append( '<page href="'+(href)+'" active="'+(page.active)+'" />' );
-                        }
-                    }
-                    pre_href = href;
-                }
-                //удаляем которых нет в pageList
-                $pages.find( " page" ).each(function(){
-                    if( !($(this).attr( "href" ) in ____._options.pageList) ) {
-                        $(this).remove();
-                    }
-                });
-            
-            //Сохраняем состояние iFrame (если он есть)
-            if( ____._options.nameIFrame in window ) {
-                var $thisPage = ____.$session.find( "pages page[href='"+(____.lastLoadPage)+"']" );
-                if( $thisPage.size() ) {
-                    var iframe = window[____._options.nameIFrame];
-                    var $iframe = $("#"+(____._options.nameIFrame));
-                    var $fittingWrap = $iframe.closest(".pmv-fitting-wrap");
-                    
-                    $thisPage
-                        .attr( "scrolltop", Math.round( $(iframe.window).scrollTop() || 0) )
-                        .attr( "scrollleft",  Math.round( $(iframe.window).scrollLeft() || 0) )
-                        .attr( "l", Math.round( $fittingWrap.position().left) )
-                        .attr( "t", Math.round( $fittingWrap.position().top) )
-                        .attr( "w", Math.round( $fittingWrap.width()) )
-                        .attr( "h", Math.round( $fittingWrap.height()) );
-                }
-            }
-            
-            //'<\?xml version="1.0" encoding="UTF-8"\?>'+
-            var resxml = ____.$session.xml().join('');
-            
-            //Записываем в файл
-            $.ajax({
-                url: "sb.php",
-                async: true,
-                cache: false,
-                type: "POST",
-                data: ({module: 'setfile', dir: ____._options.urlXML, file_text: resxml, text_encoding: 'UTF-8'})
-            });
-        }*/
     }
 }
 
