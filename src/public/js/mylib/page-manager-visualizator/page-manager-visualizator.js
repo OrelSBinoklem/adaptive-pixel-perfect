@@ -52,7 +52,12 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     });
 
     this.setSizeIFrame = function( w, source_h, fast ) {
-        var $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
+        var $fittingWrap;
+        if($("#"+(____._options.nameIFrame)).length) {
+            $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
+        } else {
+            $fittingWrap = $container.find(" .pmv-fitting-wrap");
+        }
 
         var h;
 
@@ -102,8 +107,16 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
 
     this.setPositionIFrame = function(l_factor, t_factor) {
         var $iframe = $("#" + (____._options.nameIFrame));
-        var $fittingWrap = $iframe.closest(".pmv-fitting-wrap");
-        var $outerWrap = $iframe.closest(".pmv-outer-wrap");
+        var $fittingWrap;
+        var $outerWrap;
+        if($iframe.length) {
+            $fittingWrap = $iframe.closest(".pmv-fitting-wrap");
+            $outerWrap = $iframe.closest(".pmv-outer-wrap");
+        } else {
+            $fittingWrap = $container.find(" .pmv-fitting-wrap");
+            $outerWrap = $container.find(" .pmv-outer-wrap");
+        }
+
         var w, h, w_c, h_c, l, t;
 
         w = $fittingWrap.width();

@@ -997,28 +997,26 @@ jQuery(function($) {
                 var $main = $(".pp__resolutions-list");
                 $main.empty();
 
-                if(localSession && "pages" in localSession && localSession.pages.currentPage !== null) {
-                    var res = (function recursion(resolutions, html) {
-                        for(var i in resolutions) {
-                            var one = resolutions[i];
-                            var w = one.w;
-                            var h = one.h;
-                            var active = (localSession && "resolutions" in localSession && localSession.resolutions.currentResolution.w === w && localSession.resolutions.currentResolution.h === h)?"active":"";
-                            html += "<li class='pp__resolutions-list-item' data-w='"+w+"' data-h='"+h+"'>";
-                            html += '<div class="pp__resolutions-list-item-content">' +
-                                '<button class="btn btn-default btn-xs btn-block pp__resolution-name-btn '+active+'">' +
-                                '<span class="pp__resolution-name-btn-w">'+w+'</span> | <span class="pp__resolution-name-btn-h">'+h+'</span>' +
-                                '</button>' +
-                                '</div>';
+                var res = (function recursion(resolutions, html) {
+                    for(var i in resolutions) {
+                        var one = resolutions[i];
+                        var w = one.w;
+                        var h = one.h;
+                        var active = (localSession && "resolutions" in localSession && localSession.resolutions.currentResolution.w === w && localSession.resolutions.currentResolution.h === h)?"active":"";
+                        html += "<li class='pp__resolutions-list-item' data-w='"+w+"' data-h='"+h+"'>";
+                        html += '<div class="pp__resolutions-list-item-content">' +
+                            '<button class="btn btn-default btn-xs btn-block pp__resolution-name-btn '+active+'">' +
+                            '<span class="pp__resolution-name-btn-w">'+w+'</span> | <span class="pp__resolution-name-btn-h">'+h+'</span>' +
+                            '</button>' +
+                            '</div>';
 
-                            html += "</li>";
-                        }
+                        html += "</li>";
+                    }
 
-                        return html;
-                    })(session.data.globalSession.resolutions, "");
+                    return html;
+                })(session.data.globalSession.resolutions, "");
 
-                    $main.append(res);
-                }
+                $main.append(res);
             }
 
             /****************************************************/
@@ -1062,28 +1060,37 @@ jQuery(function($) {
 
             //Запись и отправка данных сессии
             function sendScrollIFrame() {
-                var iframe = window[pageManagerVisualizator._options.nameIFrame];
-                var wWindow, wDocument, leftScroll, l_factor, hWindow, hDocument, topScroll, t_factor;
+                if(window[pageManagerVisualizator._options.nameIFrame] !== undefined) {
+                    var iframe = window[pageManagerVisualizator._options.nameIFrame];
+                    var wWindow, wDocument, leftScroll, l_factor, hWindow, hDocument, topScroll, t_factor;
 
-                wWindow = $(iframe.window).width();
-                wDocument = $(iframe.document).width();
-                hWindow = $(iframe.window).height();
-                hDocument = $(iframe.document).height();
-                topScroll = $(iframe.window).scrollTop();
-                leftScroll = $(iframe.window).scrollLeft();
+                    wWindow = $(iframe.window).width();
+                    wDocument = $(iframe.document).width();
+                    hWindow = $(iframe.window).height();
+                    hDocument = $(iframe.document).height();
+                    topScroll = $(iframe.window).scrollTop();
+                    leftScroll = $(iframe.window).scrollLeft();
 
-                if(wDocument - wWindow == 0){l_factor = 0} else {l_factor = leftScroll / (wDocument - wWindow)}
-                if(hDocument - hWindow == 0){t_factor = 0} else {t_factor = topScroll / (hDocument - hWindow)}
+                    if(wDocument - wWindow == 0){l_factor = 0} else {l_factor = leftScroll / (wDocument - wWindow)}
+                    if(hDocument - hWindow == 0){t_factor = 0} else {t_factor = topScroll / (hDocument - hWindow)}
 
-                session.onScrollIFrame({
-                    left: l_factor,
-                    top: t_factor
-                });
+                    session.onScrollIFrame({
+                        left: l_factor,
+                        top: t_factor
+                    });
+                }
             }
             function sendChangePosIFrame() {
                 var $iframe = $("#" + (pageManagerVisualizator._options.nameIFrame));
-                var $fittingWrap = $iframe.closest(".pmv-fitting-wrap");
-                var $outerWrap = $iframe.closest(".pmv-outer-wrap");
+                var $fittingWrap;
+                var $outerWrap;
+                if($iframe.length) {
+                    $fittingWrap = $iframe.closest(".pmv-fitting-wrap");
+                    $outerWrap = $iframe.closest(".pmv-outer-wrap");
+                } else {
+                    $fittingWrap = pageManagerVisualizator.$container.find(" .pmv-fitting-wrap");
+                    $outerWrap = pageManagerVisualizator.$container.find(" .pmv-outer-wrap");
+                }
                 var w, h, w_c, h_c, l, t, l_factor, t_factor;
 
                 w = $fittingWrap.width();
@@ -1102,7 +1109,12 @@ jQuery(function($) {
                 });
             }
             function sendResizeIFrame() {
-                var $fittingWrap = $("#"+(pageManagerVisualizator._options.nameIFrame)).closest(".pmv-fitting-wrap");
+                var $fittingWrap;
+                if($("#"+(pageManagerVisualizator._options.nameIFrame)).length) {
+                    $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
+                } else {
+                    $fittingWrap = pageManagerVisualizator.$container.find(" .pmv-fitting-wrap");
+                }
                 lastSizeIFrame = {
                     w: $fittingWrap.width(),
                     h: $fittingWrap.height()
