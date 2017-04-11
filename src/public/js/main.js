@@ -1907,6 +1907,7 @@ jQuery(function($) {
             $(".pp__screenshots-files-menu-scrollwrap").on("mouseenter", " .pp__screenshots-item[data-type='file']", function(){
                 $(".pp__screenshot-thumbnail")
                     .empty()
+                    .append('<img src="'+("/a-pp-design-screenshots/design-thumbnails/"+$(this).attr("data-urn"))+'?a-pp=1" width="320" height="auto" />');
                 $(".pp__screenshot-thumbnail-scrollwrap").addClass("open");
                 $(".pp__screenshots-files-menu-scrollwrap").addClass("shadow-hidden");
             });
@@ -1931,7 +1932,7 @@ jQuery(function($) {
         pageManagerVisualizator.$container.on("pmv.load.iframe", function() {
             if(browserSyncPort !== undefined) {
                 $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("script[src]").each(function() {
-                    console.log($(this).attr("src"));
+                    //console.log($(this).attr("src"));
                     if(/^\/browser-sync\/browser-sync-client.js\?v=/gim.test($(this).attr("src"))) {
                         $(this).attr("src", $(this).attr("src").replace(/^\/browser-sync\/browser-sync-client.js\?v=/gim, "http://localhost:"+browserSyncPort+"/browser-sync/browser-sync-client.js?v="));
                     }

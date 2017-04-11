@@ -29,8 +29,6 @@ var pixelPerfect = function($container, options) {
                 ____._refreshByResizeDocument();
             }
         }, 1000);
-
-        //____.showPageProofsOrDesign( parseInt(____.$session.find( "show_page_proofs_or_design" ).text()) );
     }
     
     this._destroy = function() {
@@ -137,7 +135,7 @@ var pixelPerfect = function($container, options) {
                     <div class="pp-screen-design pp-screen-'+((s.pos == "static")?"static":"fixed")+'">\
                         <div style="left: '+(s.lper + l)+'%; top: '+(s.tper + t)+'%;" class="pp-wrap-deviation-percent">\
                             <div style="width: ' + sizeScrins[s.urn].w + 'px; height: ' + sizeScrins[s.urn].h + 'px; left: ' + s.lpx + 'px; top: ' + s.tpx + 'px;" class="pp-wrap-deviation-pixels">\
-                                <img src="'+(____._options.dirScrins + "/" + s.urn)+'" style="width: ' + sizeScrins[s.urn].w + 'px; height: ' + sizeScrins[s.urn].h + 'px; left: ' + l_img + '%; top: ' + t_img + '%;"/>\
+                                <img src="'+(____._options.dirScrins + "/" + s.urn)+'?a-pp=1" style="width: ' + sizeScrins[s.urn].w + 'px; height: ' + sizeScrins[s.urn].h + 'px; left: ' + l_img + '%; top: ' + t_img + '%;"/>\
                             </div>\
                         </div>\
                     </div>';

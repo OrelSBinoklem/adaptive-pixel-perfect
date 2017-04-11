@@ -62,7 +62,6 @@ gulp.task('index.html', function () {
 
 mkdirp('public/design-thumbnails', function (err) {
     if (err) console.error(err)
-    else console.log('pow!')
 });
 
 /*gulp.task('style:build', function () {
