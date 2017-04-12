@@ -14,19 +14,26 @@ var gulp = require('gulp'),
     //rimraf = require('rimraf'),
     //concat = require('gulp-concat'),
     //concatCss = require('gulp-concat-css'),
-    //through2 = require('through2').obj,
+    through2 = require('through2').obj,
     changed = require('gulp-changed'),
 	mkdirp = require('mkdirp'),
     plumber = require('gulp-plumber');
 
 gulp.task('style', function () {
-    gulp.src("src/public/**/*.sass") //Выберем наш main.scss
+    gulp.src("src/public/**/*.sass")
+        .pipe(plumber())
         .pipe(changed("public", {extension: '.css'}))
         .pipe(sourcemaps.init())
         .pipe(sass()) //Скомпилируем
         //.pipe(prefixer()) //Добавим вендорные префиксы
         .pipe(cssmin()) //Сожмем
         .pipe(sourcemaps.write("."))
+        .pipe(through2(function(file, enc, callback){//Добавим к пути мап файлов ?a-pp=1
+            if(!/.map/.test(file.extname)) {
+                file.contents = new Buffer(file.contents.toString().replace(/(\.css\.map)([\S\s]{1,3}$)/gim, "$1?a-pp=1$2"));
+                callback(null, file);
+            }
+        }))
         .pipe(gulp.dest("public"));
 });
 
@@ -44,6 +51,12 @@ gulp.task('js', function () {
         .pipe(sourcemaps.init())
         .pipe(uglify()) //Сожмем наш js
         .pipe(sourcemaps.write('.'))
+        .pipe(through2(function(file, enc, callback){//Добавим к пути мап файлов ?a-pp=1
+            if(!/.map/.test(file.extname)) {
+                file.contents = new Buffer(file.contents.toString().replace(/(\.js\.map)([\S\s]{1,3}$)/gim, "$1?a-pp=1$2"));
+                callback(null, file);
+            }
+        }))
         .pipe(gulp.dest("public"));
 });
 
