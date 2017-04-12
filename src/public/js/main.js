@@ -437,8 +437,22 @@ jQuery(function($) {
                 $('.pmv__modal-add-page-content').removeClass("has-error");
 
                 if(pageManagerVisualizator._options.nameIFrame in window) {
-                    //отделить домен от urn
-                    $('#modal-pmv-add-page-href .pmv-href').val( window[pageManagerVisualizator._options.nameIFrame].window.location.href );
+                    //Отделение домена от urn
+                    var href = window[pageManagerVisualizator._options.nameIFrame].window.location.href;
+                    var hrefObj = str.parsingUrl(href);
+                    var urn = "";
+                    urn += hrefObj.protocol + "//" + hrefObj.domain;
+                    if(hrefObj.port !== null) {
+                        urn += ":" + hrefObj.port;
+                    }
+                    urn = $.trim(href.substring(urn.length));
+                    if(/^\//gim.test(urn)) {
+                        urn = urn.substring(1);
+                    }
+                    if(urn == "") {
+                        urn = "/";
+                    }
+                    $('#modal-pmv-add-page-href .pmv-href').val( urn );
                 }
                 $('#modal-pmv-add-page-href .modal').modal('show');
             });
