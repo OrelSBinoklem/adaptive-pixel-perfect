@@ -1123,6 +1123,7 @@ jQuery(function($) {
                 });
             }
             function sendResizeIFrame() {
+                
                 var $fittingWrap;
                 if($("#"+(pageManagerVisualizator._options.nameIFrame)).length) {
                     $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
