@@ -93,6 +93,7 @@ jQuery(function($) {
         /*Синхронизация по группам сессий*/
         /****************************************************/
         (function() {
+            
             //Свернуть-развернуть список выбора групп
             $(".shab__btn-open-groups-session").on("click", function () {
                 if(!$(this).hasClass('active')) {
