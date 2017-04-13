@@ -157,20 +157,6 @@
             ____.responseHandlers["onFastChangeScreenshots"]();
         });
 
-        this.onCollapseUncollapseScreenshotsFolder = function(designScreenshotsFoldersUncollapsed) {
-                socket.emit('global.collapseUncollapseScreenshotsFolder', {
-                    nesteedName: "designScreenshotsFoldersUncollapsed",
-                    val: designScreenshotsFoldersUncollapsed
-                });
-
-            ____.saveNesteedParamInGlobalSession("designScreenshotsFoldersUncollapsed", designScreenshotsFoldersUncollapsed);
-        }
-        socket.on('global.collapseUncollapseScreenshotsFolder', function(o) {
-            ____.saveNesteedParamInGlobalSession(o.nesteedName, o.val);
-
-            ____.responseHandlers["onCollapseUncollapseScreenshotsFolder"]();
-        });
-
         /******************************************************/
         /*Синхронизация по группам сессий и сохранение в cookies
         * если браузер неподключён ни к одной из групп*/
@@ -588,7 +574,7 @@
                 }
 
                 return false;
-            })(____.data.globalSession.designScreenshots);
+            })(____.data.globalSession.pages);
         }
 
         //Получить обьект группы
@@ -622,8 +608,7 @@
                 if("resolutions" in localSession && localSession.resolutions.currentResolution !== null) {
                     var resolution = localSession.resolutions.currentResolution;
 
-                    var screenshots = ____.data.globalSession.designScreenshots,
-                        screenshotsRelated = ____.data.globalSession.designScreenshotsRelatedResolutionAndPage;
+                    var screenshotsRelated = ____.data.globalSession.designScreenshotsRelatedResolutionAndPage;
 
                     //Проверка привязанных скриншотов
                     if(currentPage in screenshotsRelated && (resolution.w+"|"+resolution.h) in  screenshotsRelated[currentPage]) {
@@ -637,17 +622,9 @@
         //Получить скриншоты в виде обьекта {urn: obj}
         this.getScreenshotsObjList = function() {
             var screenshotsObjList = {};
-            (function recursion(arr) {
-                for (var i in arr) {
-                    var el = arr[i];
-                    if (el.type == "file") {
-                        screenshotsObjList[el.urn] = el;
-                    }
-                    if ("sub" in el) {
-                        recursion(el.sub);
-                    }
-                }
-            })(____.data.globalSession.designScreenshots);
+            ____.data.globalSession.designScreenshots.forEach(function(el) {
+                screenshotsObjList[el.urn] = el;
+            });
             return screenshotsObjList;
         }
     }

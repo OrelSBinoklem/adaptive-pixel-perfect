@@ -1362,20 +1362,6 @@ jQuery(function($) {
                 sendStopSpinnerScreenshotDeviation(e, ui);
             }
 
-            //коллапсировать-рассколапсировать
-            $(".pp__screenshots-files-menu-scrollwrap").on("click", " .pp__screenshots-btn-collapsed", function(){
-                var $item = $(this).closest(".pp__screenshots-item");
-                if( $item.hasClass("collapsed") ) {
-                    $item.removeClass("collapsed")
-                        .find(" > ul").css({display: "block"});
-                } else {
-                    $item.addClass("collapsed")
-                        .find(" > ul").css({display: "none"});
-                }
-
-                sendCollapseUncollapseScreenshotsFolder();
-            });
-
             //Показать верстку или скрины или 50 на 50
             $('.pp__verstka-btn').on('click', function(){
                 pixelPerfect.showPageProofsOrDesign(0);
@@ -1520,10 +1506,6 @@ jQuery(function($) {
                 }
             }
 
-            function sendCollapseUncollapseScreenshotsFolder() {
-                session.onCollapseUncollapseScreenshotsFolder(collapseUncollapseScreenshotsFolderToJson($(".pp__screenshots-files-menu-scrollwrap")));
-            }
-
             function sendHTMLOrDesign(state) {
                 session.onHTMLOrDesign(state);
             }
@@ -1540,9 +1522,6 @@ jQuery(function($) {
                 var screenshotsCollection = session.getCurrentRelatedScreenshotsCollection();
                 //console.timeEnd("dd");
                 pixelPerfect.refreshScrins(screenshotsCollection, session.getScreenshotsObjList());
-            }
-            session.responseHandlers["onCollapseUncollapseScreenshotsFolder"] = function() {
-                refreshMenuAllScreenshots();
             }
             session.responseHandlers["onHTMLOrDesign"] = function() {
                 var ls = session.getLocalSessionParams(true);
@@ -1872,76 +1851,26 @@ jQuery(function($) {
                 //dragItemList = false;
                 var $main = $(".pp__screenshots-files-list");
                 $main.empty();
+                var html = "";
 
-                var res = (function recursion(el, html) {
-                    //li
-                    for(var i in el) {
-                        var one = el[i];
-                        //
-                        var collapsedToObj = {};
-                        for(key in session.data.globalSession.designScreenshotsFoldersUncollapsed) {
-                            collapsedToObj[session.data.globalSession.designScreenshotsFoldersUncollapsed[key]] = true;
-                        }
-                        var _class = (one.type == "file")?"file":"folder btn-yellow";
-                        html += "<li class='pp__screenshots-item "+((one.urn in collapsedToObj)?"":"collapsed")+"' data-type='"+one.type+"' data-name='"+one.name+"' data-urn='"+one.urn+"'>";
-                        html += '<div class="pp__screenshots-item-content">' +
+                for(var i in session.data.globalSession.designScreenshots) {
+                    var one = session.data.globalSession.designScreenshots[i];
+                    html += "<li class='pp__screenshots-item' data-name='"+one.name+"' data-urn='"+one.urn+"'>";
+                    html += '<div class="pp__screenshots-item-content">' +
                             '<button class="btn btn-default btn-xs pp__screenshots-btn-collapsed"><span class="glyphicon glyphicon-minus"></span><span class="glyphicon glyphicon-plus"></span></button>' +
-                            '<div class="btn btn-default btn-xs btn-block pp__screenshots-btn-name pp__screenshots-btn-'+_class+'">' +
-                                ((one.type == "file")?
+                            '<div class="btn btn-default btn-xs btn-block pp__screenshots-btn-name">' +
                                 '<div class="btn btn-default btn-xs pp__screenshots-btn-size" data-w="'+one.w+'" data-h="'+one.h+'">' +
                                     '<span class="pp__screenshots-btn-size-w">'+one.w+'</span> | <span class="pp__screenshots-btn-size-h">'+one.h+'</span>' +
-                                '</div>':"") +
-                            one.name +
+                                '</div>' +
+                            one.urn +
                             '</div>' +
-                            ((one.type == "file")?'<button class="btn btn-success btn-xs pp__screenshots-btn-add-screenshot"><span class="glyphicon glyphicon-plus-sign"></span></button>':"") +
-                            '</div>';
+                            '<button class="btn btn-success btn-xs pp__screenshots-btn-add-screenshot"><span class="glyphicon glyphicon-plus-sign"></span></button>' +
+                        '</div>';
+                    html += "</li>";
+                }
 
-                        //sub
-                        if("sub" in one) {
-                            html = recursion(one.sub, html+"<ul>")+"</ul>";
-                        }
-                        //sub (end)
-
-                        html += "</li>";
-
-                    }
-                    //li (end)
-
-                    return html;
-                })(session.data.globalSession.designScreenshots, "");
-
-                $main.append(res);
-                refreshMenuAllScreenshots__specific($(".pp__screenshots-files-menu-scrollwrap"));
+                $main.append(html);
             }
-                //для вложенных добавляем класс "have-nested", удаляем "collapsed" для тех кто без вложенных, коллапсируем рассколапсируем
-                function refreshMenuAllScreenshots__specific($main) {
-                    //Вставляем класс для вложенных
-                    $main.find(" .pp__screenshots-item").removeClass("have-nested");
-                    $main.find(" ul").each(function() {
-                        if($(this).parent(".pp__screenshots-item").length) {
-                            $(this).parent(".pp__screenshots-item").addClass("have-nested");
-                        }
-                    });
-                    //
-                    $main.find(" .pp__screenshots-item").each(function() {
-                        if(!$(this).hasClass("have-nested")) {
-                            $(this).removeClass("collapsed");
-                        }
-                    });
-                    //Коллапсируем рассколапсируем
-                    $main.find(" .pp__screenshots-item.collapsed > ul").css({display: "none"});
-                    $main.find(" .pp__screenshots-item > ul").not($main.find(" .pp__screenshots-item.collapsed > ul")).css({display: "block"});
-                }
-                function collapseUncollapseScreenshotsFolderToJson($main) {
-                    return $main.find(" .pp__screenshots-item")
-                        .map(function() {
-                            return ($(this).hasClass("have-nested") && (!$(this).hasClass("collapsed"))) ? $(this).attr("data-urn") : null;
-                        })
-                        .get()
-                        .filter(function(el) {
-                            return el !== false;
-                        });
-                }
 
             //Отображаем миниатюрку
             var windowThumbnail__timeoutId = null;
