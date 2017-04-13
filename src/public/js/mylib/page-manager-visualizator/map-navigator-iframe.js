@@ -152,30 +152,30 @@ var mapNavigatorIFrame = function($container, options) {
 
         //Левый бордер
         if(l >= 0) {
-            $mnif.css({borderLeftStyle: "solid"});
+            $mnif.css({borderLeftColor: "#000"});
         } else {
-            $mnif.css({borderLeftStyle: "dashed"});
+            $mnif.css({borderLeftColor: "#ddd"});
         }
 
         //Правый бордер
         if(l + w <= w_c) {
-            $mnif.css({borderRightStyle: "solid"});
+            $mnif.css({borderRightColor: "#000"});
         } else {
-            $mnif.css({borderRightStyle: "dashed"});
+            $mnif.css({borderRightColor: "#ddd"});
         }
 
         //Вверхний бордер
         if(t >= 0) {
-            $mnif.css({borderTopStyle: "solid"});
+            $mnif.css({borderTopColor: "#000"});
         } else {
-            $mnif.css({borderTopStyle: "dashed"});
+            $mnif.css({borderTopColor: "#ddd"});
         }
 
         //Нижний бордер
         if(t + h <= h_c) {
-            $mnif.css({borderBottomStyle: "solid"});
+            $mnif.css({borderBottomColor: "#000"});
         } else {
-            $mnif.css({borderBottomStyle: "dashed"});
+            $mnif.css({borderBottomColor: "#ddd"});
         }
     }
     
