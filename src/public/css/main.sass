@@ -149,16 +149,14 @@
     outline: #4183C4 dashed 1px
 
 .shab__main-menu-container .shab__session-groups-synchro-params-btn
+    opacity: 0
+    width: 24px
+
+.shab__session-groups-special
     display: none
     position: absolute
     left: 0
     top: 23px
-    width: 24px
-    height: 20px
-    &[data-param="resolutions"]
-        left: 24px
-    &[data-param="iframe"]
-        left: 48px
 
 .shab__main-menu-container .shab__session-groups-delete-btn
     display: none
@@ -169,14 +167,17 @@
     height: 20px
 
 .shab__session-groups-list.open
+    .shab__session-groups-special
+        display: block
     .shab__session-groups-list-btn
         &.active
             color: red
     .shab__session-groups-synchro-params-btn
         &.active
-            display: inline-block
+            opacity: 1
     .shab__session-groups-list-item:hover
         .shab__session-groups-synchro-params-btn, .shab__session-groups-delete-btn
+            opacity: 1
             display: inline-block
 
 #shab-add-group-session .form-group
@@ -563,8 +564,6 @@
         width: 36px
     &-w
         text-align: right
-    &.active
-        box-shadow: inset 2px 0 0 0 #000, 1px 1px 4px 0 rgba(0,0,0,0.5)
 
 .pp__resolutions-screenshots
     &-btn-size.btn
@@ -711,8 +710,8 @@
                 position: absolute
                 top: 0
                 left: 0
-                width: 22px
-                height: 20px
+                width: 24px
+                height: 22px
                 box-shadow: none
             &-add-screenshot.btn
                 left: auto
@@ -771,7 +770,10 @@
                 display: inline-block
 
 .pp__screenshots-btn-collapsed
+    .glyphicon-minus
+        text-align: center
     .glyphicon-plus
+        text-align: center
         display: none
 
 //Миниатюрка

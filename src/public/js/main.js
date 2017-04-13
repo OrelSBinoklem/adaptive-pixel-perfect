@@ -174,9 +174,11 @@ jQuery(function($) {
 
                         var active = (haveCookie && (oneGroup.name in activeGroupsObj))?"active":"";
                         html += '<li class="shab__session-groups-list-item '+active+'" data-name="'+(oneGroup.name)+'">' +
-                            '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("pages"       in activeParamsObj)?"active":"")+'" data-param="pages"><i class="fa fa-file-o"></i></button>' +
-                            '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("resolutions" in activeParamsObj)?"active":"")+'" data-param="resolutions"><i class="fa fa-arrows"></i></button>' +
-                            '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframe"      in activeParamsObj)?"active":"")+'" data-param="iframe"><i class="fa fa-desktop"></i></button>' +
+                            '<div class="btn-group shab__session-groups-special">' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("pages"       in activeParamsObj)?"active":"")+'" data-param="pages"><i class="fa fa-file-o"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("resolutions" in activeParamsObj)?"active":"")+'" data-param="resolutions"><i class="fa fa-arrows"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframe"      in activeParamsObj)?"active":"")+'" data-param="iframe"><i class="fa fa-desktop"></i></button>' +
+                            '</div>' +
                             '<button class="btn btn-default btn-xs btn-block shab__session-groups-list-btn '+active+'">'+(oneGroup.name)+'</button>' +
                             '<div class="btn btn-default btn-xs shab__session-groups-btn-drag"><span class="glyphicon glyphicon-move"></span></div>' +
                             '<button class="btn btn-default btn-xs shab__session-groups-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
@@ -1138,7 +1140,7 @@ jQuery(function($) {
             function sendResizeIFrame() {
                 var $fittingWrap;
                 if($("#"+(pageManagerVisualizator._options.nameIFrame)).length) {
-                    $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
+                    $fittingWrap = $("#"+(pageManagerVisualizator._options.nameIFrame)).closest(".pmv-fitting-wrap");
                 } else {
                     $fittingWrap = pageManagerVisualizator.$container.find(" .pmv-fitting-wrap");
                 }
