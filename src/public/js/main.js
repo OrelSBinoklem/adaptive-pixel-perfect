@@ -98,15 +98,21 @@ jQuery(function($) {
                 if(!$(this).hasClass('active')) {
                     $(this).addClass('active');
                     $(".shab__session-groups-list").addClass('open');
+                    $(".shab__main-menu-bottom-section").addClass('open');
+                    $(".shab__session-groups").removeClass('open');
                 } else {
                     $(this).removeClass('active');
                     $(".shab__session-groups-list").removeClass('open');
+                    $(".shab__main-menu-bottom-section").removeClass('open');
+                    $(".shab__session-groups").removeClass('open');
                 }
             });
             $("body").on("click click.body.iframe", function (e) {
                 if( $(e.target).closest($(".shab__btn-open-groups-session").add($(".shab__session-groups-list")).add($("#shab-add-group-session")).add($("#shab-delete-group-session"))).length == 0 ) {
                     $(".shab__btn-open-groups-session").removeClass('active');
                     $(".shab__session-groups-list").removeClass('open');
+                    $(".shab__main-menu-bottom-section").removeClass('open');
+                    $(".shab__session-groups").removeClass('open');
                 }
             });
 

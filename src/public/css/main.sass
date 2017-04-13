@@ -78,7 +78,10 @@
     bottom: 0
     right: 0
     padding: 5px
-    background-color: rgba(255,255,255,0.8)
+    background-color: #fff
+    z-index: 2
+    &.open
+        top: 0
 
 .shab__btn-open-groups-session
     .caret
@@ -95,8 +98,18 @@
     .shab__add-group-session
         display: inline-block
 
+.shab__session-groups
+    position: absolute
+    left: 0
+    bottom: 0
+    right: 0
+    padding: 5px
+    background-color: #fff
+    z-index: 2
+
 .shab__session-groups-list
     position: relative
+    padding-top: 5px
     margin-bottom: 5px
     border-bottom: 1px dashed #999
     &.open
@@ -106,7 +119,7 @@
     display: none
     position: relative
     ~ .shab__session-groups-list-item
-        margin-top: 5px
+        margin-top: 10px
     &.active
         display: block
 
@@ -115,13 +128,11 @@
 
 .shab__session-groups-list.open
     .shab__session-groups-list-item
-        height: 40px
+        height: 43px
 
 .shab__session-groups-list-btn
     font-weight: bold
     text-align: left
-    &.active
-        box-shadow: inset 2px 0 0 0 #000
 
 .shab__session-groups-btn-drag
     display: none
@@ -141,31 +152,32 @@
     display: none
     position: absolute
     left: 0
-    top: 20px
-    box-shadow: 0 2px 2px -1px rgba(0,0,0,0.5)
-    width: 22px
+    top: 23px
+    width: 24px
     height: 20px
-    &.active
-        box-shadow: inset 0 -2px 0 0 #000
     &[data-param="resolutions"]
-        left: 22px
+        left: 24px
     &[data-param="iframe"]
-        left: 44px
+        left: 48px
 
 .shab__main-menu-container .shab__session-groups-delete-btn
     display: none
     position: absolute
     right: 0
-    top: 20px
-    box-shadow: 0 2px 2px -1px rgba(0,0,0,0.5)
-    width: 22px
+    top: 23px
+    width: 24px
     height: 20px
-    &.active
-        box-shadow: inset 0 -2px 0 0 #000
 
 .shab__session-groups-list.open
-    .shab__session-groups-synchro-params-btn, .shab__session-groups-delete-btn
-        display: inline-block
+    .shab__session-groups-list-btn
+        &.active
+            color: red
+    .shab__session-groups-synchro-params-btn
+        &.active
+            display: inline-block
+    .shab__session-groups-list-item:hover
+        .shab__session-groups-synchro-params-btn, .shab__session-groups-delete-btn
+            display: inline-block
 
 #shab-add-group-session .form-group
     margin-bottom: 0
