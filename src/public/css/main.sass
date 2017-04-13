@@ -52,20 +52,20 @@
     box-sizing: border-box
     z-index: 1
 
-.shab__main-menu-container >,
-.pmv__pages-window,
-.shab__main-menu-bottom-section,
-.pp__screenshots-files-menu-scrollwrap,
-.pp__resolutions-list-resolution-content,
-.pp__screenshot-content >,
-.pp__screenshots-menu-top-panel,
-.pp__resolutions-menu
+//.shab__main-menu-container >,
+//.pmv__pages-window,
+//.shab__main-menu-bottom-section,
+//.pp__screenshots-files-menu-scrollwrap,
+//.pp__resolutions-list-resolution-content,
+//.pp__screenshot-content >,
+//.pp__screenshots-menu-top-panel,
+//.pp__resolutions-menu
     //.btn
         //border: none
         //border-radius: 0
         //box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5)
-    .form-control
-        border-radius: 0
+    //.form-control
+        //border-radius: 0
 
 .pp__resolutions-screenshots-btn-size
     border: none
@@ -200,7 +200,7 @@
             top: 0
             bottom: 0
             //+16 ширина скролла
-            width: 336px
+            width: 483px
             box-shadow: 1px 0 5px 0 rgba(0,0,0,0.5), inset -16px 0 0 0 #ddd
             background-color: #fff
         &-top-menu
@@ -213,6 +213,11 @@
             box-sizing: border-box
             border-bottom: 1px dashed #999
         &-btn
+            &-specials
+                display: none
+                position: absolute
+                top: 0
+                right: 0
             &-collapsed.btn
                 display: none
                 position: absolute
@@ -224,35 +229,19 @@
                 top: 0
                 left: 100%
                 padding-left: 5px
-            &-delete-nested.btn, &-delete.btn, &-edit.btn
-                display: none
-                position: absolute
-                top: 0
-                right: 0
-                box-shadow: none
-            &-delete-nested.btn
-                right: 66px
-            &-delete.btn
-                right: 44px
-            &-edit.btn
-                right: 22px
-            &-drag.btn
-                display: none
-                position: absolute
-                top: 0
-                right: 0
-                box-shadow: none
+            &-delete.btn, &-edit.btn, &-drag.btn
+                width: 24px
         &-item
             margin-top: 5px
             &-content
                 position: relative
                 &:hover
-                     > .pmv__pages-btn-drag,  > .pmv__pages-btn-delete, .pmv__pages-btn-edit
+                      > .pmv__pages-btn-specials
                         display: block
         &-sortable
             padding: 5px
             ul
-                width: 250px
+                width: 397px
                 ul
                     margin-left: 30px
             &-scrollwrap
@@ -272,8 +261,6 @@
                 text-align: left
                 word-wrap: break-word
                 white-space: pre-wrap
-                &.active
-                    box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5), inset 0 -2px 0 0 #c00
     &__add-page-group
         position: absolute
         top: 0
