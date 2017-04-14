@@ -3,3 +3,6 @@
 /node_modules/*
 /.idea/*
 /tests/*
+gulpstart.bat
+t.bat
+t.js
