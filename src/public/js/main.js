@@ -1178,13 +1178,13 @@ jQuery(function($) {
                 "pmv.prepaste.iframe": function() {
                     $( "#loading" )
                         .css({width: "100%", height: "100%"})
-                        .addClass( "show" );
+                        .stop().animate({opacity: 1}, 500, "swing");
                 },
                 "pmv.load.iframe": function() {
-                    $( "#loading" ).removeClass( "show" );
-                    setTimeout(function() {
+                    $( "#loading" )
+                        .stop().animate({opacity: 0}, 200, "swing", function() {
                         $( "#loading" ).css({width: "0", height: "0"});
-                    }, 500);
+                    });
                 }
             });
 
