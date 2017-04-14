@@ -38,4 +38,29 @@
     top: 0
     width: 100%
     height: 100%
-    outline: 5px dashed #000
+    //fix jQuery animation
+    overflow: visible !important
+    &-bl
+        position: absolute
+        top: 0
+        right: -5px
+        bottom: -5px
+        width: 5px
+        background: linear-gradient(to top, #000 0%, #000 50%, #fff 50.0001%, #fff 100%)
+        background-size: 5px 30px
+    &-br
+        position: absolute
+        top: 0
+        left: -5px
+        bottom: -5px
+        width: 5px
+        background: linear-gradient(to top, #000 0%, #000 50%, #fff 50.0001%, #fff 100%)
+        background-size: 5px 30px
+    &-bb
+        position: absolute
+        bottom: -5px
+        left: 0
+        right: 0
+        height: 5px
+        background: linear-gradient(to left, #000 0%, #000 50%, #fff 50.0001%, #fff 100%)
+        background-size: 30px 5px

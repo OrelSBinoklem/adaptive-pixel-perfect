@@ -883,8 +883,10 @@ jQuery(function($) {
                         '<button class="btn btn-default btn-xs btn-block pp__resolutionforscreen-name-btn">' +
                         '<span class="pp__resolutionforscreen-name-btn-w">'+w+'</span> | <span class="pp__resolutionforscreen-name-btn-h">'+h+'</span>' +
                         '</button>' +
-                        '<button class="btn btn-default btn-xs pp__resolutions-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
-                        '<div class="btn btn-default btn-xs pp__resolutions-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
+                        '<div class="btn-group pp__resolutions-specials-btn">' +
+                            '<button class="btn btn-default btn-xs pp__resolutions-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
+                            '<div class="btn btn-default btn-xs pp__resolutions-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
+                        '</div>' +
                         '</div>' +
                         '<ul class="pp__resolutions-list-screenshots"></ul>' +
                         '</li>';
@@ -1267,9 +1269,11 @@ jQuery(function($) {
                                     '</div>' +
                                     urn +
                                 '</button>' +
-                                '<button class="btn btn-default btn-xs pp__resolutions-screenshots-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
-                                '<div class="btn btn-default btn-xs pp__resolutions-screenshots-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
-                                '<button class="pp__resolutions-screenshots-btn-deviation btn btn-default btn-xs"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i></button>' +
+                                '<div class="btn-group pp__resolutions-screenshots-special-btn">' +
+                                    '<button class="btn btn-default btn-xs pp__resolutions-screenshots-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
+                                    '<div class="btn btn-default btn-xs pp__resolutions-screenshots-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
+                                    '<button class="pp__resolutions-screenshots-btn-deviation btn btn-default btn-xs"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i></button>' +
+                                '</div>' +
                             '</div>' +
                         '</li>';
 
@@ -1612,10 +1616,12 @@ jQuery(function($) {
                             html += "<li class='pp__resolutions-list-resolution' data-w='"+w+"' data-h='"+h+"'>";
                             html += '<div class="pp__resolutions-list-resolution-content">' +
                                 '<button class="btn btn-default btn-xs btn-block pp__resolutionforscreen-name-btn '+active+'">' +
-                                '<span class="pp__resolutionforscreen-name-btn-w">'+w+'</span> | <span class="pp__resolutionforscreen-name-btn-h">'+h+'</span>' +
+                                    '<span class="pp__resolutionforscreen-name-btn-w">'+w+'</span> | <span class="pp__resolutionforscreen-name-btn-h">'+h+'</span>' +
                                 '</button>' +
-                                '<button class="btn btn-default btn-xs pp__resolutions-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
-                                '<div class="btn btn-default btn-xs pp__resolutions-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
+                                '<div class="btn-group pp__resolutions-specials-btn">' +
+                                    '<button class="btn btn-default btn-xs pp__resolutions-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
+                                    '<div class="btn btn-default btn-xs pp__resolutions-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
+                                '</div>' +
                                 '</div>';
 
 
@@ -1642,75 +1648,75 @@ jQuery(function($) {
             function createDeviation() {
                 var html = '' +
                     '<div class="pp__deviation panel panel-primary">' +
-                    '<div class="panel-body">' +
-                    '<div class="row">' +
-                    '<div class="col-xs-6 pp__deviation-col-left">' +
-                    '<form class="pp__deviation-fixed-or-static btn-group-vertical btn-toggle-one-color" data-toggle="buttons">' +
-                    '<label class="btn" data-btn-color="primary">' +
-                    '<input type="radio" name="sm-radio-fixed-or-static" value="1" />Static' +
-                    '</label>' +
-                    '<label class="btn" data-btn-color="danger">' +
-                    '<input type="radio" name="sm-radio-fixed-or-static" value="0" />Fixed' +
-                    '</label>' +
-                    '</form>' +
-                    '</div>' +
-                    '<div class="col-xs-6 pp__deviation-col-right">' +
-                    '<div class="pp__deviation-relative btn-group-table">' +
-                    '<div class="btn-group btn-group-justified" role="group">' +
-                    '<div class="btn" data-left="left" data-top="top" role="button">&nbsp</div>' +
-                    '<div class="btn" data-left="center" data-top="top" role="button">&nbsp</div>' +
-                    '<div class="btn" data-left="right" data-top="top" role="button">&nbsp</div>' +
-                    '</div>' +
-                    '<div class="btn-group btn-group-justified" role="group">' +
-                    '<div class="btn disabled" data-left="left" data-top="center" role="button">&nbsp</div>' +
-                    '<div class="btn disabled" data-left="center" data-top="center" role="button">&nbsp</div>' +
-                    '<div class="btn disabled" data-left="right" data-top="center" role="button">&nbsp</div>' +
-                    '</div>' +
-                    '<div class="btn-group btn-group-justified" role="group">' +
-                    '<div class="btn disabled" data-left="left" data-top="bottom" role="button">&nbsp</div>' +
-                    '<div class="btn disabled" data-left="center" data-top="bottom" role="button">&nbsp</div>' +
-                    '<div class="btn disabled" data-left="right" data-top="bottom" role="button">&nbsp</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row row-name-px-percent">' +
-                    '<div class="col-xs-6 pp__deviation-col-left">' +
-                    '<p>px</p>' +
-                    '</div>' +
-                    '<div class="col-xs-6 pp__deviation-col-right">' +
-                    '<p>%</p>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row row-otklonenie-1">' +
-                    '<div class="col-xs-6 pp__deviation-col-left">' +
-                    '<div class="input-group">' +
-                    '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-left-px">' +
-                    '<div class="input-group-addon"><span class="fa fa-long-arrow-right"></span></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-xs-6 pp__deviation-col-right">' +
-                    '<div class="input-group">' +
-                    '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-left-percent">' +
-                    '<div class="input-group-addon"><span class="fa fa-long-arrow-right"></span></div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row row-otklonenie-2">' +
-                    '<div class="col-xs-6 pp__deviation-col-left">' +
-                    '<div class="input-group">' +
-                    '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-top-px">' +
-                    '<div class="input-group-addon">&nbsp<span class="fa fa-long-arrow-down"></span>&nbsp</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-xs-6 pp__deviation-col-right">' +
-                    '<div class="input-group">' +
-                    '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-top-percent">' +
-                    '<div class="input-group-addon">&nbsp<span class="fa fa-long-arrow-down"></span>&nbsp</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
+                        '<div class="panel-body">' +
+                            '<div class="row">' +
+                                '<div class="col-xs-6 pp__deviation-col-left">' +
+                                    '<form class="pp__deviation-fixed-or-static btn-group-vertical btn-toggle-one-color" data-toggle="buttons">' +
+                                        '<label class="btn" data-btn-color="primary">' +
+                                            '<input type="radio" name="sm-radio-fixed-or-static" value="1" />Static' +
+                                        '</label>' +
+                                        '<label class="btn" data-btn-color="danger">' +
+                                            '<input type="radio" name="sm-radio-fixed-or-static" value="0" />Fixed' +
+                                        '</label>' +
+                                    '</form>' +
+                                '</div>' +
+                                '<div class="col-xs-6 pp__deviation-col-right">' +
+                                    '<div class="pp__deviation-relative btn-group-table">' +
+                                        '<div class="btn-group btn-group-justified" role="group">' +
+                                            '<div class="btn" data-left="left" data-top="top" role="button">&nbsp</div>' +
+                                            '<div class="btn" data-left="center" data-top="top" role="button">&nbsp</div>' +
+                                            '<div class="btn" data-left="right" data-top="top" role="button">&nbsp</div>' +
+                                        '</div>' +
+                                        '<div class="btn-group btn-group-justified" role="group">' +
+                                            '<div class="btn disabled" data-left="left" data-top="center" role="button">&nbsp</div>' +
+                                            '<div class="btn disabled" data-left="center" data-top="center" role="button">&nbsp</div>' +
+                                            '<div class="btn disabled" data-left="right" data-top="center" role="button">&nbsp</div>' +
+                                        '</div>' +
+                                        '<div class="btn-group btn-group-justified" role="group">' +
+                                            '<div class="btn disabled" data-left="left" data-top="bottom" role="button">&nbsp</div>' +
+                                            '<div class="btn disabled" data-left="center" data-top="bottom" role="button">&nbsp</div>' +
+                                            '<div class="btn disabled" data-left="right" data-top="bottom" role="button">&nbsp</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row row-name-px-percent">' +
+                                '<div class="col-xs-6 pp__deviation-col-left">' +
+                                    '<p>px</p>' +
+                                '</div>' +
+                                '<div class="col-xs-6 pp__deviation-col-right">' +
+                                    '<p>%</p>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row row-otklonenie-1">' +
+                                '<div class="col-xs-6 pp__deviation-col-left">' +
+                                    '<div class="input-group">' +
+                                        '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-left-px">' +
+                                        '<div class="input-group-addon"><span class="fa fa-long-arrow-right"></span></div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="col-xs-6 pp__deviation-col-right">' +
+                                    '<div class="input-group">' +
+                                        '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-left-percent">' +
+                                        '<div class="input-group-addon"><span class="fa fa-long-arrow-right"></span></div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="row row-otklonenie-2">' +
+                                '<div class="col-xs-6 pp__deviation-col-left">' +
+                                    '<div class="input-group">' +
+                                        '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-top-px">' +
+                                        '<div class="input-group-addon">&nbsp<span class="fa fa-long-arrow-down"></span>&nbsp</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="col-xs-6 pp__deviation-col-right">' +
+                                    '<div class="input-group">' +
+                                        '<input type="text" class="form-control input-sm pp__deviation-input pp__deviation-top-percent">' +
+                                        '<div class="input-group-addon">&nbsp<span class="fa fa-long-arrow-down"></span>&nbsp</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
                     '</div>';
                 $(".pp__screenshots-menu-window").append(html);
                 refreshSpinner($(".pp__deviation"));
@@ -1801,9 +1807,11 @@ jQuery(function($) {
                                     '</div>' +
                                     s.urn +
                                 '</button>' +
-                                '<button class="btn btn-default btn-xs pp__resolutions-screenshots-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
-                                '<div class="btn btn-default btn-xs pp__resolutions-screenshots-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
-                                '<button class="pp__resolutions-screenshots-btn-deviation btn btn-default btn-xs"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i></button>' +
+                                '<div class="btn-group pp__resolutions-screenshots-special-btn">' +
+                                    '<button class="btn btn-default btn-xs pp__resolutions-screenshots-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
+                                    '<div class="btn btn-default btn-xs pp__resolutions-screenshots-drag-btn"><span class="glyphicon glyphicon-move"></span></div>' +
+                                    '<button class="pp__resolutions-screenshots-btn-deviation btn btn-default btn-xs"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i></button>' +
+                                '</div>' +
                             '</div>' +
                         '</li>';
                     }
@@ -1874,7 +1882,7 @@ jQuery(function($) {
 
             //Отображаем миниатюрку
             var windowThumbnail__timeoutId = null;
-            $(".pp__screenshots-files-menu-scrollwrap").on("mouseenter", " .pp__screenshots-item[data-type='file']", function(){
+            $(".pp__screenshots-files-menu-scrollwrap").on("mouseenter", " .pp__screenshots-item", function(){
                 $(".pp__screenshot-thumbnail")
                     .empty()
                     .append('<img src="'+("/a-pp-design-screenshots/design-thumbnails/"+$(this).attr("data-urn"))+'?a-pp=1" width="320" height="auto" />');

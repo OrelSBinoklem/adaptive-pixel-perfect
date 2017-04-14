@@ -52,26 +52,6 @@
     box-sizing: border-box
     z-index: 1
 
-//.shab__main-menu-container >,
-//.pmv__pages-window,
-//.shab__main-menu-bottom-section,
-//.pp__screenshots-files-menu-scrollwrap,
-//.pp__resolutions-list-resolution-content,
-//.pp__screenshot-content >,
-//.pp__screenshots-menu-top-panel,
-//.pp__resolutions-menu
-    //.btn
-        //border: none
-        //border-radius: 0
-        //box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5)
-    //.form-control
-        //border-radius: 0
-
-.pp__resolutions-screenshots-btn-size
-    border: none
-    border-radius: 0
-    box-shadow: 1px 1px 4px 0 rgba(0,0,0,0.5)
-
 .shab__main-menu-bottom-section
     position: absolute
     left: 0
@@ -111,7 +91,8 @@
     position: relative
     padding-top: 5px
     margin-bottom: 5px
-    border-bottom: 1px dashed #999
+    background: linear-gradient(to left, #999 0%, #999 50%, #fff 50.0001%, #fff 100%) 0 bottom repeat-x
+    background-size: 6px 1px
     &.open
         padding-bottom: 33px
 
@@ -224,7 +205,8 @@
             height: 45px
             padding: 5px
             box-sizing: border-box
-            border-bottom: 1px dashed #999
+            background: linear-gradient(to left, #999 0%, #999 50%, #fff 50.0001%, #fff 100%) 0 bottom repeat-x
+            background-size: 6px 1px
         &-btn
             &-specials
                 display: none
@@ -444,7 +426,8 @@
 
 .pp__resolutions-menu
     margin-top: 5px
-    border-top: 1px dashed #999
+    background: linear-gradient(to left, #999 0%, #999 50%, #fff 50.0001%, #fff 100%) 0 top repeat-x
+    background-size: 6px 1px
 
 .pp__resolutions-list
     margin-top: 5px
@@ -493,7 +476,8 @@
     height: 45px
     padding: 5px
     box-sizing: border-box
-    border-bottom: 1px dashed #999
+    background: linear-gradient(to left, #999 0%, #999 50%, #fff 50.0001%, #fff 100%) 0 bottom repeat-x
+    background-size: 6px 1px
 
 .pp__screenshots-menu-scrollwrap
     position: absolute
@@ -528,22 +512,20 @@
         &-w
             margin-left: 10px
             text-align: right
-    .pp__resolutions-drag-btn, .pp__resolutions-delete-btn
+    .pp__resolutions-specials-btn
         display: none
         position: absolute
         right: 0
         top: 0
-        box-shadow: none
-        width: 22px
-        height: 20px
-    .pp__resolutions-delete-btn
-        right: 22px
+    .pp__resolutions-drag-btn, .pp__resolutions-delete-btn
+        width: 24px
+        height: 22px
 
 .pp__resolutions-list-resolution-content
     position: relative
     width: 110px
     &:hover
-        .pp__resolutions-drag-btn, .pp__resolutions-delete-btn
+        .pp__resolutions-specials-btn
             display: block
 
 //скриншоты
@@ -567,30 +549,28 @@
 
 .pp__resolutions-screenshots
     &-btn-size.btn
-        margin: 0 -5px 0 5px
-        box-shadow: 0 -1px 0 0 #fff, 0 1px 0 0 #fff, -1px 0 0 0 #333
+        border: none
+        border-radius: 0
+        margin: -1px -5px -1px 5px
+        box-shadow: -1px 0 0 0 #333
         float: right
-        padding: 0 0 0 5px
+        padding: 1px 5px 0
         background: #fff
-    &-delete-btn.btn, &-drag-btn.btn, &-btn-deviation.btn
+        height: 20px
+    &-special-btn
         display: none
         position: absolute
         right: 0
         top: 0
-        box-shadow: none
-        width: 22px
-        height: 20px
-    &-drag-btn.btn
-        right: 22px
-    &-delete-btn.btn
-        right: 44px
+    &-delete-btn.btn, &-drag-btn.btn, &-btn-deviation.btn
+        width: 24px
+        height: 22px
 
 .pp__screenshot-content
     position: relative
     &:hover
-        .pp__resolutions-screenshots
-            &-delete-btn.btn, &-drag-btn.btn, &-btn-deviation.btn
-                display: block
+        .pp__resolutions-screenshots-special-btn
+            display: block
 
 .pp__deviation
     display: none
@@ -676,7 +656,7 @@
         left: 608px
         top: 0
         bottom: 0
-        width: 336px
+        width: 453px
         box-shadow: inset -16px 0 0 0 #ddd
         background-color: #fff
         padding: 5px 21px 5px 5px
@@ -689,7 +669,7 @@
         &-shadow
             display: none
             position: absolute
-            left: 934px
+            left: 1051px
             top: 0
             bottom: 0
             width: 10px
@@ -720,12 +700,14 @@
                 //padding-right: 97px
             &-size
                 &.btn
-                    margin: 0 -5px 0 5px
-                    //box-shadow: -1px 0 0 0 #333, 0 1px 0 0 #333, -1px 1px 0 0 #333
-                    box-shadow: 0 -1px 0 0 #fff, 0 1px 0 0 #fff, -1px 0 0 0 #333
+                    border: none
+                    border-radius: 0
+                    margin: -1px -5px -1px 5px
+                    box-shadow: -1px 0 0 0 #333
                     float: right
-                    padding: 0 0 0 5px
+                    padding: 1px 5px 0
                     background: #fff
+                    height: 20px
                 &-w, &-h
                     display: inline-block
                     width: 36px
@@ -734,7 +716,6 @@
         &-item
             z-index: 3
             margin-top: 5px
-            width: 250px
             &-content
                 position: relative
                 &:hover >
@@ -742,7 +723,6 @@
                         display: block
         &-files-menu-scrollwrap
             ul
-                width: 250px
                 ul
                     margin-left: 30px
             .placeholder
@@ -761,8 +741,7 @@
     &-scrollwrap
         display: none
         position: absolute
-        //125+336+336  +  147
-        left: 944px
+        left: 1061px
         top: 0
         bottom: 0
         width: 336px

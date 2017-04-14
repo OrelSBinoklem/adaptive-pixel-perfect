@@ -166,7 +166,9 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     }
     
     this._init = function() {
-        $container.append('<div class="pmv-outer-wrap"><div class="pmv-fitting-wrap"></div></div>');
+        $container.append('<div class="pmv-outer-wrap"><div class="pmv-fitting-wrap">' +
+            '<div class="pmv-fitting-wrap-bl"></div><div class="pmv-fitting-wrap-bb"></div><div class="pmv-fitting-wrap-br"></div>' +
+            '</div></div>');
         $container.append('<div class="pmv-container-bl"></div><div class="pmv-container-bb"></div><div class="pmv-container-br"></div>');
         //Получем список страниц
     }
