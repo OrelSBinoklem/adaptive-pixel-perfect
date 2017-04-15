@@ -1027,6 +1027,7 @@ jQuery(function($) {
                 var $main = $(".pp__resolutions-list");
                 $main.empty();
 
+                var n = 1;
                 var res = (function recursion(resolutions, html) {
                     for(var i in resolutions) {
                         var one = resolutions[i];
@@ -1036,11 +1037,13 @@ jQuery(function($) {
                         html += "<li class='pp__resolutions-list-item' data-w='"+w+"' data-h='"+h+"'>";
                         html += '<div class="pp__resolutions-list-item-content">' +
                             '<button class="btn btn-default btn-xs btn-block pp__resolution-name-btn '+active+'">' +
-                            '<span class="pp__resolution-name-btn-w">'+w+'</span> | <span class="pp__resolution-name-btn-h">'+h+'</span>' +
+                                '<span class="badge '+((n > 10)?"badge-hidden":"")+'">'+((n > 10)?"":(n == 10)?0:n)+'</span>' +
+                                '<span class="pp__resolution-name-btn-w">'+w+'</span> | <span class="pp__resolution-name-btn-h">'+h+'</span>' +
                             '</button>' +
                             '</div>';
 
                         html += "</li>";
+                        n++;
                     }
 
                     return html;
