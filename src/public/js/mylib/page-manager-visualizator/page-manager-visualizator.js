@@ -197,6 +197,9 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
             $('#'+(____._options.nameIFrame)).contents().find('body').on('mouseup', function(e){
                 $("body").trigger( "mouseup.body.iframe" );
             });
+            $('#'+(____._options.nameIFrame)).contents().find('body').on('mousemove', function(e){
+                $("body").trigger( "mousemove.body.iframe" );
+            });
         });
     }
     

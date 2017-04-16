@@ -18,13 +18,31 @@ jQuery(function($) {
     
     function next() {
         //Глобальная переменная - зажата ли левая кнопка мыши
+        var maximumDeviationOfMouse = 10;
         var mouseKeyPressed = false;
+        var mouse_last_cursor_X = null;
+        var mouse_last_cursor_Y = null;
+        var mouse_pressfix_cursor_X = 0;
+        var mouse_pressfix_cursor_Y = 0;
         $("body").on({
             "mousedown.body.iframe": function() {
                 mouseKeyPressed = true;
+                mouse_pressfix_cursor_X = null;
+                mouse_pressfix_cursor_Y = null;
             },
             "mouseup.body.iframe": function() {
                 mouseKeyPressed = false;
+            },
+            "mousemove.body.iframe": function(e) {
+                mouse_last_cursor_X = e.screenX;
+                mouse_last_cursor_Y = e.screenY;
+
+                if(mouseKeyPressed) {
+                    if(mouse_pressfix_cursor_Y === null) {
+                        mouse_pressfix_cursor_X = mouse_last_cursor_X;
+                        mouse_pressfix_cursor_Y = mouse_last_cursor_Y;
+                    }
+                }
             }
         });
 
@@ -955,7 +973,7 @@ jQuery(function($) {
                 if((57 >= e.which && e.which >= 48) && !e.ctrlKey && !e.shiftKey && !e.altKey)
                 {
                     var n = e.which - 48;
-                    var $li = $(".pp__resolutions-list-item[data-n='"+n+"']");
+                    var $li = $(".pp__resolutions-list-item[data-n='"+((n == 0)?10:n)+"']");
                     if($li.length) {
                         handlerSelectResolution($li);
 
