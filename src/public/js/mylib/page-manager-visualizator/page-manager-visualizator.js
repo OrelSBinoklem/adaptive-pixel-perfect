@@ -189,16 +189,20 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
         $('#'+(____._options.nameIFrame)).load(function(){
             $container.trigger( "pmv.load.iframe");
             $('#'+(____._options.nameIFrame)).contents().find('body').on('click', function(e){
-                $("body").trigger( "click.body.iframe" );
+                e.type = "click.body.iframe";
+                $("body").trigger( e );
             });
             $('#'+(____._options.nameIFrame)).contents().find('body').on('mousedown', function(e){
-                $("body").trigger( "mousedown.body.iframe" );
+                e.type = "mousedown.body.iframe";
+                $("body").trigger( e );
             });
             $('#'+(____._options.nameIFrame)).contents().find('body').on('mouseup', function(e){
-                $("body").trigger( "mouseup.body.iframe" );
+                e.type = "mouseup.body.iframe";
+                $("body").trigger( e );
             });
             $('#'+(____._options.nameIFrame)).contents().find('body').on('mousemove', function(e){
-                $("body").trigger( "mousemove.body.iframe" );
+                e.type = "mousemove.body.iframe";
+                $("body").trigger( e );
             });
         });
     }

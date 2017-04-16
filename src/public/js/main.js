@@ -36,11 +36,16 @@ jQuery(function($) {
             "mousemove.body.iframe": function(e) {
                 mouse_last_cursor_X = e.screenX;
                 mouse_last_cursor_Y = e.screenY;
+                console.log(e.screenX);
 
                 if(mouseKeyPressed) {
                     if(mouse_pressfix_cursor_Y === null) {
                         mouse_pressfix_cursor_X = mouse_last_cursor_X;
                         mouse_pressfix_cursor_Y = mouse_last_cursor_Y;
+                    }
+
+                    if(Math.abs(mouse_pressfix_cursor_X - e.screenX) > maximumDeviationOfMouse || Math.abs(mouse_pressfix_cursor_Y - e.screenY) > maximumDeviationOfMouse) {
+                        mouseKeyPressed = false;
                     }
                 }
             }
@@ -970,14 +975,16 @@ jQuery(function($) {
                 $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerSelectResolutionKeyPress);
             });
             function handlerSelectResolutionKeyPress(e) {
-                if((57 >= e.which && e.which >= 48) && !e.ctrlKey && !e.shiftKey && !e.altKey)
-                {
-                    var n = e.which - 48;
-                    var $li = $(".pp__resolutions-list-item[data-n='"+((n == 0)?10:n)+"']");
-                    if($li.length) {
-                        handlerSelectResolution($li);
+                if(mouseKeyPressed) {
+                    if((57 >= e.which && e.which >= 48) && !e.ctrlKey && !e.shiftKey && !e.altKey)
+                    {
+                        var n = e.which - 48;
+                        var $li = $(".pp__resolutions-list-item[data-n='"+((n == 0)?10:n)+"']");
+                        if($li.length) {
+                            handlerSelectResolution($li);
 
-                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                            e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                        }
                     }
                 }
             }
