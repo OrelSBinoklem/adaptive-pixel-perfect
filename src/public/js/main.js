@@ -17,6 +17,17 @@ jQuery(function($) {
     });
     
     function next() {
+        //Глобальная переменная - зажата ли левая кнопка мыши
+        var mouseKeyPressed = false;
+        $("body").on({
+            "mousedown.body.iframe": function() {
+                mouseKeyPressed = true;
+            },
+            "mouseup.body.iframe": function() {
+                mouseKeyPressed = false;
+            }
+        });
+
         //Глобальные настройки
         (function() {
             var animations = {};
@@ -934,6 +945,25 @@ jQuery(function($) {
             $(".pp__resolutions-menu").on("click", " .pp__resolution-name-btn", function(){
                 var $li = $(this).closest(".pp__resolutions-list-item");
 
+                handlerSelectResolution($li);
+            });
+            $('body').on('keydown', handlerSelectResolutionKeyPress);
+            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
+                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerSelectResolutionKeyPress);
+            });
+            function handlerSelectResolutionKeyPress(e) {
+                if((57 >= e.which && e.which >= 48) && !e.ctrlKey && !e.shiftKey && !e.altKey)
+                {
+                    var n = e.which - 48;
+                    var $li = $(".pp__resolutions-list-item[data-n='"+n+"']");
+                    if($li.length) {
+                        handlerSelectResolution($li);
+
+                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                    }
+                }
+            }
+            function handlerSelectResolution($li) {
                 var w = $li.attr("data-w");
                 var h = $li.attr("data-h");
 
@@ -947,7 +977,7 @@ jQuery(function($) {
                 sendSelectResolution(w, h);
 
                 pageManagerVisualizator.setSizeIFrame(w, h);
-            });
+            }
 
             //Запись и отправка данных сессии
             function sendAddResolution() {
@@ -1034,7 +1064,7 @@ jQuery(function($) {
                         var w = one.w;
                         var h = one.h;
                         var active = (localSession && "resolutions" in localSession && localSession.resolutions.currentResolution.w === w && localSession.resolutions.currentResolution.h === h)?"active":"";
-                        html += "<li class='pp__resolutions-list-item' data-w='"+w+"' data-h='"+h+"'>";
+                        html += "<li class='pp__resolutions-list-item' data-w='"+w+"' data-h='"+h+"' data-n='"+((n > 10)?"":(n == 10)?0:n)+"'>";
                         html += '<div class="pp__resolutions-list-item-content">' +
                             '<button class="btn btn-default btn-xs btn-block pp__resolution-name-btn '+active+'">' +
                                 '<span class="badge '+((n > 10)?"badge-hidden":"")+'">'+((n > 10)?"":(n == 10)?0:n)+'</span>' +
