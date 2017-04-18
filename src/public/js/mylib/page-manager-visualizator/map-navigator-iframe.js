@@ -187,14 +187,14 @@ var mapNavigatorIFrame = function($container, options) {
         $mnif.find(" .mnif-border").remove();
 
         var i = 0;
-        while(lDrag - (stepG * i) > 0) {
-            html += '<i class="mnif-border mnif-border-v" style="left: '+(lDrag - (stepG * i))+'px;"></i>';
+        while(Math.round(lDrag) - (stepG * i) > 0) {
+            html += '<i class="mnif-border mnif-border-v" style="left: '+(Math.round(lDrag) - (stepG * i))+'px;"></i>';
             i++;
         }
         i = 1;
         var lastL = null;
-        while((lDrag + (stepG * i)) + wDrag <= wDrag_c) {
-            lastL = (lDrag + (stepG * i));
+        while((Math.round(lDrag) + (stepG * i)) + wDrag <= wDrag_c) {
+            lastL = (Math.round(lDrag) + (stepG * i));
             html += '<i class="mnif-border mnif-border-v" style="left: '+lastL+'px;"></i>';
             i++;
         }
@@ -204,14 +204,14 @@ var mapNavigatorIFrame = function($container, options) {
 
         //Горизонтальные линии
         i = 0;
-        while(tDrag - (stepV * i) > 0) {
-            html += '<i class="mnif-border mnif-border-g" style="top: '+(tDrag - (stepV * i))+'px;"></i>';
+        while(Math.round(tDrag) - (stepV * i) > 0) {
+            html += '<i class="mnif-border mnif-border-g" style="top: '+(Math.round(tDrag) - (stepV * i))+'px;"></i>';
             i++;
         }
         i = 1;
         var lastT = null;
-        while((tDrag + (stepV * i)) + hDrag <= hDrag_c) {
-            lastT = (tDrag + (stepV * i));
+        while((Math.round(tDrag) + (stepV * i)) + hDrag <= hDrag_c) {
+            lastT = (Math.round(tDrag) + (stepV * i));
             html += '<i class="mnif-border mnif-border-g" style="top: '+lastT+'px;"></i>';
             i++;
         }

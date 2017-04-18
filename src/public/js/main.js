@@ -1123,7 +1123,9 @@ jQuery(function($) {
                 if(mouseKeyPressed) {
                     if((e.which == 87 || e.which == 65 || e.which == 83 || e.which == 68) && !e.ctrlKey && !e.shiftKey && !e.altKey)
                     {
+                        console.time("a");
                         pageManagerVisualizator.mapNavigatorIFrame.handlerChangePosIFrameKeyPress(e);
+                        console.timeEnd("a");
                         e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
                     }
                 }
