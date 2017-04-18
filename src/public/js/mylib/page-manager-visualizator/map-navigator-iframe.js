@@ -178,7 +178,7 @@ var mapNavigatorIFrame = function($container, options) {
         }
 
         //Сетка
-        var html = "";
+        /*var html = "";
 
         var stepG = Math.round(wDrag * ____._options.factorDraggableGrid); stepG = (stepG < 1)?1:stepG;
         var stepV = Math.round(hDrag * ____._options.factorDraggableGrid); stepV = (stepV < 1)?1:stepV;
@@ -219,7 +219,7 @@ var mapNavigatorIFrame = function($container, options) {
             html += '<i class="mnif-border mnif-border-g" style="top: '+(hDrag_c - hDrag)+'px;"></i>';
         }
 
-        $mnif.prepend(html);
+        $mnif.prepend(html);*/
     }
     
     //Обновление скрытого скролла в IFrame
