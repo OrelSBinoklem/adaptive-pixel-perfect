@@ -1479,6 +1479,61 @@ jQuery(function($) {
                 }
             }
 
+            //Функция мерцание
+            var lastMode;
+            var handlerFlickerPageProofsOrDesign__timeout = null;
+            $('body').on('keydown', handlerFlickerPageProofsOrDesign);
+            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
+                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerFlickerPageProofsOrDesign);
+            });
+            function handlerFlickerPageProofsOrDesign(e) {
+                if(mouseKeyPressed) {
+                    if(e.which == 81 && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                        if(handlerFlickerPageProofsOrDesign__timeout !== null) {
+                            clearInterval(handlerFlickerPageProofsOrDesign__timeout);
+                        } else {
+                            lastMode = 1;
+                            var ls = session.getLocalSessionParams(false);
+                            if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
+                                lastMode = ls.resolutions.showPageProofsOrDesign;
+                            }
+                        }
+
+                        var frames = 0;
+                        function showPageProofs() {
+                            frames++;
+                            if(frames > 5) {
+                                handlerFlickerPageProofsOrDesign__timeout = null;
+                                showInitialState();
+                                return false;
+                            }
+                            pixelPerfect.showPageProofsOrDesign(0);
+                            refreshButtonsPageProofsOrDesign(0);
+                            sendHTMLOrDesign(0);
+                            handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageDesign, 200);
+                        }
+
+                        function showPageDesign() {
+                            frames++;
+                            pixelPerfect.showPageProofsOrDesign(2);
+                            refreshButtonsPageProofsOrDesign(2);
+                            sendHTMLOrDesign(2);
+                            handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageProofs, 200);
+                        }
+
+                        function showInitialState() {
+                            pixelPerfect.showPageProofsOrDesign(lastMode);
+                            refreshButtonsPageProofsOrDesign(lastMode);
+                            sendHTMLOrDesign(lastMode);
+                        }
+
+                        showPageProofs();
+
+                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                    }
+                }
+            }
+
             crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"] = function(show) {
                 $('.pp__verstka-design .btn').removeClass("active btn-primary btn-success btn-info btn-warning btn-danger").addClass("btn-default");
                 switch (show) {
