@@ -1462,20 +1462,20 @@ jQuery(function($) {
                 $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerFastChangePageProofsOrDesign);
             });
             function handlerFastChangePageProofsOrDesign(e) {
-                if(e.which == 81 && e.ctrlKey && !e.shiftKey && !e.altKey)//(e.which == 65 || e.which == 83 || e.which == 68)
-                {
-                    if($('.pp__50p-btn, .pp__design-btn').hasClass('active'))
-                    {
-                        pixelPerfect.showPageProofsOrDesign(0);
-                        sendHTMLOrDesign(0);
-                    }
-                    else
-                    {
-                        pixelPerfect.showPageProofsOrDesign(1);
-                        sendHTMLOrDesign(1);
-                    }
+                if(mouseKeyPressed) {
+                    if((e.which == 90 || e.which == 88 || e.which == 67) && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                        var mode;
+                        switch(e.which) {
+                            case 90: mode = 0; break;
+                            case 88: mode = 1; break;
+                            case 67: mode = 2; break;
+                        }
+                        pixelPerfect.showPageProofsOrDesign(mode);
+                        refreshButtonsPageProofsOrDesign(mode);
+                        sendHTMLOrDesign(mode);
 
-                    e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                    }
                 }
             }
 
