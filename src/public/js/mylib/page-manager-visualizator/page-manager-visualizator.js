@@ -12,6 +12,7 @@ var defaultOptions = {
     minHIFrame: 480,
     responsiveToMovementOfTheCursorInAConfinedSpace: true,
     movementOfTheCursorInAConfinedSpaceSpred: 10,
+    factorDraggableGrid: 0.5,
     
     gorizontalFixation: "center",
     verticalFixation: "top",
@@ -29,6 +30,7 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     
     var customScrollIFrame = new modules.customScrollIFrame($container, this._options);
     var mapNavigatorIFrame = new modules.mapNavigatorIFrame($container, this._options);
+    ____.mapNavigatorIFrame = mapNavigatorIFrame;
     var resizeIFrame = new modules.resizeIFrame($container, this._options);
     var fixationContentAtResize = new modules.fixationContentAtResize($container, this._options);
     

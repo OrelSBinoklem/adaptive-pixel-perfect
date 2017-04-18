@@ -10,6 +10,20 @@
         border-width: 4px
     .mnif-draggable
         position: absolute
-        background: #ccc
+        background: rgba(0,0,0,0.3)
         box-sizing: border-box
         cursor: move
+    .mnif-border
+        position: absolute
+    .mnif-border-g
+        left: 0
+        right: 0
+        height: 1px
+        background: linear-gradient(to left,#66afe9 0,#999 50%,#fff 50.0001%,#fff 100%) 0 top repeat-x
+        -webkit-background-size: 6px 1px
+    .mnif-border-v
+        top: 0
+        bottom: 0
+        width: 1px
+        background: linear-gradient(to top,#66afe9 0,#999 50%,#fff 50.0001%,#fff 100%) 0 top repeat-y
+        -webkit-background-size: 1px 6px

@@ -36,7 +36,6 @@ jQuery(function($) {
             "mousemove.body.iframe": function(e) {
                 mouse_last_cursor_X = e.screenX;
                 mouse_last_cursor_Y = e.screenY;
-                console.log(e.screenX);
 
                 if(mouseKeyPressed) {
                     if(mouse_pressfix_cursor_Y === null) {
@@ -400,6 +399,7 @@ jQuery(function($) {
                 minHIFrame: 480,
                 responsiveToMovementOfTheCursorInAConfinedSpace: true,
                 movementOfTheCursorInAConfinedSpaceSpred: 10,
+                factorDraggableGrid: 0.5,
                 gorizontalFixation: "center",
                 verticalFixation: "top",
                 minHeightCalculateAuto: 480,
@@ -1115,7 +1115,21 @@ jQuery(function($) {
             pageManagerVisualizator.$container.on("fcar.scroll", sendScrollIFrame);
 
             //Смена позиции окна Айфрейма
+            $('body').on('keydown', handlerChangePosIFrameKeyPress);
+            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
+                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerChangePosIFrameKeyPress);
+            });
+            function handlerChangePosIFrameKeyPress(e) {
+                if(mouseKeyPressed) {
+                    if((e.which == 87 || e.which == 65 || e.which == 83 || e.which == 68) && !e.ctrlKey && !e.shiftKey && !e.altKey)
+                    {
+                        pageManagerVisualizator.mapNavigatorIFrame.handlerChangePosIFrameKeyPress(e);
+                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                    }
+                }
+            }
             pageManagerVisualizator.$container.on("mnif.changePos", sendChangePosIFrame);
+            
 
             //Ресайз Айфрейма
             var resizeIFrame__timeoutId = null;
@@ -1146,7 +1160,6 @@ jQuery(function($) {
                 sendResizeIFrame();
             });
 
-            
             //Запись и отправка данных сессии
             function sendScrollIFrame() {
                 if(window[pageManagerVisualizator._options.nameIFrame] !== undefined) {

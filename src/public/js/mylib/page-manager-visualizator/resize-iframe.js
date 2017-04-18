@@ -34,7 +34,6 @@ var resizeIFrame = function($container, options) {
         
         $(window).on('resize', ____._handlerResize);
         $(window[____._options.nameIFrame].window).on('resize', ____._handlerResize);
-        
     }
     
     this._destroy = function() {

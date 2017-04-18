@@ -6,8 +6,8 @@ var defaultOptions = {
     minWDraggable: 15,
     minHDraggable: 15,
     responsiveToMovementOfTheCursorInAConfinedSpace: true,//в включённом состоянии запоминает положение курсора, при выходе за границы будет реагировать только при возращении курсора в область реагирования, если отключить то при выходе курсора из области реагирование его состояние будет сбрасываеться и при смене движения модуль будет реагировать неожидая возвращения в область реагирования
-    movementOfTheCursorInAConfinedSpaceSpred: 10//насколько курсор должен выйти за границы реагирования чтобы его состояние начало сбрасываться
-    //доделать спред(чтоб запоминалось например на 5 пикселей)
+    movementOfTheCursorInAConfinedSpaceSpred: 10,//насколько курсор должен выйти за границы реагирования чтобы его состояние начало сбрасываться
+    factorDraggableGrid: 0.5
 };
 
 var mapNavigatorIFrame = function($container, options) {
@@ -104,8 +104,7 @@ var mapNavigatorIFrame = function($container, options) {
 
         if(e.preventDefault){e.preventDefault()}else{e.stop()};e.returnValue = false;e.stopPropagation();return false;
     }
-    
-    //Отпускание клавиш
+
     this._handlerUp = function(e) {
         if( ____._draggable ) {
             /*var $mnif = ____._options.$mapNavigatorContainer.find(" .mnif-show-space");
@@ -177,6 +176,50 @@ var mapNavigatorIFrame = function($container, options) {
         } else {
             $mnif.css({borderBottomColor: "#ddd"});
         }
+
+        //Сетка
+        var html = "";
+
+        var stepG = Math.round(wDrag * ____._options.factorDraggableGrid); stepG = (stepG < 1)?1:stepG;
+        var stepV = Math.round(hDrag * ____._options.factorDraggableGrid); stepV = (stepV < 1)?1:stepV;
+
+        //Вертикальные линии
+        $mnif.find(" .mnif-border").remove();
+
+        var i = 0;
+        while(lDrag - (stepG * i) > 0) {
+            html += '<i class="mnif-border mnif-border-v" style="left: '+(lDrag - (stepG * i))+'px;"></i>';
+            i++;
+        }
+        i = 1;
+        var lastL = null;
+        while((lDrag + (stepG * i)) + wDrag <= wDrag_c) {
+            lastL = (lDrag + (stepG * i));
+            html += '<i class="mnif-border mnif-border-v" style="left: '+lastL+'px;"></i>';
+            i++;
+        }
+        if(lastL !== wDrag_c - wDrag && wDrag_c - wDrag > 0) {
+            html += '<i class="mnif-border mnif-border-v" style="left: '+(wDrag_c - wDrag)+'px;"></i>';
+        }
+
+        //Горизонтальные линии
+        i = 0;
+        while(tDrag - (stepV * i) > 0) {
+            html += '<i class="mnif-border mnif-border-g" style="top: '+(tDrag - (stepV * i))+'px;"></i>';
+            i++;
+        }
+        i = 1;
+        var lastT = null;
+        while((tDrag + (stepV * i)) + hDrag <= hDrag_c) {
+            lastT = (tDrag + (stepV * i));
+            html += '<i class="mnif-border mnif-border-g" style="top: '+lastT+'px;"></i>';
+            i++;
+        }
+        if(lastT !== hDrag_c - hDrag && hDrag_c - hDrag > 0) {
+            html += '<i class="mnif-border mnif-border-g" style="top: '+(hDrag_c - hDrag)+'px;"></i>';
+        }
+
+        $mnif.prepend(html);
     }
     
     //Обновление скрытого скролла в IFrame
@@ -286,6 +329,87 @@ var mapNavigatorIFrame = function($container, options) {
                 $container.trigger("mnif.changePos");
             }
             
+            ____.updateDraggable();
+        }
+    }
+
+    this.handlerChangePosIFrameKeyPress = function(e) {
+        if((e.which == 87 || e.which == 65 || e.which == 83 || e.which == 68) && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+            var $iframe = $("#"+(____._options.nameIFrame));
+            var $fittingWrap = $iframe.closest(".pmv-fitting-wrap");
+            var $outerWrap = $iframe.closest(".pmv-outer-wrap");
+            var $mnif = ____._options.$mapNavigatorContainer.find(" .mnif-show-space");
+            var w, h, w_c, h_c, t, l,
+                wDrag, hDrag, tDrag, lDrag, wDrag_c, hDrag_c,
+                stepVertical, stepGorizontal,
+                resTop, resLeft;
+
+            w =   $fittingWrap.width();
+            h =   $fittingWrap.height();
+            t =   $fittingWrap.position().top;
+            l =   $fittingWrap.position().left;
+            w_c = $outerWrap.width();
+            h_c = $outerWrap.height();
+
+            wDrag_c = $mnif.width();
+            hDrag_c = $mnif.height();
+
+            //Вычисляем размеры элементов "за которые можно прокручивать" на внешнем скролле и отступы для смешения чтоб показать насколько прокручена страница
+            hDrag = h_c / h * hDrag_c;
+            if(hDrag < ____._options.minHDraggable) {hDrag = ____._options.minHDraggable;}
+
+            wDrag = w_c / w * wDrag_c;
+            if(wDrag < ____._options.minWDraggable){wDrag = ____._options.minWDraggable;}
+
+            var stepDragG = Math.round(wDrag * ____._options.factorDraggableGrid); stepDragG = (stepDragG < 1)?1:stepDragG;
+            var stepDragV = Math.round(hDrag * ____._options.factorDraggableGrid); stepDragV = (stepDragV < 1)?1:stepDragV;
+
+            var stepsG = 0;
+            var stepsV = 0;
+
+            switch(e.which) {
+                case 87: stepsV = - stepDragV; break;
+                case 65: stepsG = - stepDragG; break;
+                case 83: stepsV = stepDragV; break;
+                case 68: stepsG = stepDragG; break;
+            }
+
+            if(h > h_c) {//Нуль делить нельзя
+                stepVertical = (h_c - h) / (hDrag_c - hDrag);
+
+                resTop = (stepsV) * stepVertical + t;
+                tDrag = resTop / - (h - h_c) * (hDrag_c - hDrag);
+
+                if( resTop > 0 ) {
+                    resTop = 0;
+                }
+                if( resTop < - (h - h_c) ) {
+                    resTop = - (h - h_c);
+                }
+
+                $fittingWrap.css({top: Math.round( resTop )});
+
+                $container.trigger("mnif.changePos");
+            }
+
+            if(w > w_c) {
+                stepGorizontal = (w_c - w) / (wDrag_c - wDrag);
+
+                resLeft = (stepsG) * stepGorizontal + l;
+                lDrag = resLeft / - (w - w_c) * (wDrag_c - wDrag);
+
+                if( resLeft > 0 ) {
+                    resLeft = 0;
+                }
+                if( resLeft < - (w - w_c) ) {
+                    resLeft = - (w - w_c);
+                }
+
+                $fittingWrap.css({left: Math.round( resLeft )});
+
+                $container.trigger("mnif.changePos");
+            }
+
             ____.updateDraggable();
         }
     }
