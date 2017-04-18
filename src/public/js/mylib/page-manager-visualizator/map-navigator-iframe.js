@@ -33,8 +33,8 @@ var mapNavigatorIFrame = function($container, options) {
         //Установка обработчиков событий
         $iFrame.find('body').on('mousemove', ____._handlerMove);
         $('body').on('mousemove', ____._handlerMove);
-        $('body').on('keydown', ____._handlerKeyDown);
-        $iFrame.find('body').on('keydown', ____._handlerKeyDown);
+        //$('body').on('keydown', ____._handlerKeyDown);
+        //$iFrame.find('body').on('keydown', ____._handlerKeyDown);
         ____._options.$mapNavigatorContainer.find(" .mnif-draggable").on('mousedown', ____._handlerMouseDown);
         $('body').on('keyup mouseup', ____._handlerUp);
         $iFrame.find('body').on('keyup mouseup', ____._handlerUp);
@@ -50,8 +50,8 @@ var mapNavigatorIFrame = function($container, options) {
         
         $iFrame.find('body').off('mousemove', ____._handlerMove);
         $('body').off('mousemove', ____._handlerMove);
-        $('body').off('keydown', ____._handlerKeyDown);
-        $iFrame.find('body').off('keydown', ____._handlerKeyDown);
+        //$('body').off('keydown', ____._handlerKeyDown);
+        //$iFrame.find('body').off('keydown', ____._handlerKeyDown);
         ____._options.$mapNavigatorContainer.find(" .mnif-draggable").off('mousedown', ____._handlerMouseDown);
         $('body').off('keyup mouseup', ____._handlerUp);
         $iFrame.find('body').off('keyup mouseup', ____._handlerUp);
