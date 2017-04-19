@@ -1,7 +1,6 @@
 {
   "name": "adaptive-pixel-perfect",
-  "version": "0.2.1",
-  "description": "Pixel perfect for multiple resolutions",
+  "version": "0.2.1"
   "main": "index.js",
   "repository": {
     "type": "git",
