@@ -16,6 +16,7 @@ var pixelPerfect = function($container, options) {
         //свойства
         ____.intervalRefreshByResizeDocument = null;
         ____.wIFrame = null;
+        ____.checkBottomSpace__interval = null;
         
         ____.changePositionTemp = {};
         
@@ -215,6 +216,47 @@ var pixelPerfect = function($container, options) {
                 $container.find( " .pp-design" ).css({opacity: 1});
                 $( '#'+(____._options.nameIFrame) ).css({opacity: 0});
                 break;
+        }
+    }
+
+    this.insertBottomSpace = function() {
+        if(____.checkBottomSpace__interval !== null) {
+            clearInterval(____.checkBottomSpace__interval);
+        }
+
+        $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
+        $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 320px;"></div>');
+
+        ____.checkBottomSpace__interval = setInterval(function() {
+            if($('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space + *').length) {
+                $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
+                $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 320px;"></div>');
+            }
+            if(!$('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').length) {
+                $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 320px;"></div>');
+            }
+        }, 1000);
+    }
+
+    this.deleteBottomSpace = function() {
+        if(____.checkBottomSpace__interval !== null) {
+            clearInterval(____.checkBottomSpace__interval);
+            ____.checkBottomSpace__interval = null;
+            $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
+
+            //Хром сохраняет скролл и при возвращении блока сам прикручивает вниз
+            var iframe = window[____._options.nameIFrame];
+            var hWindow, hDocument, topScroll;
+
+            hWindow = $(iframe.window).height();
+            hDocument = $(iframe.document).height();
+            topScroll = $(iframe.window).scrollTop();
+
+            if(topScroll >= hDocument - hWindow) {
+                console.log(topScroll, hDocument - hWindow);
+                $(iframe.window).scrollTop(0);
+                $(iframe.window).scrollTop(hDocument - hWindow);
+            }
         }
     }
 }

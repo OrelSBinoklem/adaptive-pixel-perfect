@@ -359,6 +359,22 @@
             ____.responseHandlers["onHTMLOrDesign"]();
         });
 
+        this.onShowBottomSpace = function(state) {
+            socket.emit('local.showBottomSpace', {
+                nesteedName: "resolutions|showBottomSpace",
+                val: state,
+                activeGroups: ____.getSynchroGroupsThisBrowser()
+            });
+
+            //Сохраняем
+            ____.setNesteedParamInLocalSessionAndCookie("resolutions|showBottomSpace", state);
+        }
+        socket.on('local.showBottomSpace', function(o) {
+            ____.setNesteedParamInLocalSession(o.nesteedName, o.val, o.activeGroups);
+
+            ____.responseHandlers["onShowBottomSpace"]();
+        });
+
         /*Айфрейм с вёрсткой*/
         this.onResizeIFrame = function(size) {
             socket.emit('local.resizeIFrame', {

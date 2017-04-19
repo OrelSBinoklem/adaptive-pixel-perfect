@@ -366,6 +366,12 @@ jQuery(function($) {
                         pixelPerfect.showPageProofsOrDesign(ls.resolutions.showPageProofsOrDesign);
                         crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"](ls.resolutions.showPageProofsOrDesign);
                     }
+                    if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
+                        if(ls.resolutions.showBottomSpace) {
+                            pixelPerfect.insertBottomSpace();
+                            $(".pp__bottom-space-btn").addClass("active");
+                        }
+                    }
                     //iFrame
                     if( ls && "iframe" in ls && "size" in ls.iframe ) {
                         pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
@@ -1482,57 +1488,87 @@ jQuery(function($) {
             //Функция мерцание
             var lastMode;
             var handlerFlickerPageProofsOrDesign__timeout = null;
-            $('body').on('keydown', handlerFlickerPageProofsOrDesign);
+            $('body').on('keydown', handlerFlickerKeyPress);
             pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
-                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerFlickerPageProofsOrDesign);
+                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerFlickerKeyPress);
             });
-            function handlerFlickerPageProofsOrDesign(e) {
+            $(".pp__flicker-btn").on("click", flicker);
+            function handlerFlickerKeyPress(e) {
                 if(mouseKeyPressed) {
                     if(e.which == 81 && !e.ctrlKey && !e.shiftKey && !e.altKey) {
-                        if(handlerFlickerPageProofsOrDesign__timeout !== null) {
-                            clearInterval(handlerFlickerPageProofsOrDesign__timeout);
-                        } else {
-                            lastMode = 1;
-                            var ls = session.getLocalSessionParams(false);
-                            if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
-                                lastMode = ls.resolutions.showPageProofsOrDesign;
-                            }
-                        }
-
-                        var frames = 0;
-                        function showPageProofs() {
-                            frames++;
-                            if(frames > 5) {
-                                handlerFlickerPageProofsOrDesign__timeout = null;
-                                showInitialState();
-                                return false;
-                            }
-                            pixelPerfect.showPageProofsOrDesign(0);
-                            refreshButtonsPageProofsOrDesign(0);
-                            sendHTMLOrDesign(0);
-                            handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageDesign, 200);
-                        }
-
-                        function showPageDesign() {
-                            frames++;
-                            pixelPerfect.showPageProofsOrDesign(2);
-                            refreshButtonsPageProofsOrDesign(2);
-                            sendHTMLOrDesign(2);
-                            handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageProofs, 200);
-                        }
-
-                        function showInitialState() {
-                            pixelPerfect.showPageProofsOrDesign(lastMode);
-                            refreshButtonsPageProofsOrDesign(lastMode);
-                            sendHTMLOrDesign(lastMode);
-                        }
-
-                        showPageProofs();
+                        flicker();
 
                         e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
                     }
                 }
             }
+            function flicker() {
+                if(handlerFlickerPageProofsOrDesign__timeout !== null) {
+                    clearInterval(handlerFlickerPageProofsOrDesign__timeout);
+                } else {
+                    lastMode = 1;
+                    var ls = session.getLocalSessionParams(false);
+                    if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
+                        lastMode = ls.resolutions.showPageProofsOrDesign;
+                    }
+                }
+
+                var frames = 0;
+                function showPageProofs() {
+                    frames++;
+                    if(frames > 5) {
+                        handlerFlickerPageProofsOrDesign__timeout = null;
+                        showInitialState();
+                        return false;
+                    }
+                    pixelPerfect.showPageProofsOrDesign(0);
+                    refreshButtonsPageProofsOrDesign(0);
+                    sendHTMLOrDesign(0);
+                    handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageDesign, 200);
+                }
+
+                function showPageDesign() {
+                    frames++;
+                    pixelPerfect.showPageProofsOrDesign(2);
+                    refreshButtonsPageProofsOrDesign(2);
+                    sendHTMLOrDesign(2);
+                    handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageProofs, 200);
+                }
+
+                function showInitialState() {
+                    pixelPerfect.showPageProofsOrDesign(lastMode);
+                    refreshButtonsPageProofsOrDesign(lastMode);
+                    sendHTMLOrDesign(lastMode);
+                }
+
+                showPageProofs();
+            }
+
+            //Добавление-удаление блока перед закрывающим тегом body
+            $(".pp__bottom-space-btn").on("click", function(){
+                if(!$(".pp__bottom-space-btn").hasClass("active")) {
+                    pixelPerfect.insertBottomSpace();
+                    $(".pp__bottom-space-btn").addClass("active");
+                } else {
+                    pixelPerfect.deleteBottomSpace();
+                    $(".pp__bottom-space-btn").removeClass("active");
+                }
+
+                sendShowBottomSpace($(".pp__bottom-space-btn").hasClass("active"));
+            });
+            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
+                var ls = session.getLocalSessionParams(false);
+
+                if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
+                    if(ls.resolutions.showBottomSpace) {
+                        pixelPerfect.insertBottomSpace();
+                        $(".pp__bottom-space-btn").addClass("active");
+                    } else {
+                        pixelPerfect.deleteBottomSpace();
+                        $(".pp__bottom-space-btn").removeClass("active");
+                    }
+                }
+            });
 
             crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"] = function(show) {
                 $('.pp__verstka-design .btn').removeClass("active btn-primary btn-success btn-info btn-warning btn-danger").addClass("btn-default");
@@ -1641,6 +1677,9 @@ jQuery(function($) {
             function sendHTMLOrDesign(state) {
                 session.onHTMLOrDesign(state);
             }
+            function sendShowBottomSpace(state) {
+                session.onShowBottomSpace(state);
+            }
 
             //Приём данных сессии
             session.responseHandlers["onChangeScreenshots"] = function() {
@@ -1660,6 +1699,19 @@ jQuery(function($) {
                 if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
                     pixelPerfect.showPageProofsOrDesign(ls.resolutions.showPageProofsOrDesign);
                     crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"](ls.resolutions.showPageProofsOrDesign);
+                }
+            }
+            session.responseHandlers["onShowBottomSpace"] = function() {
+                var ls = session.getLocalSessionParams(true);
+                
+                if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
+                    if(ls.resolutions.showBottomSpace) {
+                        pixelPerfect.insertBottomSpace();
+                        $(".pp__bottom-space-btn").addClass("active");
+                    } else {
+                        pixelPerfect.deleteBottomSpace();
+                        $(".pp__bottom-space-btn").removeClass("active");
+                    }
                 }
             }
 
