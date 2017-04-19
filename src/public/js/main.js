@@ -1514,6 +1514,14 @@ jQuery(function($) {
                 }
 
                 var frames = 0;
+                function hiddenAll() {
+                    pixelPerfect.$container.find( " .pp-design" ).css({opacity: 0});
+                    $( '#'+(pixelPerfect._options.nameIFrame) ).css({opacity: 0});
+                    $('.pp__verstka-design .btn').removeClass("active btn-primary btn-success btn-info btn-warning btn-danger").addClass("btn-default");
+
+                    handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageProofs, 400);
+                }
+
                 function showPageProofs() {
                     frames++;
                     if(frames > 5) {
@@ -1541,7 +1549,7 @@ jQuery(function($) {
                     sendHTMLOrDesign(lastMode);
                 }
 
-                showPageProofs();
+                hiddenAll();
             }
 
             //Добавление-удаление блока перед закрывающим тегом body
@@ -1703,7 +1711,7 @@ jQuery(function($) {
             }
             session.responseHandlers["onShowBottomSpace"] = function() {
                 var ls = session.getLocalSessionParams(true);
-                
+
                 if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
                     if(ls.resolutions.showBottomSpace) {
                         pixelPerfect.insertBottomSpace();

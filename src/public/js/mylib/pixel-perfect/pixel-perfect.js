@@ -244,7 +244,7 @@ var pixelPerfect = function($container, options) {
             ____.checkBottomSpace__interval = null;
             $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
 
-            //Хром сохраняет скролл и при возвращении блока сам прикручивает вниз
+            //Хром сохраняет скролл и при возвращении блока сам прокручивает вниз
             var iframe = window[____._options.nameIFrame];
             var hWindow, hDocument, topScroll;
 
