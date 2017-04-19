@@ -54,57 +54,58 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     });
 
     this.setSizeIFrame = function( w, source_h, fast ) {
-        var $fittingWrap;
-        if($("#"+(____._options.nameIFrame)).length) {
-            $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
-        } else {
-            $fittingWrap = $container.find(" .pmv-fitting-wrap");
-        }
-
-        var h;
-
-        w = parseInt(w);
-
-        if(source_h == "auto") {
-            h = Math.round(w / ____._options.heightCalculateRatio);
-            if(h < ____._options.minHeightCalculateAuto) {
-                h = ____._options.minHeightCalculateAuto;
-            }
-        } else {
-            h = source_h;
-        }
-
-        if(fast) {
-            fixationContentAtResize.startFixation();
-
-            if(source_h == "auto" && ____._options.calculatedHeightAsMaxHeight) {
-                $fittingWrap.stop().css({width: w+'px', height: '100%', maxHeight: h+'px'});
+        if(w !== null) {
+            var $fittingWrap;
+            if($("#"+(____._options.nameIFrame)).length) {
+                $fittingWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-fitting-wrap");
             } else {
-                $fittingWrap.stop().css({width: w+'px', height: h+'px', maxHeight: ''});
+                $fittingWrap = $container.find(" .pmv-fitting-wrap");
             }
 
-            fixationContentAtResize.stopFixation();
-        } else {
-            fixationContentAtResize.startFixation();
+            var h;
 
-            if(source_h == "auto" && ____._options.calculatedHeightAsMaxHeight) {
-                var $outerWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-outer-wrap");
+            w = parseInt(w);
 
-                $fittingWrap.css({height: ($fittingWrap.height())+'px', maxHeight: ''});
-                
-                $fittingWrap.stop().animate({width: w+'px', height: ((h < $outerWrap.height())?h:$outerWrap.height())+'px'}, 1000, "swing", function() {
+            if(source_h == "auto") {
+                h = Math.round(w / ____._options.heightCalculateRatio);
+                if(h < ____._options.minHeightCalculateAuto) {
+                    h = ____._options.minHeightCalculateAuto;
+                }
+            } else {
+                h = source_h;
+            }
+
+            if(fast) {
+                fixationContentAtResize.startFixation();
+
+                if(source_h == "auto" && ____._options.calculatedHeightAsMaxHeight) {
                     $fittingWrap.stop().css({width: w+'px', height: '100%', maxHeight: h+'px'});
+                } else {
+                    $fittingWrap.stop().css({width: w+'px', height: h+'px', maxHeight: ''});
+                }
 
-                    fixationContentAtResize.stopFixation();
-                });
+                fixationContentAtResize.stopFixation();
             } else {
-                $fittingWrap.css({maxHeight: ''});
-                $fittingWrap.stop().animate({width: w+'px', height: h+'px'}, 1000, "swing", function() {
-                    fixationContentAtResize.stopFixation();
-                });
+                fixationContentAtResize.startFixation();
+
+                if(source_h == "auto" && ____._options.calculatedHeightAsMaxHeight) {
+                    var $outerWrap = $("#"+(____._options.nameIFrame)).closest(".pmv-outer-wrap");
+
+                    $fittingWrap.css({height: ($fittingWrap.height())+'px', maxHeight: ''});
+
+                    $fittingWrap.stop().animate({width: w+'px', height: ((h < $outerWrap.height())?h:$outerWrap.height())+'px'}, 1000, "swing", function() {
+                        $fittingWrap.stop().css({width: w+'px', height: '100%', maxHeight: h+'px'});
+
+                        fixationContentAtResize.stopFixation();
+                    });
+                } else {
+                    $fittingWrap.css({maxHeight: ''});
+                    $fittingWrap.stop().animate({width: w+'px', height: h+'px'}, 1000, "swing", function() {
+                        fixationContentAtResize.stopFixation();
+                    });
+                }
             }
         }
-
     }
 
     this.setPositionIFrame = function(l_factor, t_factor) {

@@ -437,6 +437,12 @@
     .pp__resolution-name-btn
         text-align: left
         font-weight: bold
+        &.bloor
+            //border-style: dotted
+            color: #333
+            background-color: #fff
+            border-color: #ccc
+            box-shadow: none
         .badge
             display: inline-block
             font-weight: normal
@@ -447,6 +453,8 @@
             width: 14px
         .badge-hidden
             visibility: hidden
+        &.active .badge
+            background-color: #ec971f
         &-w, &-h
             width: 36px
             display: inline-block

@@ -355,8 +355,9 @@ jQuery(function($) {
                 }
                 function pageLoaded() {
                     //Разрешение
-                    if( ls && "iframe" in ls && "size" in ls.iframe ) {
+                    if( ls && "iframe" in ls && "size" in ls.iframe && ls.iframe.size.w !== null) {
                         pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
+                        $(".pp__resolution-name-btn.active").addClass("bloor");
                     } else if(ls && "resolutions" in ls && "currentResolution" in ls.resolutions) {
                         pageManagerVisualizator.setSizeIFrame(ls.resolutions.currentResolution.w, ls.resolutions.currentResolution.h, true);
                     }
@@ -373,9 +374,10 @@ jQuery(function($) {
                         }
                     }
                     //iFrame
-                    if( ls && "iframe" in ls && "size" in ls.iframe ) {
+                    //Разрешение выше
+                    /*if( ls && "iframe" in ls && "size" in ls.iframe ) {
                         pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
-                    }
+                    }*/
                     if( ls && "iframe" in ls && "position" in ls.iframe ) {
                         pageManagerVisualizator.setPositionIFrame(ls.iframe.position.left, ls.iframe.position.top);
                     }
@@ -1008,6 +1010,8 @@ jQuery(function($) {
                 sendSelectResolution(w, h);
 
                 pageManagerVisualizator.setSizeIFrame(w, h);
+                session.onResizeIFrame({w: null, h: null});
+                $(".pp__resolution-name-btn").removeClass("bloor");
             }
 
             //Запись и отправка данных сессии
@@ -1062,6 +1066,7 @@ jQuery(function($) {
                     $(".pp__resolutions-list-resolution[data-w='"+(o.val.w)+"'][data-h='"+(o.val.h)+"'] .pp__resolutionforscreen-name-btn").addClass("active");
 
                     pageManagerVisualizator.setSizeIFrame(ls.resolutions.currentResolution.w, ls.resolutions.currentResolution.h);
+                    $(".pp__resolution-name-btn").removeClass("bloor");
                 }
 
                 var screenshotsCollection = session.getCurrentRelatedScreenshotsCollection();
@@ -1230,13 +1235,16 @@ jQuery(function($) {
                     h: $fittingWrap.height()
                 };
                 session.onResizeIFrame(lastSizeIFrame);
+
+                $(".pp__resolution-name-btn.active").addClass("bloor");
             }
 
             //Приём данных сессии
             session.responseHandlers["onResizeIFrame"] = function(o) {
                 var ls = session.getLocalSessionParams(true);
-                if( ls && "iframe" in ls && "size" in ls.iframe ) {
+                if( ls && "iframe" in ls && "size" in ls.iframe && ls.iframe.size.w !== null ) {
                     pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
+                    $(".pp__resolution-name-btn.active").addClass("bloor");
                 }
             }
             session.responseHandlers["onChangePosIFrame"] = function(o) {
