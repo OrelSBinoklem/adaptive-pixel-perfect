@@ -182,7 +182,7 @@ jQuery(function($) {
                         activeGroups.filter(function(item, i, arr) {
                             return item in sessionGroupsForNames;
                         });
-                        $.cookie('adaptive_pixel_perfect_groups_session', $.toJSON({"groups": activeGroups}));
+                        $.cookie('adaptive_pixel_perfect_groups_session', $.toJSON({"groups": activeGroups}), {expires: 7, path: '/'});
                         if(!activeGroups.length) {
                             $.removeCookie('adaptive_pixel_perfect_groups_session');
                             haveCookie = false;

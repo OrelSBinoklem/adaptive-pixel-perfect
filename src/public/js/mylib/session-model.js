@@ -179,7 +179,7 @@
                         return item in sessionGroupsForNames;
                     });
 
-                    $.cookie('adaptive_pixel_perfect_groups_session', $.toJSON({"groups": sessionGroups}));
+                    $.cookie('adaptive_pixel_perfect_groups_session', $.toJSON({"groups": sessionGroups}), {expires: 7, path: '/'});
                     if(!sessionGroups.length) {
                         $.removeCookie('adaptive_pixel_perfect_groups_session');
                         return notObjectSession();
@@ -212,7 +212,7 @@
                                 dataSession[key] = resObj[key];
                             }
                             if(isExistParams) {
-                                $.cookie('adaptive_pixel_perfect_browser_session', $.toJSON(dataSession));
+                                $.cookie('adaptive_pixel_perfect_browser_session', $.toJSON(dataSession), {expires: 7, path: '/'});
                             }
                         })();
 
@@ -302,7 +302,7 @@
                 sessionGroups.filter(function(item, i, arr) {
                     return item in sessionGroupsForNames;
                 });
-                $.cookie('adaptive_pixel_perfect_groups_session', $.toJSON({"groups": sessionGroups}));
+                $.cookie('adaptive_pixel_perfect_groups_session', $.toJSON({"groups": sessionGroups}), {expires: 7, path: '/'});
                 if(!sessionGroups.length) {
                     $.removeCookie('adaptive_pixel_perfect_groups_session');
                 }
@@ -496,7 +496,7 @@
                 dataSession = $.secureEvalJSON($.cookie('adaptive_pixel_perfect_browser_session'));
             }
             ____.setNesteedParamInObj(nesteedName, val, dataSession);
-            $.cookie('adaptive_pixel_perfect_browser_session', $.toJSON(dataSession));
+            $.cookie('adaptive_pixel_perfect_browser_session', $.toJSON(dataSession), {expires: 7, path: '/'});
         }
 
         //Сохранить вложенный параметр в переданный обьект

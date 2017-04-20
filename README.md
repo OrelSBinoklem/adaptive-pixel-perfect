@@ -39,6 +39,7 @@ The plugin will be available at **http://localhost:3010/?a-pp=1**
 
 | Release | Notes |
 | --- | --- |
+| 0.2.7 | Fixed saving the selected synchronization group |
 | 0.2.6 | If the user cuts the iframe then the button ceases to be active, but it remains to highlight the "badge". Now in the session, the priority of choosing the resolution or the size as a result of the manual resizing of the iframe |
 | 0.2.4 | Additing bootom space for close tag body, to be able to scroll down and see in the design which block should be typed as follows. Added the flicker function to make it easier to adjust the block with fuzzy edges under the design |
 | 0.2.0 | Improved design and made it more appropriate bootstrap. Additing hot-keys |
