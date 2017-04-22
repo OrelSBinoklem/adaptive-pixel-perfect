@@ -321,7 +321,7 @@
             ____.setNesteedParamInLocalSessionAndCookie("pages|currentPage", page);
         }
         socket.on('local.selectPage', function(o) {
-            ____.setNesteedParamInLocalSession("pages.currentPage", o.val, o.activeGroups);
+            ____.setNesteedParamInLocalSession("pages|currentPage", o.val, o.activeGroups);
 
             ____.responseHandlers["onSelectPage"](o);
         });
@@ -470,6 +470,7 @@
                                     var param = activeParams[i];
                                     if(nesteedNameArr[0] == param) {
                                         //console.log(dataSession);
+                                        //console.log(nesteedName, val, dataSession);
                                         ____.setNesteedParamInObj(nesteedName, val, dataSession);
                                         //console.log(dataSession);
                                         break;

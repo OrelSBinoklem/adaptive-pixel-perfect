@@ -4,7 +4,7 @@
 var crossModulesFunctions = {};
 jQuery(function($) {
     var session;
-    var socket = io.connect('/');
+    var socket = io.connect('/a-pp');
     var browserSyncPort = undefined;
 
     socket.once("browserSyncPort", function(bsp) {
@@ -713,6 +713,7 @@ jQuery(function($) {
                 //Получаем сессию без куков потому что м в куках и так будет записано текущее состояние сессии
                 var ls = session.getLocalSessionParams(true);
                 //Страница
+                console.log(ls.pages.currentPage, pageManagerVisualizator.currentPage);
                 if( ls && "pages" in ls && "currentPage" in ls.pages && (ls.pages.currentPage !== pageManagerVisualizator.currentPage && true) ) {
                     $(".pmv__pages-btn-page").removeClass("active");
                     $(".pmv__pages-item[data-name='"+(ls.pages.currentPage)+"'] > * > .pmv__pages-btn-page").addClass("active");
@@ -2101,18 +2102,6 @@ jQuery(function($) {
                 }
             });
         })();
-
-        //Рероутим скрипт browserSync
-        pageManagerVisualizator.$container.on("pmv.load.iframe", function() {
-            if(browserSyncPort !== undefined) {
-                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("script[src]").each(function() {
-                    //console.log($(this).attr("src"));
-                    if(/^\/browser-sync\/browser-sync-client.js\?v=/gim.test($(this).attr("src"))) {
-                        $(this).attr("src", $(this).attr("src").replace(/^\/browser-sync\/browser-sync-client.js\?v=/gim, "http://localhost:"+browserSyncPort+"/browser-sync/browser-sync-client.js?v="));
-                    }
-                });
-            }
-        });
 
         //Первое применение сессии
         crossModulesFunctions["session.applyAllParamsLocalSession"](false);

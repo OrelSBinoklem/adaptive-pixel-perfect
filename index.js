@@ -25,10 +25,12 @@ var __ = function(port, dirDesignScreenshots, browserSyncPort) {
 
     this.app = express();
     this.server = http.createServer(this.app);
-    this.io = io.listen(this.server);
-
+    this.io = io(this.server);
+    this.io = this.io.of('/a-pp');
+    
     if(browserSyncPort !== undefined) {
         this.app.use('/a-pp-design-screenshots', function (req, res, next) {
+            //console.log(req._parsedUrl.path);
             if("a-pp" in req.query && req.query["a-pp"] == 1) {
                 express.static(dirDesignScreenshots).apply(this, arguments);
             } else {
@@ -37,6 +39,7 @@ var __ = function(port, dirDesignScreenshots, browserSyncPort) {
         });
 
         this.app.use('/', function (req, res, next) {
+            //console.log(req._parsedUrl.path);
             if("a-pp" in req.query && req.query["a-pp"] == 1) {
                 express.static(__dirname + '/public').apply(this, arguments);
             } else {
@@ -75,7 +78,7 @@ __.prototype.init = function() {
 
         ____.server.listen( ____.port || 3010 );
 
-        ____.io.sockets.on('connection', function (socket) {
+        ____.io.on('connection', function (socket) {
             if("browserSyncPort" in ____) {
                 socket.emit("browserSyncPort", ____.browserSyncPort);
             }
