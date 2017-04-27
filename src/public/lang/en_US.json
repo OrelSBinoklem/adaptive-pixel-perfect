@@ -1,0 +1,75 @@
+{
+  "pages": "Pages",
+  "screenshots": "Screenshots",
+
+  "pp__verstka-btn": "Page profs",
+  "pp__50p-btn": "Translucent layout superimposed on design",
+  "pp__design-btn": "Image of design",
+
+  "pp__flicker-btn": "Function flicker - if the boundaries of the object are fuzzy and difficult to bring it under the design, then you can use this function. It alternately switches layout-design, layout-design, layout-design. Thanks to this, it is possible to determine whether the object is designed exactly for design",
+  "pp__bottom-space-btn": "Adds after the closing body tag an empty block with a certain height so that you can scroll down and see in the design which block should be typed as follows",
+
+  "description-sync": {
+    "groups-synchronous": "Synchronization groups:",
+    "params-synchronous": "Sync params:",
+    "generals": "Main:",
+    "select-pages": "selection of pages",
+    "select-resolution": "choice of resolution",
+    "pixel-perfect": "Pixel perfect:",
+    "50-to-50": "page profs, 50 by 50, design",
+    "bottom-space": "indent at the bottom of the page",
+    "params-iframe": "IFrame parameters:",
+    "position-iframe": "position",
+    "size-iframe": "size",
+    "params-page-profs": "Page profs parameters:",
+    "page-scroll": "scroll"
+  },
+  "pmv__add-page": "Add page",
+  "pmv__add-group": "Add group",
+  "pp__add-resolution-btn": "Add a resolution",
+
+  "common-for-modal": {
+    "add": "Add",
+    "delete": "Delete",
+    "update": "Update",
+    "back": "Back"
+  },
+  "a-pp__modal-add-group-session": {
+    "modal-title": "Enter name",
+    "name": "Name"
+  },
+  "a-pp__modal-delete-group-session": {
+    "modal-title": "Delete the group"
+  },
+  "pmv__modal-add-page-href": {
+    "modal-title": "link to the page",
+    "urn-exists": "This page already exists",
+    "urn-empty": "You entered an empty value"
+  },
+  "pmv__modal-add-group": {
+    "modal-title": "Group name",
+    "name-exists": "This group already exists",
+    "name-empty": "You entered an empty value"
+  },
+  "pmv__modal-page-or-group-update": {
+    "modal-title": "Enter the",
+    "new-urn": "new URN",
+    "new-name": "new name"
+  },
+  "pmv__modal-page-or-group-delete": {
+    "modal-title": "Delete",
+    "delete-nested": "Delete with nested",
+    "page": "the page",
+    "group": "the group"
+  },
+  "pp__modal-add-resolution": {
+    "modal-title": "Enter width and height",
+    "width": "Width",
+    "height": "Height",
+    "exists": "This resolution already exists!",
+    "not-digit": "You must enter a number between 320 and 99999 or &quot;auto&quot; in height"
+  },
+  "pp__modal-delete-resolution": {
+    "modal-title": "Delete resolution"
+  }
+}

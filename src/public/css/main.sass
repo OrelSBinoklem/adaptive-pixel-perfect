@@ -1,8 +1,8 @@
 //Рероутим подгрузку контента
 @font-face
     font-family: 'FontAwesome'
-    src: url('../fonts/fontawesome-webfont.eot?v=4.3.0&a-pp=1')
-    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.3.0&a-pp=1') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.3.0&a-pp=1') format('woff2'),url('../fonts/fontawesome-webfont.woff?v=4.3.0&a-pp=1') format('woff'),url('../fonts/fontawesome-webfont.ttf?v=4.3.0&a-pp=1') format('truetype'),url('../fonts/fontawesome-webfont.svg?v=4.3.0&a-pp=1#fontawesomeregular') format('svg')
+    src: url('../fonts/fontawesome-webfont.eot?v=4.7.0&a-pp=1')
+    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0&a-pp=1') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0&a-pp=1') format('woff2'),url('../fonts/fontawesome-webfont.woff?v=4.7.0&a-pp=1') format('woff'),url('../fonts/fontawesome-webfont.ttf?v=4.7.0&a-pp=1') format('truetype'),url('../fonts/fontawesome-webfont.svg?v=4.7.0&a-pp=1#fontawesomeregular') format('svg')
     font-weight: normal
     font-style: normal
 
@@ -52,63 +52,56 @@
     box-sizing: border-box
     z-index: 1
 
-.shab__main-menu-bottom-section
-    position: absolute
-    left: 0
-    bottom: 0
-    right: 0
-    padding: 5px
-    background-color: #fff
-    z-index: 2
-    &.open
+.settings
+    &__window
+        display: none
+        position: absolute
+        left: 125px
         top: 0
+        bottom: 0
+        width: 483px
+        box-shadow: 1px 0 5px 0 rgba(0,0,0,0.5), inset -16px 0 0 0 #ddd
+        background-color: #fff
+        .row
+            margin-top: 15px
+            margin-bottom: 15px
+            [class*="col-"]
+                padding-left: 5px
+                padding-right: 5px
+        .gorizontal-separator
+            margin: 0 -15px
+    &__scrollwrap
+        position: absolute
+        top: 0
+        left: 0
+        right: 16px
+        bottom: 0
+    &__param
+        &-left
+            padding-right: 7px
+        &-right
+            padding-left: 8px
 
-.shab__main-menu-gorizontal-separator
+.gorizontal-separator
     background: linear-gradient(to left, #999 0, #999 50%, #fff 50.0001%, #fff 100%) 0 top repeat-x
     -webkit-background-size: 6px 1px
     background-size: 6px 1px
     height: 1px
 
-.shab__btn-open-groups-session
-    .caret
-        border-top: 0
-        border-bottom: 4px dashed
-
-.shab__add-group-session
-    display: none
-    position: absolute
-    bottom: 5px
-    right: 0
-
-.shab__session-groups-list.open
-    .shab__add-group-session
-        display: inline-block
-
-.shab__session-groups
-    position: absolute
-    left: 0
-    bottom: 0
-    right: 0
-    padding: 5px
-    background-color: #fff
-    z-index: 2
-
 .shab__session-groups-list
     position: relative
     padding-top: 5px
     margin-bottom: 5px
-    background: linear-gradient(to left, #999 0%, #999 50%, #fff 50.0001%, #fff 100%) 0 bottom repeat-x
     background-size: 6px 1px
+    &-ul
+        margin-bottom: 5px
     &.open
         padding-bottom: 33px
 
 .shab__session-groups-list-item
-    display: none
     position: relative
     ~ .shab__session-groups-list-item
-        margin-top: 10px
-    &.active
-        display: block
+        margin-top: 5px
 
 .shab__session-groups-list.open .shab__session-groups-list-item
     display: block
@@ -120,15 +113,37 @@
 .shab__session-groups-list-btn
     font-weight: bold
     text-align: left
+    word-wrap: break-word
+    white-space: pre-wrap
+    padding-right: 240px
+    &.active
+        color: red
+
+.shab__add-group-session
+    float: right
+
+#shab__group-session-tips
+    margin-top: 5px
+    ul
+        padding-left: 16px
+        list-style: disc
+        ul
+            padding-left: 15px
+            list-style: none
+    .fa, .glyphicon
+        min-width: 18px
+        text-align: right
+    .fa-mobile
+        min-width: 0
 
 .shab__session-groups-btn-drag
     display: none
 
-.shab__session-groups-list.open .shab__session-groups-list-item:hover .shab__session-groups-btn-drag
+.shab__session-groups-list-item:hover .shab__session-groups-btn-drag
     display: inline-block
     position: absolute
     top: 0
-    right: 0
+    left: 216px
     box-shadow: none
 
 .shab__session-groups-list .placeholder
@@ -136,38 +151,30 @@
     outline: #4183C4 dashed 1px
 
 .shab__main-menu-container .shab__session-groups-synchro-params-btn
-    opacity: 0
-    width: 24px
+    min-width: 24px
 
 .shab__session-groups-special
-    display: none
     position: absolute
-    left: 0
-    top: 23px
+    right: 0
+    top: 0
+    .btn-group
+        margin-left: 1px
+        &:nth-child(2)
+            margin-left: 0
 
 .shab__main-menu-container .shab__session-groups-delete-btn
     display: none
     position: absolute
-    right: 0
-    top: 23px
+    left: 180px
+    top: 0
     width: 24px
-    height: 20px
+    height: 22px
 
-.shab__session-groups-list.open
-    .shab__session-groups-special
-        display: block
-    .shab__session-groups-list-btn
-        &.active
-            color: red
-    .shab__session-groups-synchro-params-btn
-        &.active
-            opacity: 1
-    .shab__session-groups-list-item:hover
-        .shab__session-groups-synchro-params-btn, .shab__session-groups-delete-btn
-            opacity: 1
-            display: inline-block
+.shab__session-groups-list-item:hover
+    .shab__session-groups-delete-btn
+        display: inline-block
 
-#shab-add-group-session .form-group
+#a-pp__modal-add-group-session .form-group
     margin-bottom: 0
 
 .shab__global-settings
@@ -291,11 +298,11 @@
 .pmv__modal-empty
     display: none
 
-#modal-pmv-add-page-href
+#pmv__modal-add-page-href
     .modal-body
         padding-bottom: 0
 
-#shab__page-or-group-update
+#pmv__modal-page-or-group-update
     .shab__page-or-group__name
         display: none
 
@@ -426,7 +433,7 @@
         height: 110px
 
 .pp__resolutions-menu
-    margin-top: 15px
+    margin-top: 10px
 
 .pp__resolutions-list
     margin-top: 5px
@@ -696,12 +703,16 @@
 
 .pp
     &__verstka-design
-        margin-top: 15px
+        margin-top: 5px
         .btn
             padding-left: 0
             padding-right: 0
     &__flicker-and-bottom-space
-        margin: 5px 0 15px
+        margin: 5px 0 5px
+        .btn
+            width: 35px
+        .pp__bottom-space-btn
+            width: 36px
     &__screenshots
         &-btn
             &-collapsed.btn, &-add-screenshot.btn

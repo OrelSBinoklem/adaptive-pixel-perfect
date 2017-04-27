@@ -6,6 +6,7 @@ var fs   = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 var proxy = require('express-http-proxy');
+var externalip = require('externalip');
 
 var pageManagerVisualizator   = require('./lib/page-manager-visualizator');
 var pixelPerfect   = require('./lib/pixel-perfect');
@@ -27,6 +28,21 @@ var __ = function(port, dirDesignScreenshots, browserSyncPort) {
     this.server = http.createServer(this.app);
     this.io = io(this.server);
     this.io = this.io.of('/a-pp');
+
+    //var myip = require('quick-local-ip');
+    //console.log(myip.getLocalIP4());
+
+
+    /*var localtunnel = require('localtunnel');
+
+    var tunnel = localtunnel(3010, {subdomain: "bb", local_host: "localhost"}, function(err, tunnel) {
+        //if (err)
+
+        // the assigned public url for your tunnel
+        // i.e. https://abcdefgjhij.localtunnel.me
+            //console.log(tunnel.url);
+        //tunnel.url;
+    });*/
     
     if(browserSyncPort !== undefined) {
         this.app.use('/a-pp-design-screenshots', function (req, res, next) {
@@ -79,10 +95,6 @@ __.prototype.init = function() {
         ____.server.listen( ____.port || 3010 );
 
         ____.io.on('connection', function (socket) {
-            if("browserSyncPort" in ____) {
-                socket.emit("browserSyncPort", ____.browserSyncPort);
-            }
-
             ____.sessionModel.connect(socket);
 
             /*socket.on('disconnect', function () {

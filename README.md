@@ -52,6 +52,7 @@ The plugin will be available at **http://localhost:3010/?a-pp=1**
 
 | Release | Notes |
 | --- | --- |
+| 0.3.0 | Added a window with settings, added English, moved session groups to the settings window and divided the parameters for more flexible customization |
 | 0.2.8 | Fixed synchronization select pages |
 | 0.2.7 | Fixed saving the selected synchronization group |
 | 0.2.6 | If the user cuts the iframe then the button ceases to be active, but it remains to highlight the "badge". Now in the session, the priority of choosing the resolution or the size as a result of the manual resizing of the iframe |

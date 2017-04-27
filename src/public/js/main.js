@@ -5,11 +5,6 @@ var crossModulesFunctions = {};
 jQuery(function($) {
     var session;
     var socket = io.connect('/a-pp');
-    var browserSyncPort = undefined;
-
-    socket.once("browserSyncPort", function(bsp) {
-        browserSyncPort = bsp;
-    });
 
     socket.once('session.load', function (data) {
         session = new modules.sessionModel(data, socket);
@@ -50,105 +45,54 @@ jQuery(function($) {
             }
         });
 
-        //Глобальные настройки
+        /****************************************************/
+        /*Настройки*/
+        /****************************************************/
         (function() {
-            var animations = {};
-            $( ".shab__global-settings-btn" ).on("click", function () {
-                if( !$(this).hasClass('active') ) {
-                    openOptions();
+            //Открыть-закрыть меню выбора настроек
+            $(".settings__window-open-btn").on("click", function () {
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                    $(".settings__window").css({display: "none"});
                 } else {
-                    closeOptions();
+                    $(this).addClass('active');
+                    $(".settings__window").css({display: "block"});
+                }
+            });
+            var dragItemList = false;
+            $("body").on("click click.body.iframe", function (e) {
+                if( $(e.target).closest($(".settings__window-open-btn").add($(".settings__window, #a-pp__modal-add-group-session, #a-pp__modal-delete-group-session"))).length == 0 && !dragItemList ) {
+                    $(".settings__window-open-btn").removeClass('active');
+                    $(".settings__window").css({display: "none"});
                 }
             });
 
-            $( "body" ).on("click click.body.iframe", function (e) {
-                if( $(e.target).closest($(".shab__global-settings-btn").add($(".shab__global-settings"))).size() == 0 ) {
-                    if( $(".shab__global-settings-btn").hasClass('active') ) {
-                        closeOptions();
-                    }
-                }
+            //Выбор языка
+            $('select.settings__lang-select').on("change", function(){
+                setLang($(this).val());
+
+                sendChangeLang($(this).val());
             });
 
-            function openOptions() {
-                if( "openOptionsTimeLine__close" in animations ) { animations.openOptionsTimeLine__close.pause() }
-                $(" .shab__global-settings").css({
-                    display: "block",
-                    opacity: 0,
-                    transform: "scale(0.8, 0.8)"
-                });
+            setLang(session.data.globalSession.lang);
+            $('.settings__lang-select.selectpicker').selectpicker('val', session.data.globalSession.lang);
 
-                if( !("openOptionsTimeLine" in animations) ) {
-                    animations.openOptionsTimeLine = (new TimelineLite()).append([
-                        TweenMax.to($(".shab__global-settings"), 0.5,
-                            {css:{transform: "scale(1, 1)" }}),
-                        TweenMax.to($(".shab__global-settings"), 0.3,
-                            {css:{ opacity: 1 }})
-                    ]);
-                } else {
-                    animations.openOptionsTimeLine.restart();
-                }
-
-                $( ".shab__global-settings-btn" ).addClass('active');
+            //Запись и отправка данных настроек
+            function sendChangeLang(lang) {
+                session.onChangeLang(lang);
             }
 
-            function closeOptions() {
-                if( "openOptionsTimeLine" in animations ) { animations.openOptionsTimeLine.pause() }
-                if( !("openOptionsTimeLine__close" in animations) ) {
-                    animations.openOptionsTimeLine__close = (new TimelineLite()).append([
-                        TweenMax.to($(".shab__global-settings"), 0.5,
-                            {css:{ transform: "scale(0.8, 0.8)"}, onComplete: handlerComplete}),
-                        TweenMax.to($(".shab__global-settings"), 0.5,
-                            {css:{ opacity: 0 }})
-                    ]);
-                } else {
-                    animations.openOptionsTimeLine__close.restart();
-                }
-                function handlerComplete() {
-                    $(".shab__global-settings").css('display', 'none');
-                }
-
-                $( ".shab__global-settings-btn" ).removeClass('active');
+            //Приём данных настроек
+            session.responseHandlers["onChangeLang"] = function() {
+                setLang(session.data.globalSession.lang);
+                $('.settings__lang-select.selectpicker').selectpicker('val', session.data.globalSession.lang);
             }
-
-            //$('#text-encoding-server').selectpicker();
-
-            //Кодировка на хосте
-            //$('#text-encoding-server').selectpicker('val', shablonizator.settings.find('text_encoding_server').text());
-
-            /*$('#text-encoding-server').on('change', function(){
-                shablonizator.textEncodingServer = $(this).val();
-                shablonizator.settings.find('text_encoding_server').text($(this).val());
-                shablonizator.save_g_settings();
-            });*/
         })();
 
         /****************************************************/
         /*Синхронизация по группам сессий*/
         /****************************************************/
         (function() {
-            //Свернуть-развернуть список выбора групп
-            $(".shab__btn-open-groups-session").on("click", function () {
-                if(!$(this).hasClass('active')) {
-                    $(this).addClass('active');
-                    $(".shab__session-groups-list").addClass('open');
-                    $(".shab__main-menu-bottom-section").addClass('open');
-                    $(".shab__session-groups").removeClass('open');
-                } else {
-                    $(this).removeClass('active');
-                    $(".shab__session-groups-list").removeClass('open');
-                    $(".shab__main-menu-bottom-section").removeClass('open');
-                    $(".shab__session-groups").removeClass('open');
-                }
-            });
-            $("body").on("click click.body.iframe", function (e) {
-                if( $(e.target).closest($(".shab__btn-open-groups-session").add($(".shab__session-groups-list")).add($("#shab-add-group-session")).add($("#shab-delete-group-session"))).length == 0 ) {
-                    $(".shab__btn-open-groups-session").removeClass('active');
-                    $(".shab__session-groups-list").removeClass('open');
-                    $(".shab__main-menu-bottom-section").removeClass('open');
-                    $(".shab__session-groups").removeClass('open');
-                }
-            });
-
             //Формирование меню групп сессий
             $(".shab__session-groups-list").prepend("<ul class='shab__session-groups-list-ul'></ul>");
             refreshMenuView();
@@ -208,9 +152,13 @@ jQuery(function($) {
                         var active = (haveCookie && (oneGroup.name in activeGroupsObj))?"active":"";
                         html += '<li class="shab__session-groups-list-item '+active+'" data-name="'+(oneGroup.name)+'">' +
                             '<div class="btn-group shab__session-groups-special">' +
-                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("pages"       in activeParamsObj)?"active":"")+'" data-param="pages"><i class="fa fa-file-o"></i></button>' +
-                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("resolutions" in activeParamsObj)?"active":"")+'" data-param="resolutions"><i class="fa fa-arrows"></i></button>' +
-                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframe"      in activeParamsObj)?"active":"")+'" data-param="iframe"><i class="fa fa-desktop"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("pages"          in activeParamsObj)?"active":"")+'" data-param="pages"><i class="fa fa-file-o"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("resolutions"    in activeParamsObj)?"active":"")+'" data-param="resolutions"><i class="fa fa-desktop"></i> <i class="fa fa-mobile"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("showPageProofsOrDesign"          in activeParamsObj)?"active":"")+'" data-param="showPageProofsOrDesign"><i class="fa fa-clone"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("showBottomSpace"    in activeParamsObj)?"active":"")+'" data-param="showBottomSpace"><i class="fa fa-chevron-down"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframePosition" in activeParamsObj)?"active":"")+'" data-param="iframePosition"><i class="glyphicon glyphicon-modal-window"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframeSize"     in activeParamsObj)?"active":"")+'" data-param="iframeSize"><i class="fa fa-desktop"></i></button>' +
+                                '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframeScroll"   in activeParamsObj)?"active":"")+'" data-param="iframeScroll"><i class="fa fa-arrows-v"></i></button>' +
                             '</div>' +
                             '<button class="btn btn-default btn-xs btn-block shab__session-groups-list-btn '+active+'">'+(oneGroup.name)+'</button>' +
                             '<div class="btn btn-default btn-xs shab__session-groups-btn-drag"><span class="glyphicon glyphicon-move"></span></div>' +
@@ -228,15 +176,21 @@ jQuery(function($) {
 
             //Добавить группу
             $('.shab__add-group-session').on('click', function(){
-                $('#shab-add-group-session .modal').modal('show');
+                $('#a-pp__modal-add-group-session .modal').modal('show');
             });
-            $('#shab-add-group-session .btn-select').on('click', function(){
-                var name = $('#shab-add-group-session .shab-add-group-session__name').val();
+            $('#a-pp__modal-add-group-session .btn-select').on('click', function(){
+                var name = $('#a-pp__modal-add-group-session .a-pp__modal-add-group-session__name').val();
                 if($.trim(name)) {
                     var html = '<li class="shab__session-groups-list-item" data-name="'+($.trim(name))+'">' +
-                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn" data-param="pages"><i class="fa fa-file-o"></i></button>' +
-                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn" data-param="resolutions"><i class="fa fa-arrows"></i></button>' +
-                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn" data-param="iframe"><i class="fa fa-desktop"></i></button>' +
+                        '<div class="btn-group shab__session-groups-special">' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("pages"          in activeParamsObj)?"active":"")+'" data-param="pages"><i class="fa fa-file-o"></i></button>' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("resolutions"    in activeParamsObj)?"active":"")+'" data-param="resolutions"><i class="fa fa-desktop"></i> <i class="fa fa-mobile"></i></button>' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("showPageProofsOrDesign"          in activeParamsObj)?"active":"")+'" data-param="showPageProofsOrDesign"><i class="fa fa-clone"></i></button>' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("showBottomSpace"    in activeParamsObj)?"active":"")+'" data-param="showBottomSpace"><i class="fa fa-chevron-down"></i></button>' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframePosition" in activeParamsObj)?"active":"")+'" data-param="iframePosition"><i class="glyphicon glyphicon-modal-window"></i></button>' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframeSize"     in activeParamsObj)?"active":"")+'" data-param="iframeSize"><i class="fa fa-desktop"></i></button>' +
+                        '<button class="btn btn-default btn-xs shab__session-groups-synchro-params-btn '+(("iframeScroll"   in activeParamsObj)?"active":"")+'" data-param="iframeScroll"><i class="fa fa-arrows-v"></i></button>' +
+                        '</div>' +
                         '<button class="btn btn-default btn-xs btn-block shab__session-groups-list-btn">'+($.trim(name))+'</button>' +
                         '<div class="btn btn-default btn-xs shab__session-groups-btn-drag"><span class="glyphicon glyphicon-move"></span></div>' +
                         '<button class="btn btn-default btn-xs shab__session-groups-delete-btn"><span class="glyphicon glyphicon-remove"></span></button>' +
@@ -247,40 +201,38 @@ jQuery(function($) {
                 } else {
                     alert("Имя недолжно быть пустым");
                 }
-                $('#shab-add-group-session .modal').modal('hide');
+                $('#a-pp__modal-add-group-session .modal').modal('hide');
             });
 
             //Удалить группу
             $('.shab__session-groups-list').on('click', " .shab__session-groups-delete-btn", function(){
-                $('#shab-delete-group-session .modal').modal('show');
+                $('#a-pp__modal-delete-group-session .modal').modal('show');
 
                 var name = $(this).closest(".shab__session-groups-list-item").attr("data-name");
-                $('#shab-delete-group-session .shab-delete-group-session__name')
+                $('#a-pp__modal-delete-group-session .a-pp__modal-delete-group-session__name')
                     .attr("data-name", name)
                     .text(name);
             });
-            $('#shab-delete-group-session .btn-select').on('click', function(){
-                var name = $('#shab-delete-group-session .shab-delete-group-session__name').attr("data-name");
+            $('#a-pp__modal-delete-group-session .btn-select').on('click', function(){
+                var name = $('#a-pp__modal-delete-group-session .a-pp__modal-delete-group-session__name').attr("data-name");
                 $(".shab__session-groups-list-item[data-name='"+name+"']").remove();
 
                 sendSessionDeleteGroup();
 
-                $('#shab-delete-group-session .modal').modal('hide');
+                $('#a-pp__modal-delete-group-session .modal').modal('hide');
             });
 
             //Активировать-деактивировать группу
             $('.shab__session-groups-list').on('click', " .shab__session-groups-list-btn", function(){
-                if($(".shab__session-groups-list.open").length) {
-                    if(!$(this).hasClass("active")) {
-                        $(this).addClass("active")
-                            .closest(".shab__session-groups-list-item").addClass("active");
-                    } else {
-                        $(this).removeClass("active")
-                            .closest(".shab__session-groups-list-item").removeClass("active");
-                    }
-
-                    sendSessionActivatedGroup($(this).closest(".shab__session-groups-list-item").attr("data-name"), $(this).hasClass("active"));
+                if(!$(this).hasClass("active")) {
+                    $(this).addClass("active")
+                        .closest(".shab__session-groups-list-item").addClass("active");
+                } else {
+                    $(this).removeClass("active")
+                        .closest(".shab__session-groups-list-item").removeClass("active");
                 }
+
+                sendSessionActivatedGroup($(this).closest(".shab__session-groups-list-item").attr("data-name"), $(this).hasClass("active"));
             });
 
             //Активировать-деактивировать параметр группы
@@ -355,20 +307,20 @@ jQuery(function($) {
                 }
                 function pageLoaded() {
                     //Разрешение
-                    if( ls && "iframe" in ls && "size" in ls.iframe && ls.iframe.size.w !== null) {
-                        pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
+                    if( ls && "iframeSize" in ls && ls.iframeSize.w !== null) {
+                        pageManagerVisualizator.setSizeIFrame(ls.iframeSize.w, ls.iframeSize.h, true);
                         $(".pp__resolution-name-btn.active").addClass("bloor");
                     } else if(ls && "resolutions" in ls && "currentResolution" in ls.resolutions) {
                         pageManagerVisualizator.setSizeIFrame(ls.resolutions.currentResolution.w, ls.resolutions.currentResolution.h, true);
                     }
                     var screenshotsCollection = session.getCurrentRelatedScreenshotsCollection();
                     pixelPerfect.refreshScrins(screenshotsCollection, session.getScreenshotsObjList());
-                    if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
-                        pixelPerfect.showPageProofsOrDesign(ls.resolutions.showPageProofsOrDesign);
-                        crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"](ls.resolutions.showPageProofsOrDesign);
+                    if(ls && "showPageProofsOrDesign" in ls) {
+                        pixelPerfect.showPageProofsOrDesign(ls.showPageProofsOrDesign);
+                        crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"](ls.showPageProofsOrDesign);
                     }
-                    if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
-                        if(ls.resolutions.showBottomSpace) {
+                    if(ls && "showBottomSpace" in ls) {
+                        if(ls.showBottomSpace) {
                             pixelPerfect.insertBottomSpace();
                             $(".pp__bottom-space-btn").addClass("active");
                         }
@@ -376,13 +328,13 @@ jQuery(function($) {
                     //iFrame
                     //Разрешение выше
                     /*if( ls && "iframe" in ls && "size" in ls.iframe ) {
-                        pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
+                        pageManagerVisualizator.setSizeIFrame(ls.iframeSize.w, ls.iframeSize.h, true);
                     }*/
-                    if( ls && "iframe" in ls && "position" in ls.iframe ) {
-                        pageManagerVisualizator.setPositionIFrame(ls.iframe.position.left, ls.iframe.position.top);
+                    if( ls && "iframePosition" in ls ) {
+                        pageManagerVisualizator.setPositionIFrame(ls.iframePosition.left, ls.iframePosition.top);
                     }
-                    if( ls && "iframe" in ls && "scroll" in ls.iframe ) {
-                        pageManagerVisualizator.setScrollIFrame(ls.iframe.scroll.left, ls.iframe.scroll.top);
+                    if( ls && "iframeScroll" in ls ) {
+                        pageManagerVisualizator.setScrollIFrame(ls.iframeScroll.left, ls.iframeScroll.top);
                     }
                 }
             }
@@ -440,7 +392,7 @@ jQuery(function($) {
             });
             var dragItemList = false;
             $("body").on("click click.body.iframe", function (e) {
-                if( $(e.target).closest($(".pmv__select-page-open-list").add($(".pmv__pages-window, #modal-pmv-add-page-href, #pmv__modal-add-group, #shab__page-or-group-delete, #shab__page-or-group-update"))).length == 0 && !dragItemList ) {
+                if( $(e.target).closest($(".pmv__select-page-open-list").add($(".pmv__pages-window, #pmv__modal-add-page-href, #pmv__modal-add-group, #pmv__modal-page-or-group-delete, #pmv__modal-page-or-group-update"))).length == 0 && !dragItemList ) {
                     $(".pmv__select-page-open-list").removeClass('active');
                 }
             });
@@ -457,8 +409,8 @@ jQuery(function($) {
             });
 
             //Добавляем страницу
-            $('#modal-pmv-add-page-href .btn-select').on('click', function(event){
-                var urn = $('#modal-pmv-add-page-href .pmv-href').val();
+            $('#pmv__modal-add-page-href .btn-select').on('click', function(event){
+                var urn = $('#pmv__modal-add-page-href .pmv-href').val();
 
                 //Проверяем на ошибки
                 $('.pmv__modal-urn-exists').css({display: ""});
@@ -480,7 +432,7 @@ jQuery(function($) {
                 //Добавляем страницу
                 function next() {
                     $(".pmv__pages-sortable > ul").prepend( createMenuItem("page", $.trim(urn)) );
-                    $('#modal-pmv-add-page-href .modal').modal('hide');
+                    $('#pmv__modal-add-page-href .modal').modal('hide');
 
                     sendAddPage();
                 }
@@ -506,12 +458,12 @@ jQuery(function($) {
                     if(urn == "") {
                         urn = "/";
                     }
-                    $('#modal-pmv-add-page-href .pmv-href').val( urn );
+                    $('#pmv__modal-add-page-href .pmv-href').val( urn );
                 }
-                $('#modal-pmv-add-page-href .modal').modal('show');
+                $('#pmv__modal-add-page-href .modal').modal('show');
             });
-            $('#modal-pmv-add-page-href').on('shown.bs.modal', function(e){
-                var input = $('#modal-pmv-add-page-href .pmv-href');
+            $('#pmv__modal-add-page-href').on('shown.bs.modal', function(e){
+                var input = $('#pmv__modal-add-page-href .pmv-href');
                 //Выделение
                 input.get(0).focus();
                 //input.get(0).setSelectionRange(0, input.val().length);
@@ -556,22 +508,22 @@ jQuery(function($) {
             //Удаляем страницу или группу
             $('.pmv__pages-sortable').on('click', " .pmv__pages-btn-delete", function(){
                 if($(this).closest(".pmv__pages-item").hasClass("have-nested")) {
-                    $("#shab__page-or-group-delete .shab__page-or-group-delete-nested-btn").css({display: "inline-block"});
+                    $("#pmv__modal-page-or-group-delete .pmv__modal-page-or-group-delete-nested-btn").css({display: "inline-block"});
                 } else {
-                    $("#shab__page-or-group-delete .shab__page-or-group-delete-nested-btn").css({display: "none"});
+                    $("#pmv__modal-page-or-group-delete .pmv__modal-page-or-group-delete-nested-btn").css({display: "none"});
                 }
 
-                $('#shab__page-or-group-delete .modal').modal('show');
+                $('#pmv__modal-page-or-group-delete .modal').modal('show');
 
                 var name = $(this).closest(".pmv__pages-item").attr("data-name");
                 var type = $(this).closest(".pmv__pages-item").attr("data-type");
-                $('#shab__page-or-group-delete .shab__page-or-group__name')
+                $('#pmv__modal-page-or-group-delete .shab__page-or-group__name')
                     .attr("data-name", name)
                     .text(name);
-                $('#shab__page-or-group-delete .shab__page-or-group__type').text((type == "page")?"страницу":"группу");
+                $('#pmv__modal-page-or-group-delete .shab__page-or-group__type').text((type == "page")?_l_("pmv__modal-page-or-group-delete|page", langCascade):_l_("pmv__modal-page-or-group-delete|group", langCascade));
             });
-            $('#shab__page-or-group-delete .shab__page-or-group-delete-btn').on('click', function(){
-                var name = $('#shab__page-or-group-delete .shab__page-or-group__name').attr("data-name");
+            $('#pmv__modal-page-or-group-delete .pmv__modal-page-or-group-delete-btn').on('click', function(){
+                var name = $('#pmv__modal-page-or-group-delete .shab__page-or-group__name').attr("data-name");
                 var $cutItems = $(".pmv__pages-item[data-name='"+name+"'] > ul > .pmv__pages-item").remove();
                 $(".pmv__pages-item[data-name='"+name+"']").after($cutItems);
                 $(".pmv__pages-item[data-name='"+name+"']").remove();
@@ -581,12 +533,12 @@ jQuery(function($) {
                 refreshNestedEl($main);
                 clearCollapseNotNested($main);
 
-                $('#shab__page-or-group-delete .modal').modal('hide');
+                $('#pmv__modal-page-or-group-delete .modal').modal('hide');
 
                 sendDeletePageOrGroup();
             });
-            $('#shab__page-or-group-delete .shab__page-or-group-delete-nested-btn').on('click', function(){
-                var name = $('#shab__page-or-group-delete .shab__page-or-group__name').attr("data-name");
+            $('#pmv__modal-page-or-group-delete .pmv__modal-page-or-group-delete-nested-btn').on('click', function(){
+                var name = $('#pmv__modal-page-or-group-delete .shab__page-or-group__name').attr("data-name");
                 $(".pmv__pages-item[data-name='"+name+"']").remove();
 
                 var $main = $(".pmv__pages-sortable");
@@ -594,57 +546,57 @@ jQuery(function($) {
                 refreshNestedEl($main);
                 clearCollapseNotNested($main);
 
-                $('#shab__page-or-group-delete .modal').modal('hide');
+                $('#pmv__modal-page-or-group-delete .modal').modal('hide');
 
                 sendDeletePageOrGroup();
             });
 
             //Обновляем страницу или группу
             $('.pmv__pages-sortable').on('click', " .pmv__pages-btn-edit", function(){
-                $('#shab__page-or-group-update .modal').modal('show');
+                $('#pmv__modal-page-or-group-update .modal').modal('show');
 
                 var name = $(this).closest(".pmv__pages-item").attr("data-name");
                 var type = $(this).closest(".pmv__pages-item").attr("data-type");
-                $('#shab__page-or-group-update .shab__page-or-group__name')
+                $('#pmv__modal-page-or-group-update .shab__page-or-group__name')
                     .attr("data-name", name);
-                $('#shab__page-or-group-update .shab__page-or-group-update__name').val(name);
+                $('#pmv__modal-page-or-group-update .pmv__modal-page-or-group-update__name').val(name);
 
-                $('#shab__page-or-group-update .shab__page-or-group__type').attr("data-type", type).text((type == "page")?"новый URN":"новое имя");
+                $('#pmv__modal-page-or-group-update .shab__page-or-group__type').attr("data-type", type).text((type == "page")?_l_("pmv__modal-page-or-group-update|new-urn", langCascade):_l_("pmv__modal-page-or-group-update|new-name", langCascade));
             });
-            $('#shab__page-or-group-update .btn-select').on('click', function(){
-                var name = $('#shab__page-or-group-update .shab__page-or-group__name').attr("data-name");
-                var type = $('#shab__page-or-group-update .shab__page-or-group__type').attr("data-type");
-                var newName = $('#shab__page-or-group-update .shab__page-or-group-update__name').val();
+            $('#pmv__modal-page-or-group-update .btn-select').on('click', function(){
+                var name = $('#pmv__modal-page-or-group-update .shab__page-or-group__name').attr("data-name");
+                var type = $('#pmv__modal-page-or-group-update .shab__page-or-group__type').attr("data-type");
+                var newName = $('#pmv__modal-page-or-group-update .pmv__modal-page-or-group-update__name').val();
 
                 //Проверяем на ошибки
-                $('#shab__page-or-group-update .pmv__modal-urn-exists').css({display: ""});
-                $('#shab__page-or-group-update .pmv__modal-name-exists').css({display: ""});
-                $('#shab__page-or-group-update .pmv__modal-empty').css({display: ""});
-                $('#shab__page-or-group-update .pmv__modal-content').removeClass("has-error");
+                $('#pmv__modal-page-or-group-update .pmv__modal-urn-exists').css({display: ""});
+                $('#pmv__modal-page-or-group-update .pmv__modal-name-exists').css({display: ""});
+                $('#pmv__modal-page-or-group-update .pmv__modal-empty').css({display: ""});
+                $('#pmv__modal-page-or-group-update .pmv__modal-content').removeClass("has-error");
 
                 if(type == "page") {
                     if($.trim(newName)) {
                         if(session.getPage(newName) === false) {
                             next();
                         } else {
-                            $('#shab__page-or-group-update .pmv__modal-urn-exists').css({display: "block"});
-                            $('#shab__page-or-group-update .pmv__modal-content').addClass("has-error");
+                            $('#pmv__modal-page-or-group-update .pmv__modal-urn-exists').css({display: "block"});
+                            $('#pmv__modal-page-or-group-update .pmv__modal-content').addClass("has-error");
                         }
                     } else {
-                        $('#shab__page-or-group-update .pmv__modal-empty').css({display: "block"});
-                        $('#shab__page-or-group-update .pmv__modal-content').addClass("has-error");
+                        $('#pmv__modal-page-or-group-update .pmv__modal-empty').css({display: "block"});
+                        $('#pmv__modal-page-or-group-update .pmv__modal-content').addClass("has-error");
                     }
                 } else {
                     if($.trim(newName)) {
                         if(session.getGroup(newName) === false) {
                             next();
                         } else {
-                            $('#shab__page-or-group-update .pmv__modal-name-exists').css({display: "block"});
-                            $('#shab__page-or-group-update .pmv__modal-content').addClass("has-error");
+                            $('#pmv__modal-page-or-group-update .pmv__modal-name-exists').css({display: "block"});
+                            $('#pmv__modal-page-or-group-update .pmv__modal-content').addClass("has-error");
                         }
                     } else {
-                        $('#shab__page-or-group-update .pmv__modal-empty').css({display: "block"});
-                        $('#shab__page-or-group-update .pmv__modal-content').addClass("has-error");
+                        $('#pmv__modal-page-or-group-update .pmv__modal-empty').css({display: "block"});
+                        $('#pmv__modal-page-or-group-update .pmv__modal-content').addClass("has-error");
                     }
                 }
 
@@ -654,7 +606,7 @@ jQuery(function($) {
                     $li.attr("data-name", newName)
                         .find(" > * > .pmv__pages-btn-name").text(newName);
 
-                    $('#shab__page-or-group-update .modal').modal('hide');
+                    $('#pmv__modal-page-or-group-update .modal').modal('hide');
 
                     if(type == "page") {
                         if($li.find(" .pmv__pages-btn-page").hasClass("active")) {
@@ -713,7 +665,6 @@ jQuery(function($) {
                 //Получаем сессию без куков потому что м в куках и так будет записано текущее состояние сессии
                 var ls = session.getLocalSessionParams(true);
                 //Страница
-                console.log(ls.pages.currentPage, pageManagerVisualizator.currentPage);
                 if( ls && "pages" in ls && "currentPage" in ls.pages && (ls.pages.currentPage !== pageManagerVisualizator.currentPage && true) ) {
                     $(".pmv__pages-btn-page").removeClass("active");
                     $(".pmv__pages-item[data-name='"+(ls.pages.currentPage)+"'] > * > .pmv__pages-btn-page").addClass("active");
@@ -1243,21 +1194,21 @@ jQuery(function($) {
             //Приём данных сессии
             session.responseHandlers["onResizeIFrame"] = function(o) {
                 var ls = session.getLocalSessionParams(true);
-                if( ls && "iframe" in ls && "size" in ls.iframe && ls.iframe.size.w !== null ) {
-                    pageManagerVisualizator.setSizeIFrame(ls.iframe.size.w, ls.iframe.size.h, true);
+                if( ls && "iframeSize" in ls && ls.iframeSize.w !== null ) {
+                    pageManagerVisualizator.setSizeIFrame(ls.iframeSize.w, ls.iframeSize.h, true);
                     $(".pp__resolution-name-btn.active").addClass("bloor");
                 }
             }
             session.responseHandlers["onChangePosIFrame"] = function(o) {
                 var ls = session.getLocalSessionParams(true);
-                if( ls && "iframe" in ls && "position" in ls.iframe ) {
-                    pageManagerVisualizator.setPositionIFrame(ls.iframe.position.left, ls.iframe.position.top);
+                if( ls && "iframePosition" in ls ) {
+                    pageManagerVisualizator.setPositionIFrame(ls.iframePosition.left, ls.iframePosition.top);
                 }
             }
             session.responseHandlers["onScrollIFrame"] = function(o) {
                 var ls = session.getLocalSessionParams(true);
-                if( ls && "iframe" in ls && "scroll" in ls.iframe ) {
-                    pageManagerVisualizator.setScrollIFrame(ls.iframe.scroll.left, ls.iframe.scroll.top);
+                if( ls && "iframeScroll" in ls ) {
+                    pageManagerVisualizator.setScrollIFrame(ls.iframeScroll.left, ls.iframeScroll.top);
                 }
             }
 
@@ -1296,8 +1247,8 @@ jQuery(function($) {
                 pixelPerfect.refreshScrins(screenshotsCollection, session.getScreenshotsObjList());
 
                 var ls = session.getLocalSessionParams(false);
-                if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
-                    pixelPerfect.showPageProofsOrDesign(ls.resolutions.showPageProofsOrDesign);
+                if(ls && "showPageProofsOrDesign" in ls) {
+                    pixelPerfect.showPageProofsOrDesign(ls.showPageProofsOrDesign);
                 }
 
                 refreshMenuViewScreenshotsForResolutions();
@@ -1517,8 +1468,8 @@ jQuery(function($) {
                 } else {
                     lastMode = 1;
                     var ls = session.getLocalSessionParams(false);
-                    if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
-                        lastMode = ls.resolutions.showPageProofsOrDesign;
+                    if(ls && "showPageProofsOrDesign" in ls) {
+                        lastMode = ls.showPageProofsOrDesign;
                     }
                 }
 
@@ -1576,8 +1527,8 @@ jQuery(function($) {
             pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
                 var ls = session.getLocalSessionParams(false);
 
-                if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
-                    if(ls.resolutions.showBottomSpace) {
+                if(ls && "showBottomSpace" in ls) {
+                    if(ls.showBottomSpace) {
                         pixelPerfect.insertBottomSpace();
                         $(".pp__bottom-space-btn").addClass("active");
                     } else {
@@ -1713,16 +1664,16 @@ jQuery(function($) {
             }
             session.responseHandlers["onHTMLOrDesign"] = function() {
                 var ls = session.getLocalSessionParams(true);
-                if(ls && "resolutions" in ls && "showPageProofsOrDesign" in ls.resolutions) {
-                    pixelPerfect.showPageProofsOrDesign(ls.resolutions.showPageProofsOrDesign);
-                    crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"](ls.resolutions.showPageProofsOrDesign);
+                if(ls && "showPageProofsOrDesign" in ls) {
+                    pixelPerfect.showPageProofsOrDesign(ls.showPageProofsOrDesign);
+                    crossModulesFunctions["pp.refreshButtonsPageProofsOrDesign"](ls.showPageProofsOrDesign);
                 }
             }
             session.responseHandlers["onShowBottomSpace"] = function() {
                 var ls = session.getLocalSessionParams(true);
 
-                if(ls && "resolutions" in ls && "showBottomSpace" in ls.resolutions) {
-                    if(ls.resolutions.showBottomSpace) {
+                if(ls && "showBottomSpace" in ls) {
+                    if(ls.showBottomSpace) {
                         pixelPerfect.insertBottomSpace();
                         $(".pp__bottom-space-btn").addClass("active");
                     } else {
@@ -2130,8 +2081,8 @@ jQuery(function($) {
             //Подсказки
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
+            $('.selectpicker').selectpicker();
             //==========
         });
     }
 });
-

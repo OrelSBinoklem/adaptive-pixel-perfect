@@ -8,6 +8,21 @@
         /*Общая синхронизация*/
         /*********************************/
 
+        /*Настройки*/
+        this.onChangeLang = function(lang) {
+            socket.emit('global.changeLang', {
+                nesteedName: "lang",
+                val: lang
+            });
+
+            ____.saveNesteedParamInGlobalSession("lang", lang);
+        }
+        socket.on('global.changeLang', function(o) {
+            ____.saveNesteedParamInGlobalSession(o.nesteedName, o.val);
+
+            ____.responseHandlers["onChangeLang"]();
+        });
+
         /*Синхронизации сессий*/
         this.onChangeSessionGroups = function(listGroupsAndActiveParameters) {
             var sessionGroupsForNames = {};
@@ -345,13 +360,13 @@
 
         this.onHTMLOrDesign = function(state) {
             socket.emit('local.HTMLOrDesign', {
-                nesteedName: "resolutions|showPageProofsOrDesign",
+                nesteedName: "showPageProofsOrDesign",
                 val: state,
                 activeGroups: ____.getSynchroGroupsThisBrowser()
             });
 
             //Сохраняем
-            ____.setNesteedParamInLocalSessionAndCookie("resolutions|showPageProofsOrDesign", state);
+            ____.setNesteedParamInLocalSessionAndCookie("showPageProofsOrDesign", state);
         }
         socket.on('local.HTMLOrDesign', function(o) {
             ____.setNesteedParamInLocalSession(o.nesteedName, o.val, o.activeGroups);
@@ -361,13 +376,13 @@
 
         this.onShowBottomSpace = function(state) {
             socket.emit('local.showBottomSpace', {
-                nesteedName: "resolutions|showBottomSpace",
+                nesteedName: "showBottomSpace",
                 val: state,
                 activeGroups: ____.getSynchroGroupsThisBrowser()
             });
 
             //Сохраняем
-            ____.setNesteedParamInLocalSessionAndCookie("resolutions|showBottomSpace", state);
+            ____.setNesteedParamInLocalSessionAndCookie("showBottomSpace", state);
         }
         socket.on('local.showBottomSpace', function(o) {
             ____.setNesteedParamInLocalSession(o.nesteedName, o.val, o.activeGroups);
@@ -378,48 +393,48 @@
         /*Айфрейм с вёрсткой*/
         this.onResizeIFrame = function(size) {
             socket.emit('local.resizeIFrame', {
-                nesteedName: "iframe|size",
+                nesteedName: "iframeSize",
                 val: size,
                 activeGroups: ____.getSynchroGroupsThisBrowser()
             });
 
             //Сохраняем
-            ____.setNesteedParamInLocalSessionAndCookie("iframe|size", size);
+            ____.setNesteedParamInLocalSessionAndCookie("iframeSize", size);
         }
         socket.on('local.resizeIFrame', function(o) {
-            ____.setNesteedParamInLocalSession("iframe|size", o.val, o.activeGroups);
+            ____.setNesteedParamInLocalSession(o.nesteedName, o.val, o.activeGroups);
 
             ____.responseHandlers["onResizeIFrame"](o);
         });
 
         this.onChangePosIFrame = function(position) {
             socket.emit('local.changePosIFrame', {
-                nesteedName: "iframe|position",
+                nesteedName: "iframePosition",
                 val: position,
                 activeGroups: ____.getSynchroGroupsThisBrowser()
             });
 
             //Сохраняем
-            ____.setNesteedParamInLocalSessionAndCookie("iframe|position", position);
+            ____.setNesteedParamInLocalSessionAndCookie("iframePosition", position);
         }
         socket.on('local.changePosIFrame', function(o) {
-            ____.setNesteedParamInLocalSession("iframe|position", o.val, o.activeGroups);
+            ____.setNesteedParamInLocalSession(o.nesteedName, o.val, o.activeGroups);
 
             ____.responseHandlers["onChangePosIFrame"](o);
         });
 
         this.onScrollIFrame = function(position) {
             socket.emit('local.scrollIFrame', {
-                nesteedName: "iframe|scroll",
+                nesteedName: "iframeScroll",
                 val: position,
                 activeGroups: ____.getSynchroGroupsThisBrowser()
             });
 
             //Сохраняем
-            ____.setNesteedParamInLocalSessionAndCookie("iframe|scroll", position);
+            ____.setNesteedParamInLocalSessionAndCookie("iframeScroll", position);
         }
         socket.on('local.scrollIFrame', function(o) {
-            ____.setNesteedParamInLocalSession("iframe|scroll", o.val, o.activeGroups);
+            ____.setNesteedParamInLocalSession(o.nesteedName, o.val, o.activeGroups);
 
             ____.responseHandlers["onScrollIFrame"](o);
         });

@@ -40,6 +40,176 @@ var pixelPerfect;//Пиксель перфект
 var shablonizator = {};//shablonizator
 
 //==============================================
+/* РАБОТА С ЯЗЫКАМИ*/
+//==============================================
+
+var lang_English = null;
+
+var setLang = function(lang) {
+    if(lang_English === null) {
+        $.ajax({
+            url: "/lang/en_US.json",
+            type: "GET",
+            cache: false,
+            data: ({"a-pp": 1}),
+            dataType: "json",
+            async: true,
+            success: function(data){
+                lang_English = data;
+                if(lang == "en_US") {
+                    setTranslates(lang);
+                } else {
+                    next();
+                }
+            }
+        });
+    } else {
+        if(lang == "en_US") {
+            setTranslates(lang);
+        } else {
+            next();
+        }
+    }
+    
+    function next() {
+        $.ajax({
+            url: "/lang/" + lang + ".json",
+            type: "GET",
+            cache: false,
+            data: ({"a-pp": 1}),
+            dataType: "json",
+            async: true,
+            success: function(data){
+                setTranslates(lang, data);
+            }
+        });
+    }
+}
+
+function _l_(id, translates) {
+    var result = id;
+    id = id.split("|");
+    translates = translates.slice(0).reverse();
+
+
+    for(var i in translates) {
+        var translate = translates[i];
+        var current = translate;
+
+        for(var j in id) {
+            var param = id[j];
+            if(param in current) {
+                if(typeof current[param] != "object") {
+                    return current[param];
+                } else {
+                    current = current[param];
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+var langCascade;
+function setTranslates(lang, data) {
+    var t;
+    if(lang == "en_US") {
+        t = [lang_English];
+    } else {
+        t = [lang_English, data];
+    }
+    langCascade = t;
+
+    //Устанавливаем значения
+    $(".pmv__select-page-open-list").text( _l_("pages", t) );
+
+    $(".pp__btn-open-screenshots").text( _l_("screenshots", t) );
+
+    $('.pp__verstka-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__verstka-btn", t));
+    $('.pp__50p-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__50p-btn", t));
+    $('.pp__design-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__design-btn", t));
+
+    $('.pp__flicker-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__flicker-btn", t));
+    $('.pp__bottom-space-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__bottom-space-btn", t));
+
+    var ds = "description-sync";
+    $('.settings__description-groups-synchronous').text(_l_(ds+"|groups-synchronous", t));
+    $('.settings__description-params-synchronous').text(_l_(ds+"|params-synchronous", t));
+    $('.settings__description-generals').text(_l_(ds+"|generals", t));
+        $('.settings__description-select-pages').text(_l_(ds+"|select-pages", t));
+        $('.settings__description-select-resolution').text(_l_(ds+"|select-resolution", t));
+    $('.settings__description-pixel-perfect').text(_l_(ds+"|pixel-perfect", t));
+        $('.settings__description-50-to-50').text(_l_(ds+"|50-to-50", t));
+        $('.settings__description-bottom-space').text(_l_(ds+"|bottom-space", t));
+    $('.settings__description-params-iframe').text(_l_(ds+"|params-iframe", t));
+        $('.settings__description-position-iframe').text(_l_(ds+"|position-iframe", t));
+        $('.settings__description-size-iframe').text(_l_(ds+"|size-iframe", t));
+    $('.settings__description-params-page-profs').text(_l_(ds+"|params-page-profs", t));
+        $('.settings__description-page-scroll').text(_l_(ds+"|page-scroll", t));
+
+    $(".pmv__add-page").attr("title", _l_("pmv__add-page", t));
+    $(".pmv__add-group").attr("title", _l_("pmv__add-group", t));
+    $(".pp__add-resolution-btn").attr("title", _l_("pp__add-resolution-btn", t));
+    
+    var cfm = "common-for-modal";
+    var mags = "a-pp__modal-add-group-session";
+    $("#a-pp__modal-add-group-session .modal-title").text(_l_(mags+"|modal-title", t));
+    $(".a-pp__modal-add-group-session__name").attr("placeholder", _l_(mags+"|name", t));
+    $("#a-pp__modal-add-group-session .btn-select").text(_l_(cfm+"|add", t));
+    $("#a-pp__modal-add-group-session .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var mdgs = "a-pp__modal-delete-group-session";
+    $("#a-pp__modal-delete-group-session .modal-title-text").text(_l_(mdgs+"|modal-title", t));
+    $("#a-pp__modal-delete-group-session .btn-select").text(_l_(cfm+"|delete", t));
+    $("#a-pp__modal-delete-group-session .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var maph = "pmv__modal-add-page-href";
+    $("#pmv__modal-add-page-href .modal-title").text(_l_(maph+"|modal-title", t));
+    $("#pmv__modal-add-page-href .pmv__modal-urn-exists").text(_l_(maph+"|urn-exists", t));
+    $("#pmv__modal-add-page-href .pmv__modal-urn-empty").text(_l_(maph+"|urn-empty", t));
+    $("#pmv__modal-add-page-href .btn-select").text(_l_(cfm+"|add", t));
+    $("#pmv__modal-add-page-href .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var mag = "pmv__modal-add-group";
+    $("#pmv__modal-add-group .modal-title").text(_l_(mag+"|modal-title", t));
+    $("#pmv__modal-add-group .pmv__modal-name-exists").text(_l_(mag+"|name-exists", t));
+    $("#pmv__modal-add-group .pmv__modal-name-empty").text(_l_(mag+"|name-empty", t));
+    $("#pmv__modal-add-group .btn-select").text(_l_(cfm+"|add", t));
+    $("#pmv__modal-add-group .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var mpogu = "pmv__modal-page-or-group-update";
+    $("#pmv__modal-page-or-group-update .modal-title-text").text(_l_(mpogu+"|modal-title", t));
+    $("#pmv__modal-page-or-group-update .pmv__modal-urn-exists").text(_l_(maph+"|urn-exists", t));
+    $("#pmv__modal-page-or-group-update .pmv__modal-name-exists").text(_l_(mag+"|name-exists", t));
+    $("#pmv__modal-page-or-group-update .pmv__modal-empty").text(_l_(maph+"|urn-empty", t));
+    $("#pmv__modal-page-or-group-update .btn-select").text(_l_(cfm+"|update", t));
+    $("#pmv__modal-page-or-group-update .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var mpogd = "pmv__modal-page-or-group-delete";
+    $("#pmv__modal-page-or-group-delete .modal-title-text").text(_l_(mpogd+"|modal-title", t));
+    $(".pmv__modal-page-or-group-delete-btn").text(_l_(cfm+"|delete", t));
+    $(".pmv__modal-page-or-group-delete-nested-btn").text(_l_(mpogd+"|delete-nested", t));
+    $("#pmv__modal-page-or-group-delete .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var mar = "pp__modal-add-resolution";
+    $("#pp__modal-add-resolution .modal-title").text(_l_(mar+"|modal-title", t));
+    $(".pp__modal-add-resolution-w").attr("placeholder", _l_(mar+"|width", t));
+    $(".pp__modal-add-resolution-h").attr("placeholder", _l_(mar+"|height", t));
+    $("#pp__modal-add-resolution .pp__modal-val-exists").text(_l_(mar+"|exists", t));
+    $("#pp__modal-add-resolution .pp__modal-val-not-digit").text(_l_(mar+"|not-digit", t));
+    $("#pp__modal-add-resolution .btn-select").text(_l_(cfm+"|add", t));
+    $("#pp__modal-add-resolution .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    var mdr = "pp__modal-delete-resolution";
+    $("#pp__modal-delete-resolution .modal-title-text").text(_l_(mdr+"|modal-title", t));
+    $("#pp__modal-delete-resolution .btn-select").text(_l_(cfm+"|delete", t));
+    $("#pp__modal-delete-resolution .btn.btn-close").text(_l_(cfm+"|back", t));
+}
+
+//==============================================
 /* РАБОТА С URL*/
 //==============================================
 var str = function () {
