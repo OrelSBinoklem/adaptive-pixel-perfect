@@ -685,9 +685,11 @@ jQuery(function($) {
                     '<div class="pmv__pages-item-content">' +
                     '<button class="btn btn-default btn-xs pmv__pages-btn-collapsed"><span class="glyphicon glyphicon-minus"></span><span class="glyphicon glyphicon-plus"></span></button>' +
                     '<button class="btn btn-default btn-xs btn-block pmv__pages-btn-name pmv__pages-btn-'+_class+'">'+name+'</button>' +
-                    '<button class="btn btn-default btn-xs pmv__pages-btn-delete"><span class="glyphicon glyphicon-remove"></span></button>' +
-                    '<button class="btn btn-default btn-xs pmv__pages-btn-edit"><span class="glyphicon glyphicon-edit"></span></button>' +
-                    '<div class="btn btn-default btn-xs pmv__pages-btn-drag"><span class="glyphicon glyphicon-move"></span></div>' +
+                    '<div class="btn-group pmv__pages-btn-specials">' +
+                        '<button class="btn btn-default btn-xs pmv__pages-btn-delete"><span class="glyphicon glyphicon-remove"></span></button>' +
+                        '<button class="btn btn-default btn-xs pmv__pages-btn-edit"><span class="glyphicon glyphicon-edit"></span></button>' +
+                        '<div class="btn btn-default btn-xs pmv__pages-btn-drag"><span class="glyphicon glyphicon-move"></span></div>' +
+                    '</div>' +
                     '</div>' +
                     '</li>';
 
