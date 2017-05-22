@@ -1,47 +1,3 @@
-//Рероутим подгрузку контента
-@font-face
-    font-family: 'FontAwesome'
-    src: url('../fonts/fontawesome-webfont.eot?v=4.7.0&a-pp=1')
-    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0&a-pp=1') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0&a-pp=1') format('woff2'),url('../fonts/fontawesome-webfont.woff?v=4.7.0&a-pp=1') format('woff'),url('../fonts/fontawesome-webfont.ttf?v=4.7.0&a-pp=1') format('truetype'),url('../fonts/fontawesome-webfont.svg?v=4.7.0&a-pp=1#fontawesomeregular') format('svg')
-    font-weight: normal
-    font-style: normal
-
-@font-face
-    font-family: 'Glyphicons Halflings'
-    src: url(../js/bootstrap-3.3.7/fonts/glyphicons-halflings-regular.eot?a-pp=1)
-    src: url(../js/bootstrap-3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&a-pp=1) format('embedded-opentype'),url(../js/bootstrap-3.3.7/fonts/glyphicons-halflings-regular.woff2?a-pp=1) format('woff2'),url(../js/bootstrap-3.3.7/fonts/glyphicons-halflings-regular.woff?a-pp=1) format('woff'),url(../js/bootstrap-3.3.7/fonts/glyphicons-halflings-regular.ttf?a-pp=1) format('truetype'),url(../js/bootstrap-3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular?a-pp=1) format('svg')
-
-.ui-widget-content
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_highlight-soft_100_eeeeee_1x100.png?a-pp=1")
-.ui-widget-header
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_gloss-wave_35_f6a828_500x100.png?a-pp=1")
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_glass_100_f6f6f6_1x400.png?a-pp=1")
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_glass_100_fdf5ce_1x400.png?a-pp=1")
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_glass_65_ffffff_1x400.png?a-pp=1")
-.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_highlight-soft_75_ffe45c_1x100.png?a-pp=1")
-.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_diagonals-thick_18_b81900_40x40.png?a-pp=1")
-.ui-icon, .ui-widget-content .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_222222_256x240.png?a-pp=1")
-.ui-widget-header .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_ffffff_256x240.png?a-pp=1")
-.ui-state-default .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_ef8c08_256x240.png?a-pp=1")
-.ui-state-hover .ui-icon, .ui-state-focus .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_ef8c08_256x240.png?a-pp=1")
-.ui-state-active .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_ef8c08_256x240.png?a-pp=1")
-.ui-state-highlight .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_228ef1_256x240.png?a-pp=1")
-.ui-state-error .ui-icon, .ui-state-error-text .ui-icon
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-icons_ffd27a_256x240.png?a-pp=1")
-.ui-widget-overlay
-    background-image: url("../js/jquery-ui-1.11.4/images/ui-bg_diagonals-thick_20_666666_40x40.png?a-pp=1")
-
 .shab__main-menu-container
     position: fixed
     top: 0
@@ -802,6 +758,18 @@
 
 .pp__modal-add-resolution-errors
     margin-bottom: 0
+
+.f-c-style__editor
+    &-wrap
+        position: absolute
+        left: 5px
+        bottom: 5px
+        width: 110px
+        height: 240px
+        box-sizing: border-box
+        border: 1px solid #ccc
+    width: 200%
+    height: 100%
 
 /*Для выподающего списка групп*/
 

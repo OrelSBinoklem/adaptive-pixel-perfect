@@ -1,3 +1,4 @@
+define(function(require, exports, module) {
 /****************************************************/
 /*Шаблонизатор*/
 /****************************************************/
@@ -10,7 +11,7 @@ jQuery(function($) {
         session = new modules.sessionModel(data, socket);
         next();
     });
-    
+
     function next() {
         //Глобальная переменная - зажата ли левая кнопка мыши
         var maximumDeviationOfMouse = 10;
@@ -1096,7 +1097,7 @@ jQuery(function($) {
                 }
             }
             pageManagerVisualizator.$container.on("mnif.changePos", sendChangePosIFrame);
-            
+
 
             //Ресайз Айфрейма
             var resizeIFrame__timeoutId = null;
@@ -2056,6 +2057,109 @@ jQuery(function($) {
             });
         })();
 
+        /****************************************************/
+        /*Быстрая калибровка стилей*/
+        /****************************************************/
+        (function() {
+            var files = {};
+
+            //require("ace/lib/fixoldbrowsers");
+
+            //require("ace/multi_select");
+            //require("ace/ext/spellcheck");
+            //require("./acedemo/inline_editor");
+            //require("./acedemo/dev_util");
+            //require("./acedemo/file_drop");
+
+            //var config = require("ace/config");
+            //config.init();
+            //var env = {};
+
+            //var dom = require("ace/lib/dom");
+            var net = require("ace/lib/net");
+            //var lang = require("ace/lib/lang");
+            //var useragent = require("ace/lib/useragent");
+
+            //var event = require("ace/lib/event");
+            //var theme = require("ace/theme/textmate");
+            //var EditSession = require("ace/edit_session").EditSession;
+            //var UndoManager = require("ace/undomanager").UndoManager;
+
+            //var HashHandler = require("ace/keyboard/hash_handler").HashHandler;
+
+            //var Renderer = require("ace/virtual_renderer").VirtualRenderer;
+            //var Editor = require("ace/editor").Editor;
+
+            //var whitespace = require("ace/ext/whitespace");
+
+            //var doclist = require("./acedemo/doclist");
+            var modelist = require("ace/ext/modelist");
+            //var themelist = require("ace/ext/themelist");
+            ////var layout = require("./acedemo/layout");
+            //var TokenTooltip = require("./acedemo/token_tooltip").TokenTooltip;
+            //var util = require("./acedemo/util");
+            //var saveOption = util.saveOption;
+            //var fillDropdown = util.fillDropdown;
+            //var bindCheckbox = util.bindCheckbox;
+            //var bindDropdown = util.bindDropdown;
+
+            //var ElasticTabstopsLite = require("ace/ext/elastic_tabstops_lite").ElasticTabstopsLite;
+
+            //var IncrementalSearch = require("ace/incremental_search").IncrementalSearch;
+
+            //var workerModule = require("ace/worker/worker_client");
+
+            var range = require("ace/range").Range;
+
+            /*********** create editor ***************************/
+            var editor = require("ace/ace").edit($(".f-c-style__editor").get(0));
+            editor.setTheme("ace/theme/textmate");
+            editor.renderer.setShowGutter(false);
+            //Emmet
+            var Emmet = require("ace/ext/emmet");
+            net.loadScript("https://cloud9ide.github.io/emmet-core/emmet.js", function() {
+                Emmet.setCore(window.emmet);
+                editor.setOption("enableEmmet", true);
+            });
+            //Сниппеты
+            require("ace/ext/language_tools");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: false,
+                enableSnippets: true
+            });
+
+            socket.on('modifyStile', function (data) {
+                if(!(data.file.path in files)) {
+                    files[data.file.path] = {};
+                    files[data.file.path].session = require("ace/ace").createEditSession( data.file.string, modelist.getModeForPath(data.file.path).mode );
+                }
+                files[data.file.path].data = data;
+
+                editor.setSession(files[data.file.path].session);
+
+                editor.setValue(data.file.string);
+
+                //ПОКАЗЫВАТЬ КОЛИЧЕСТВО КУРСОРОВ
+                var countCursors = data.file.cursors.length;
+
+                if(countCursors) {
+                    editor.clearSelection();
+                    var firstRow;
+                    data.file.cursors.forEach(function(el, i, arr) {
+                        var pos = editor.getSession().getDocument().indexToPosition(el, 0);
+                        if(firstRow === undefined) {
+                            firstRow = pos.row;
+                        }
+                        editor.getSession().getSelection().addRange(new range(pos.row, pos.column, pos.row, pos.column));
+                    });
+                    //СДЕЛАТЬ ПОМЕНЬШЕ ШРИФТ
+                    editor.scrollToRow(firstRow);//СКРОЛЛИТЬ ПО ЦЕНТРУ
+                    editor.focus();//ФОКУСИРОВАТЬ ПРИСОБЫТИЯХ
+                }
+            });
+        })();
+
         //Первое применение сессии
         crossModulesFunctions["session.applyAllParamsLocalSession"](false);
 
@@ -2087,4 +2191,5 @@ jQuery(function($) {
             //==========
         });
     }
+});
 });

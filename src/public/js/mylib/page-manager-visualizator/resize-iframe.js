@@ -13,8 +13,7 @@ var resizeIFrame = function($container, options) {
     ____._last_cursor_Y = 0;
     ____._last_cursor_X = 0;
 
-    this._create = function()
-    {
+    this._create = function() {
         var $iFrame = $("#"+(____._options.nameIFrame)).contents();
         
         $container.append('<div class="rif-show-dimensions panel panel-primary"><div class="panel-body"><span class="rif-width btn btn-default btn-lg">0</span> X <span class="rif-height btn btn-default btn-lg">0</span></div></div>');

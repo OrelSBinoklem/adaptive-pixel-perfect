@@ -21,19 +21,27 @@ var gulp = require('gulp'),
 
 gulp.task('style', function () {
     gulp.src("src/public/**/*.sass")
+        .pipe(through2(function(file, enc, callback){
+            //console.log("--"+file.path);
+            callback(null, file);
+        }))
         .pipe(plumber())
         .pipe(changed("public", {extension: '.css'}))
+        .pipe(through2(function(file, enc, callback){
+            //console.log("++"+file.path);
+            callback(null, file);
+        }))
         .pipe(sourcemaps.init())
         .pipe(sass()) //Скомпилируем
         //.pipe(prefixer()) //Добавим вендорные префиксы
         .pipe(cssmin()) //Сожмем
         .pipe(sourcemaps.write("."))
-        .pipe(through2(function(file, enc, callback){//Добавим к пути мап файлов ?a-pp=1
+        /*.pipe(through2(function(file, enc, callback){//Добавим к пути мап файлов ?a-pp=1
             if(!/.map/.test(file.extname)) {
                 file.contents = new Buffer(file.contents.toString().replace(/(\.css\.map)([\S\s]{1,3}$)/gim, "$1?a-pp=1$2"));
                 callback(null, file);
             }
-        }))
+        }))*/
         .pipe(gulp.dest("public"));
 });
 
@@ -45,18 +53,37 @@ gulp.task('css', function () {
 });
 
 gulp.task('js', function () {
-    gulp.src("src/public/**/*.js")
+    gulp.src([
+            "src/public/**/*.js",
+            "!src/public/js/require/require.js",
+            "!src/public/js/main.js",
+            "!src/public/js/ace/**/*.*",
+            "!src/public/js/acedemo/**/*.*"
+    ])
         .pipe(plumber())
         .pipe(changed("public"))
         .pipe(sourcemaps.init())
         .pipe(uglify()) //Сожмем наш js
         .pipe(sourcemaps.write('.'))
-        .pipe(through2(function(file, enc, callback){//Добавим к пути мап файлов ?a-pp=1
+        /*.pipe(through2(function(file, enc, callback){//Добавим к пути мап файлов ?a-pp=1
             if(!/.map/.test(file.extname)) {
                 file.contents = new Buffer(file.contents.toString().replace(/(\.js\.map)([\S\s]{1,3}$)/gim, "$1?a-pp=1$2"));
                 callback(null, file);
             }
-        }))
+        }))*/
+        .pipe(gulp.dest("public"));
+});
+
+gulp.task('js_uncompress', function () {
+    gulp.src([
+        "src/public/js/require/require.js",
+        "src/public/js/main.js",
+        "src/public/js/ace/**/*.*",
+        "src/public/js/acedemo/**/*.*"
+    ],
+        {base: "src/public"})
+        .pipe(plumber())
+        //.pipe(changed("public"))
         .pipe(gulp.dest("public"));
 });
 
@@ -103,6 +130,7 @@ gulp.task('build', [
     'style',
     'css',
     "js",
+    "js_uncompress",
     'content'
 ]);
 
@@ -111,5 +139,5 @@ gulp.task('default', ['build']);
 gulp.watch("src/public/index.html", ['index.html']);
 gulp.watch("src/public/**/*.sass", ['style']);
 gulp.watch("src/public/**/*.css", ['css']);
-gulp.watch("src/public/**/*.js", ['js']);
+gulp.watch("src/public/**/*.js", ['js', 'js_uncompress']);
 gulp.watch("src/public/**/*.{jpg,png,gif,svg,otf,eot,svg,ttf,woff,woff2,json}", ['content']);

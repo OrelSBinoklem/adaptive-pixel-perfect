@@ -48,10 +48,9 @@ var lang_English = null;
 var setLang = function(lang) {
     if(lang_English === null) {
         $.ajax({
-            url: "/lang/en_US.json",
+            url: "/a-pp-public/lang/en_US.json",
             type: "GET",
             cache: false,
-            data: ({"a-pp": 1}),
             dataType: "json",
             async: true,
             success: function(data){
@@ -73,10 +72,9 @@ var setLang = function(lang) {
     
     function next() {
         $.ajax({
-            url: "/lang/" + lang + ".json",
+            url: "/a-pp-public/lang/" + lang + ".json",
             type: "GET",
             cache: false,
-            data: ({"a-pp": 1}),
             dataType: "json",
             async: true,
             success: function(data){
