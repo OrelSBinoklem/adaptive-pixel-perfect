@@ -2143,8 +2143,8 @@ jQuery(function($) {
                 $(".f-c-style__count-cursors .label").text(data.file.cursors.length);
 
                 if(data.file.cursors.length) {
-                    editor.clearSelection();
                     var firstRow;
+                    editor.clearSelection();
                     data.file.cursors.forEach(function(el, i, arr) {
                         var pos = editor.getSession().getDocument().indexToPosition(el, 0);
                         if(firstRow === undefined) {
@@ -2152,9 +2152,17 @@ jQuery(function($) {
                         }
                         editor.getSession().getSelection().addRange(new range(pos.row, pos.column, pos.row, pos.column));
                     });
-                    //СДЕЛАТЬ ПОМЕНЬШЕ ШРИФТ
-                    editor.scrollToRow(firstRow);//СКРОЛЛИТЬ ПО ЦЕНТРУ
-                    editor.focus();//ФОКУСИРОВАТЬ ПРИСОБЫТИЯХ
+
+                    //Скроллим к строке и так чтоб она была по центру вертикали
+                    setTimeout(function() {
+                        var scrollRow = firstRow - Math.floor((editor.getLastVisibleRow() - editor.getFirstVisibleRow()) / 2);
+                        if(scrollRow < 0) {scrollRow = 0}
+                        editor.scrollToRow(scrollRow);
+                    }, 1);
+                    
+                    editor.focus();//ФОКУСИРОВАТЬ ПРИ СОБЫТИЯХ
+
+                    //ПРИ БЫСТРОМ РЕДАКТИРОВАНИИ СТИЛЕЙ В РЕДАКТОРЕ - ПОСТОЯННО НЕОТСЫЛАТЬ ФАЙЛ ЧЕРЕЗ СОКЕТ
                 }
             });
         })();
