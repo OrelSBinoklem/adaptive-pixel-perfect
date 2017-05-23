@@ -71,5 +71,6 @@
   },
   "pp__modal-delete-resolution": {
     "modal-title": "Delete resolution"
-  }
+  },
+  "f-c-style__count-cursors-text": "Modifications"
 }

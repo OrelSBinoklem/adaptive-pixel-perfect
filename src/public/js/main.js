@@ -2139,11 +2139,10 @@ jQuery(function($) {
                 editor.setSession(files[data.file.path].session);
 
                 editor.setValue(data.file.string);
+                
+                $(".f-c-style__count-cursors .label").text(data.file.cursors.length);
 
-                //ПОКАЗЫВАТЬ КОЛИЧЕСТВО КУРСОРОВ
-                var countCursors = data.file.cursors.length;
-
-                if(countCursors) {
+                if(data.file.cursors.length) {
                     editor.clearSelection();
                     var firstRow;
                     data.file.cursors.forEach(function(el, i, arr) {

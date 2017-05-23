@@ -205,6 +205,8 @@ function setTranslates(lang, data) {
     $("#pp__modal-delete-resolution .modal-title-text").text(_l_(mdr+"|modal-title", t));
     $("#pp__modal-delete-resolution .btn-select").text(_l_(cfm+"|delete", t));
     $("#pp__modal-delete-resolution .btn.btn-close").text(_l_(cfm+"|back", t));
+
+    $(".f-c-style__count-cursors-text").text(_l_("f-c-style__count-cursors-text", t));
 }
 
 //==============================================
