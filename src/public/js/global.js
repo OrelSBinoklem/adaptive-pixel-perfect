@@ -500,3 +500,8 @@ $(document).ready(function(){
         }
     });
 });
+
+//fix - когда меняеш быстро цифры в редакторе калибратора стилей зажавши комбинации клавиш, а потом резко в основном редакторе
+var TabstopManager_attach;
+var TabstopManager_detach;
+var TabstopManager_attached = false;

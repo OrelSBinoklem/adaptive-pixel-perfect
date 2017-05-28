@@ -101,7 +101,7 @@ gulp.task('index.html', function () {
 });
 
 mkdirp('public/design-thumbnails', function (err) {
-    if (err) console.error(err)
+    if (err) console.error(err);
 });
 
 /*gulp.task('style:build', function () {

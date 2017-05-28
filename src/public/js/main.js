@@ -2062,6 +2062,7 @@ jQuery(function($) {
         /****************************************************/
         (function() {
             var files = {};
+            var lastEditPath = null;
 
             //require("ace/lib/fixoldbrowsers");
 
@@ -2129,7 +2130,84 @@ jQuery(function($) {
                 enableSnippets: true
             });
 
-            socket.on('modifyStile', function (data) {
+            editor.setReadOnly(true);
+            editor.$blockScrolling = Infinity;
+
+            //Чтоб срабатывал фокус приклике или комбинации клавиш - редактор запоминает что он был в фокусе и при blur событии window он размываеться но при событии focus обьекта window
+            // он опять фокусируеться и если при фокусеровке на окне браузера пользователь кликал по редактору то он не кликнет по маске чтоб редактор сфокусировался а кликнет по какомуто месту
+            // в уже сфокусированном редакторе и таким образом пользователь может ненарошно выделить нежелательный код - поэтому мы расфокусируем его "полностью" методом blur
+            $(window).on("blur", function(){
+                editor.blur();
+            });
+
+            //Фокусировка при комбинациях или клике по маске
+            $(".f-c-style__mask").on("click", function(){
+                editor.focus();
+            });
+
+            $('body').on('keydown', handlerEditorFocusKeyPress);
+            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
+                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerEditorFocusKeyPress);
+            });
+            function handlerEditorFocusKeyPress(e) {
+                if(mouseKeyPressed) {
+                    if(e.which == 70 && !e.ctrlKey && !e.shiftKey && !e.altKey)
+                    {
+                        editor.focus();
+
+                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
+                    }
+                }
+            }
+
+            var cursorMovedToEditor = false;
+            $(".f-c-style__editor-wrap").on({
+                "mouseenter": function() {cursorMovedToEditor = true; expandEditor()},
+                "mouseleave": function() {cursorMovedToEditor = false; expandEditor()}
+            });
+
+            var editorFocused = false;
+            editor.on("focus", function(){$(".f-c-style__mask").hide(); editorFocused = true; expandEditor()});
+            editor.on("blur", function(){$(".f-c-style__mask").show(); editorFocused = false; expandEditor()});
+
+            function expandEditor() {
+                if(cursorMovedToEditor && editorFocused) {
+                    $(".f-c-style__editor-wrap").width(320)/*.height(320)*/;
+                    //$(".f-c-style__editor").height(300);
+                } else {
+                    $(".f-c-style__editor-wrap").width(120)/*.height(240)*/;
+                    //$(".f-c-style__editor").height(220);
+                }
+                editor.resize();
+            }
+
+            var stopRecursion = false;
+            var stylesModify = false;
+            var modifyData;
+            TabstopManager_attach = function() {
+                TabstopManager_attached = true;
+            }
+            TabstopManager_detach = function() {
+                TabstopManager_attached = false;
+                if(stylesModify) {
+                    handlerModifyStile();
+                }
+            }
+            socket.on('modifyStile', function(data) {
+                modifyData = data;
+                if(!TabstopManager_attached) {
+                    handlerModifyStile();
+                } else {
+                    stylesModify = true;
+                }
+            });
+            function handlerModifyStile () {
+                stylesModify = false;
+                var data = modifyData;
+                editor.setReadOnly(false);
+
+                lastEditPath = data.file.path;
+
                 if(!(data.file.path in files)) {
                     files[data.file.path] = {};
                     files[data.file.path].session = require("ace/ace").createEditSession( data.file.string, modelist.getModeForPath(data.file.path).mode );
@@ -2138,8 +2216,10 @@ jQuery(function($) {
 
                 editor.setSession(files[data.file.path].session);
 
+                stopRecursion = true;
                 editor.setValue(data.file.string);
-                
+                stopRecursion = false;
+
                 $(".f-c-style__count-cursors .label").text(data.file.cursors.length);
 
                 if(data.file.cursors.length) {
@@ -2159,11 +2239,29 @@ jQuery(function($) {
                         if(scrollRow < 0) {scrollRow = 0}
                         editor.scrollToRow(scrollRow);
                     }, 1);
-                    
-                    editor.focus();//ФОКУСИРОВАТЬ ПРИ СОБЫТИЯХ
 
-                    //ПРИ БЫСТРОМ РЕДАКТИРОВАНИИ СТИЛЕЙ В РЕДАКТОРЕ - ПОСТОЯННО НЕОТСЫЛАТЬ ФАЙЛ ЧЕРЕЗ СОКЕТ
+                    //editor.focus();
                 }
+            }
+
+            editor.on("change", function(){
+                if(!stopRecursion) {
+                    socket.emit('modifyStileNotification');
+                }
+            });
+
+            socket.on('getStile', function() {
+                socket.emit("sendStile", {
+                    path: lastEditPath,
+                    string: editor.getValue()
+                });
+            });
+
+            setTimeout(function() {
+                socket.emit("getLastStyleData");
+            }, 1);
+            $(window).on("focus", function(){
+                socket.emit("getLastStyleData");
             });
         })();
 
@@ -2174,15 +2272,9 @@ jQuery(function($) {
         /*Для тестов*/
         /****************************************************/
         $(document).ready(function(){
-            $("body").on('keydown', function(e) {
-                if(e.which == 49 && e.altKey) {//(e.which == 65 || e.which == 83 || e.which == 68)
-                    //console.log(parseFloat("900.5"));//Возвращает целое число
-                    //console.log($("body").data("dfsdfsd"));//Возвращает undefined
-                    /*var obj = {a: 1, b: 2};
-                    $("body").data("dfsdfsd", obj);
-                    $("body").data("dfsdfsd").a = 10;
-                    console.log(obj);*///обект не клонируеться, а остаёться оригинальным
-                    console.log(navigator.userAgent);
+            $("body").on('click', function(e) {
+                if(e.altKey && e.ctrlKey && e.shiftKey) {//(e.which == 65 || e.which == 83 || e.which == 68)
+                    //socket.emit('modifyStileNotification');
                 }
             });
         });

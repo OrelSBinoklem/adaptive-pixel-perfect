@@ -657,6 +657,7 @@ var TabstopManager = function(editor) {
         this.editor.on("changeSession", this.$onChangeSession);
         this.editor.commands.on("afterExec", this.$onAfterExec);
         this.editor.keyBinding.addKeyboardHandler(this.keyboardHandler);
+        TabstopManager_attach();
     };
     this.detach = function() {
         this.tabstops.forEach(this.removeTabstopMarkers, this);
@@ -670,6 +671,7 @@ var TabstopManager = function(editor) {
         this.editor.keyBinding.removeKeyboardHandler(this.keyboardHandler);
         this.editor.tabstopManager = null;
         this.editor = null;
+        TabstopManager_detach();
     };
 
     this.onChange = function(delta) {
