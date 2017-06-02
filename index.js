@@ -12,7 +12,7 @@ var diff = require('diff');
 
 var pageManagerVisualizator   = require('./lib/page-manager-visualizator');
 var pixelPerfect   = require('./lib/pixel-perfect');
-var sessionModel   = require('./lib/session-model.js');
+var sessionModel   = require('./lib/session-model');
 
 var ____;
 var __ = function() {};
@@ -94,7 +94,6 @@ __.prototype.init = function() {
 
     ____.server.listen( ____.port || 3010 );
 
-    var ii = 0;
     ____.io.on('connection', function (socket) {
         ____.sessionModel.connect(socket);
         socket.on("modifyStileNotification", function(){
@@ -126,24 +125,26 @@ __.prototype.init = function() {
 }
 
 __.prototype.changeStyle = function(o) {
-    ____.stylePath = o.filepath;
-    ____.runTask = o.runTask;
-    //var contents = fs.readFileSync(filepath);
+    if(____.serverInit) {
+        ____.stylePath = o.filepath;
+        ____.runTask = o.runTask;
+        //var contents = fs.readFileSync(filepath);
 
-    //Пропускаем только те файлы которые были модифицированы не калибратором стилей
+        //Пропускаем только те файлы которые были модифицированы не калибратором стилей
 
-    var mtime = fs.statSync(____.stylePath).mtime.getTime();
-    if(____.stylePath in ____.cacheStile) {
-        if(____.cacheStile[____.stylePath].mtime < mtime) {
-            ____.fileModifyInBrowser = false;
-            sendBrowser();
-            ____.runTask();
+        var mtime = fs.statSync(____.stylePath).mtime.getTime();
+        if(____.stylePath in ____.cacheStile) {
+            if(____.cacheStile[____.stylePath].mtime < mtime) {
+                ____.fileModifyInBrowser = false;
+                sendBrowser();
+                ____.runTask();
+            } else {
+                ____.fileModifyInBrowser = true;
+            }
         } else {
-            ____.fileModifyInBrowser = true;
+            ____.cacheStile[____.stylePath] = {};
+            addCache();
         }
-    } else {
-        ____.cacheStile[____.stylePath] = {};
-        addCache();
     }
 
     function sendBrowser() {
@@ -240,10 +241,12 @@ __.prototype._saveAndRunStyleTask__next = function(data) {
 }
 
 __.prototype.endStyleTask = function() {
-    //console.timeEnd("ModifyStile");
-    //console.timeEnd("CompileStile");
-    ____.stylesTaskRuned = false;
-    ____._attemptSaveAndRunStyleTask();
+    if(____.serverInit) {
+        //console.timeEnd("ModifyStile");
+        //console.timeEnd("CompileStile");
+        ____.stylesTaskRuned = false;
+        ____._attemptSaveAndRunStyleTask();
+    }
 }
 
 module.exports = __;
