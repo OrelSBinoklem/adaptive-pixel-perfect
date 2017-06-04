@@ -225,15 +225,15 @@ var pixelPerfect = function($container, options) {
         }
 
         $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
-        $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 320px;"></div>');
+        $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 1200px;"></div>');
 
         ____.checkBottomSpace__interval = setInterval(function() {
             if($('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space + *').length) {
                 $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
-                $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 320px;"></div>');
+                $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 1200px;"></div>');
             }
             if(!$('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').length) {
-                $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 320px;"></div>');
+                $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 1200px;"></div>');
             }
         }, 1000);
     }
