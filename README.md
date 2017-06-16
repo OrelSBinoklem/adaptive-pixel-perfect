@@ -11,71 +11,32 @@ $ npm i adaptive-pixel-perfect --save-dev
  a_pp.start(port, designFolder, portForBrowserSync);
 ```
 
-Use the plugin on port 3010 together with browserSync, (pre-create a design folder and add design images to it), use methods - changeStyle and endStyleTask to work the calibrator of styles:
+Use the plugin on port 3010 together with browserSync, (pre-create a design folder and add design images to it):
 
 ```js
-var gulp        = require('gulp');
-var a_pp = require('adaptive-pixel-perfect').create();
+var a_pp = require('adaptive-pixel-perfect');
 var browserSync = require('browser-sync').create();
-
-var sourcemaps = require('gulp-sourcemaps');
-var sass = require('gulp-sass');
-var cssmin = require('gulp-minify-css');
-var changed = require('gulp-changed');
-var plumber = require('gulp-plumber');
 
 var port = 3010;
 var folderForDesignScreenshots = "design";
 var portForBrowserSync = 3000;
 
-gulp.task("server", function() {
-    browserSync.init({
-        server: "./",
-        cors: true,
-        middleware: function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            next();
-        },
-        socket: {
-            domain: 'localhost:' + portForBrowserSync
-        },
-        scriptPath: function (path, port, options) {
-            return "http://" + options.getIn(['socket', 'domain']) + path;
-        }
-    });
+browserSync.init({
+    server: "./",
+    cors: true,
+    middleware: function (req, res, next) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        next();
+    },
+    socket: {
+        domain: 'localhost:' + portForBrowserSync
+    },
+    scriptPath: function (path, port, options) {
+        return "http://" + options.getIn(['socket', 'domain']) + path;
+    }
 });
 
-gulp.task("a_pp", function() {
-    a_pp.start(port, folderForDesignScreenshots, portForBrowserSync);
-});
-
-gulp.task("styles", function() {
-    return gulp.src("tests/questor-it.ru/www/sass/*.sass")
-        .pipe(plumber())
-        .pipe(changed("tests/questor-it.ru/www/styles", {extension: '.css'}))
-        //.pipe(sourcemaps.init())
-        .pipe(sass()) //Скомпилируем
-        //.pipe(prefixer()) //Добавим вендорные префиксы
-        //.pipe(cssmin()) //Сожмем
-        //.pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("tests/questor-it.ru/www/styles"))
-        .pipe(browserSync.stream())
-        .on("end", a_pp.endStyleTask);
-});
-
-gulp.task("watch", function() {
-    gulp.watch("tests/questor-it.ru/www/sass/*.sass")
-        .on("change", function(event) {
-            a_pp.changeStyle({
-                filepath: event.path,
-                runTask: function() {
-                    gulp.start("styles");
-                }
-            });
-        });
-});
-
-gulp.task("default", ["server", "a_pp", "styles", "watch"]);
+a_pp.start(port, folderForDesignScreenshots, portForBrowserSync);
 ```
 
 The plugin will be available at **http://localhost:3010/?a-pp=1**
@@ -92,6 +53,7 @@ The plugin will be available at **http://localhost:3010/?a-pp=1**
 
 | Release | Notes |
 | --- | --- |
+| 0.5.0 | Delete fast calibrator styles |
 | 0.4.0 | Added fast calibrator styles |
 | 0.3.0 | Added a window with settings, added English, moved session groups to the settings window and divided the parameters for more flexible customization |
 | 0.2.8 | Fixed synchronization select pages |
