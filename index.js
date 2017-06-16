@@ -43,13 +43,6 @@ __.prototype.start = function(port, dirDesignScreenshots, browserSyncPort) {
         this.io = io(this.server);
         this.io = this.io.of('/a-pp');
 
-        this.cacheStile = {};
-        this.stylesChanged = false;
-        this.stylesTaskRuned = false;
-        this.stylesCurSocket = null;
-
-        this.fileModifyInBrowser = false;
-
         //var myip = require('quick-local-ip');
         //console.log(myip.getLocalIP4());
 
@@ -96,20 +89,7 @@ __.prototype.init = function() {
 
     ____.io.on('connection', function (socket) {
         ____.sessionModel.connect(socket);
-        socket.on("modifyStileNotification", function(){
-            ____._handlerModifyStileNotification(socket);
-        });
 
-        socket.on("sendStile", function(data) {
-            ____.lastSendStyleSocket = socket;
-            ____._saveAndRunStyleTask__next(data);
-        });
-
-        socket.on("getLastStyleData", function() {
-            if("fileModifyInBrowser" in ____ && ____.fileModifyInBrowser && ____.lastSendStyleSocket !== socket) {
-                socket.emit("modifyStile", ____.lastFileData);
-            }
-        });
 
         /*socket.on('disconnect', function () {
             console.log('user disconnected');
@@ -122,131 +102,6 @@ __.prototype.init = function() {
             ____.sessionModel.sessionChange = false;
         }
     }, 2000);
-}
-
-__.prototype.changeStyle = function(o) {
-    if(____.serverInit) {
-        ____.stylePath = o.filepath;
-        ____.runTask = o.runTask;
-        //var contents = fs.readFileSync(filepath);
-
-        //Пропускаем только те файлы которые были модифицированы не калибратором стилей
-
-        var mtime = fs.statSync(____.stylePath).mtime.getTime();
-        if(____.stylePath in ____.cacheStile) {
-            if(____.cacheStile[____.stylePath].mtime < mtime) {
-                ____.fileModifyInBrowser = false;
-                sendBrowser();
-                ____.runTask();
-            } else {
-                ____.fileModifyInBrowser = true;
-            }
-        } else {
-            ____.cacheStile[____.stylePath] = {};
-            addCache();
-        }
-    }
-
-    function sendBrowser() {
-        var fold = ____.cacheStile[____.stylePath].string;
-        addCache();
-        var fnew = ____.cacheStile[____.stylePath].string;
-
-        ____.lastFileData = {
-            file: {
-                path: ____.stylePath,
-                string: fnew,
-                cursors: ____._getCursors(fold, fnew)
-            }
-        };
-
-        ____.io.emit("modifyStile", ____.lastFileData);
-    }
-
-    function addCache() {
-        ____.cacheStile[____.stylePath].mtime = mtime;
-        ____.cacheStile[____.stylePath].string = fs.readFileSync(____.stylePath).toString();
-    }
-}
-
-    __.prototype._getCursors = function (fold, fnew) {
-        var compare = diff.diffChars(fold, fnew);
-        var cursors = [];
-        var lastRangeModified = false;
-        compare.forEach(function(el, i) {
-            if(!("added" in el || "removed" in el)) {
-                cursors.push((cursors.length)?cursors[cursors.length - 1] + el.count:el.count);
-                lastRangeModified = false;
-            } else {
-                lastRangeModified = true;
-
-                if(i == 0) {
-                    cursors.push(0);
-                }
-
-                if("added" in el && el.added === true) {
-                    cursors[cursors.length - 1] += el.count;
-                }
-            }
-        });
-        //Если в последнем куске небыло модификаций
-        if(cursors.length && !lastRangeModified) {
-            cursors.pop();
-        }
-        return cursors;
-    }
-
-__.prototype._handlerModifyStileNotification = function(socket) {
-    //console.time("ModifyStile");
-    ____.stylesCurSocket = socket;
-    ____.stylesChanged = true;
-    ____._attemptSaveAndRunStyleTask();
-}
-
-__.prototype._attemptSaveAndRunStyleTask = function() {
-    if(!____.stylesTaskRuned && ____.stylesChanged) {
-        ____.stylesTaskRuned = true;
-        ____.stylesChanged = false;
-        setTimeout(____._saveAndRunStyleTask, 1);
-    }
-}
-
-__.prototype._saveAndRunStyleTask = function() {
-    //Запрашиваем строку файла и сохраняем
-    ____.stylesCurSocket.emit("getStile");
-}
-
-__.prototype._saveAndRunStyleTask__next = function(data) {
-    if(____.cacheStile[data.path].string != data.string) {
-        ____.lastFileData = {
-            file: {
-                path: data.path,
-                string: data.string,
-                cursors: ____._getCursors(____.cacheStile[data.path].string, data.string)
-            }
-        };
-    }
-
-    fs.writeFileSync(data.path, data.string);
-    var stats = fs.statSync(data.path)
-
-    //обновляем чтобы небыло рекурсии чтобы метод "changeStyle" обрабатывал только если файл редактировать будут не через калибратор стилей
-    //(ватчер срабатывает и при сохранении нами файла и вызывает метод "changeStyle")
-    ____.cacheStile[data.path].mtime = stats.mtime.getTime();
-    ____.cacheStile[data.path].string = data.string;
-
-    //Запускаем gulp чтоб он обработал стили
-    //console.time("CompileStile");
-    ____.runTask();
-}
-
-__.prototype.endStyleTask = function() {
-    if(____.serverInit) {
-        //console.timeEnd("ModifyStile");
-        //console.timeEnd("CompileStile");
-        ____.stylesTaskRuned = false;
-        ____._attemptSaveAndRunStyleTask();
-    }
 }
 
 module.exports = __;
