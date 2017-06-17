@@ -130,8 +130,13 @@ function setTranslates(lang, data) {
     $('.pp__50p-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__50p-btn", t));
     $('.pp__design-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__design-btn", t));
 
-    $('.pp__flicker-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__flicker-btn", t));
-    $('.pp__bottom-space-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__bottom-space-btn", t));
+    $('.pp__bottom-space-text').text(_l_("pp__bottom-space", t));
+    $('.bootstrap-toggle').bootstrapToggle('destroy');
+    $('.bootstrap-toggle').bootstrapToggle({
+        on: _l_("pp__bottom-space-btn|on", t),
+        off: _l_("pp__bottom-space-btn|off", t)
+    });
+    $('.pp__bottom-space-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__bottom-space-btn|tooltip", t));
 
     var ds = "description-sync";
     $('.settings__description-groups-synchronous').text(_l_(ds+"|groups-synchronous", t));

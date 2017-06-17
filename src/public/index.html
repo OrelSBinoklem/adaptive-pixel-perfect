@@ -18,9 +18,11 @@
     <link href="/a-pp-public/css/font-awesome.min.css" rel="stylesheet">
     <link href="/a-pp-public/js/selectpicker/bootstrap-select.min.css" rel="stylesheet">
     <link href="/a-pp-public/js/flag-icon-css-master/css/flag-icon.min.css" rel="stylesheet">
+    <link href="/a-pp-public/js/bootstrap-toggle/bootstrap2-toggle.css" rel="stylesheet">
     <script src="/a-pp-public/js/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script src="/a-pp-public/js/selectpicker/bootstrap-select.min.js"></script>
     <script src="/a-pp-public/js/selectpicker/i18n/defaults-ru_RU.js"></script>
+    <script src="/a-pp-public/js/bootstrap-toggle/bootstrap2-toggle.js"></script>
 
     <!--socket.io-->
     <script src="/socket.io/socket.io.js"></script>
@@ -62,7 +64,8 @@
 
     <!--main-->
     <link rel="stylesheet" href="/a-pp-public/css/main.css">
-    <!--<script type="text/javascript" src="/a-pp-public/js/main.js"></script>-->
+    <link rel="stylesheet" href="/a-pp-public/css/simplified-style.css">
+    <script type="text/javascript" src="/a-pp-public/js/main.js"></script>
 </head>
 <body>
 
@@ -80,10 +83,6 @@
                 <div class="btn-group btn-group-sm">
                     <a href="#" class="settings__window-open-btn btn btn-default"><span class="fa fa-cogs"></span></a>
                 </div>
-                <div class="btn-group btn-group-sm">
-                    <a href="#" class="pp__flicker-btn btn btn-default"><span data-toggle="tooltip" data-placement="bottom" data-original-title="Функция мерцание - если границы обьекта нечёткие и тяжело подвести его под дизайн, то можете воспользоваться данной функцией. Она поочереди переключает вёрстка-дизайн, вёрстка-дизайн, вёрстка-дизайн. Благодаря этому можно определить точно ли наложен обьект на дизайн"><i class="fa fa-bolt"></i></span></a>
-                    <a href="#" class="pp__bottom-space-btn btn btn-default"><span data-toggle="tooltip" data-placement="bottom" data-original-title="Добавляет после закрывающего тега body пустой блок с определённой высотой чтоб можно было прокрутить вниз и посмотреть в дизайне какой блок надо верстать следующим"><i class="fa fa-chevron-down"></i></span></a>
-                </div>
             </div>
         </div>
 
@@ -98,6 +97,15 @@
                                 <option value="en_US" data-content='<span class="flag-icon flag-icon-us"></span> English'>English</option>
                                 <option value="ru_RU" data-content='<span class="flag-icon flag-icon-ru"></span> Русский'>Русский</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="gorizontal-separator"></div>
+                    <div class="row">
+                        <div class="col-xs-6 settings__param-left"><h5 class="text-right"><b class="pp__bottom-space-text">Отступ снизу:</b></h5></div>
+                        <div class="col-xs-6 settings__param-right">
+                            <label class="checkbox-inline" data-toggle="tooltip" data-placement="bottom" data-original-title="Добавляет после закрывающего тега body пустой блок с определённой высотой чтоб можно было прокрутить вниз и посмотреть в дизайне какой блок надо верстать следующим">
+                                <input class="bootstrap-toggle pp__bottom-space-btn" type="checkbox" checked data-toggle="toggle" data-width="70">
+                            </label>
                         </div>
                     </div>
                     <div class="gorizontal-separator"></div>
@@ -188,13 +196,6 @@
             <div class="pp__screenshot-thumbnail"></div>
         </div>
         <div class="pp__screenshot-thumbnail-scrollwrap-shadow"></div>
-
-        <!--Калибратор стилей-->
-        <div class="f-c-style__editor-wrap">
-            <h6 class="f-c-style__count-cursors"><span class="f-c-style__count-cursors-text">Модификаций</span> <span class="label label-default">0</span></h6>
-            <div class="f-c-style__editor"></div>
-            <div class="f-c-style__mask"></div>
-        </div>
     </div>
 
     <!--Айфрейм-->
@@ -420,16 +421,5 @@
             </div>
         </div>
     </div>
-    <!--ace editor-->
-    <script type="text/javascript">
-        var require = {
-            baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/") + "/a-pp-public/js",
-            paths: {
-                ace: "ace"
-            },
-            waitSeconds: 30
-        };
-    </script>
-    <script src="/a-pp-public/js/require/require.js" data-main="/a-pp-public/js/main.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-define(function(require, exports, module) {
 /****************************************************/
 /*Шаблонизатор*/
 /****************************************************/
@@ -323,7 +322,7 @@ jQuery(function($) {
                     if(ls && "showBottomSpace" in ls) {
                         if(ls.showBottomSpace) {
                             pixelPerfect.insertBottomSpace();
-                            $(".pp__bottom-space-btn").addClass("active");
+                            $(".pp__bottom-space-btn").bootstrapToggle('on');
                         }
                     }
                     //iFrame
@@ -1448,84 +1447,18 @@ jQuery(function($) {
                 }
             }
 
-            //Функция мерцание
-            var lastMode;
-            var handlerFlickerPageProofsOrDesign__timeout = null;
-            $('body').on('keydown', handlerFlickerKeyPress);
-            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
-                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerFlickerKeyPress);
-            });
-            $(".pp__flicker-btn").on("click", flicker);
-            function handlerFlickerKeyPress(e) {
-                if(mouseKeyPressed) {
-                    if(e.which == 81 && !e.ctrlKey && !e.shiftKey && !e.altKey) {
-                        flicker();
-
-                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
-                    }
-                }
-            }
-            function flicker() {
-                if(handlerFlickerPageProofsOrDesign__timeout !== null) {
-                    clearInterval(handlerFlickerPageProofsOrDesign__timeout);
-                } else {
-                    lastMode = 1;
-                    var ls = session.getLocalSessionParams(false);
-                    if(ls && "showPageProofsOrDesign" in ls) {
-                        lastMode = ls.showPageProofsOrDesign;
-                    }
-                }
-
-                var frames = 0;
-                function hiddenAll() {
-                    pixelPerfect.$container.find( " .pp-design" ).css({opacity: 0});
-                    $( '#'+(pixelPerfect._options.nameIFrame) ).css({opacity: 0});
-                    $('.pp__verstka-design .btn').removeClass("active btn-primary btn-success btn-info btn-warning btn-danger").addClass("btn-default");
-
-                    handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageProofs, 400);
-                }
-
-                function showPageProofs() {
-                    frames++;
-                    if(frames > 5) {
-                        handlerFlickerPageProofsOrDesign__timeout = null;
-                        showInitialState();
-                        return false;
-                    }
-                    pixelPerfect.showPageProofsOrDesign(0);
-                    refreshButtonsPageProofsOrDesign(0);
-                    sendHTMLOrDesign(0);
-                    handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageDesign, 200);
-                }
-
-                function showPageDesign() {
-                    frames++;
-                    pixelPerfect.showPageProofsOrDesign(2);
-                    refreshButtonsPageProofsOrDesign(2);
-                    sendHTMLOrDesign(2);
-                    handlerFlickerPageProofsOrDesign__timeout = setTimeout(showPageProofs, 200);
-                }
-
-                function showInitialState() {
-                    pixelPerfect.showPageProofsOrDesign(lastMode);
-                    refreshButtonsPageProofsOrDesign(lastMode);
-                    sendHTMLOrDesign(lastMode);
-                }
-
-                hiddenAll();
-            }
-
             //Добавление-удаление блока перед закрывающим тегом body
-            $(".pp__bottom-space-btn").on("click", function(){
-                if(!$(".pp__bottom-space-btn").hasClass("active")) {
-                    pixelPerfect.insertBottomSpace();
-                    $(".pp__bottom-space-btn").addClass("active");
-                } else {
-                    pixelPerfect.deleteBottomSpace();
-                    $(".pp__bottom-space-btn").removeClass("active");
-                }
+            var pp__bottomSpaceBtn__stop_recursion = true;
+            $(".pp__bottom-space-btn").on("change", function(){
+                if(pp__bottomSpaceBtn__stop_recursion) {
+                    if($(".pp__bottom-space-btn").prop("checked")) {
+                        pixelPerfect.insertBottomSpace();
+                    } else {
+                        pixelPerfect.deleteBottomSpace();
+                    }
 
-                sendShowBottomSpace($(".pp__bottom-space-btn").hasClass("active"));
+                    sendShowBottomSpace($(".pp__bottom-space-btn").prop("checked"));
+                }
             });
             pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
                 var ls = session.getLocalSessionParams(false);
@@ -1533,10 +1466,10 @@ jQuery(function($) {
                 if(ls && "showBottomSpace" in ls) {
                     if(ls.showBottomSpace) {
                         pixelPerfect.insertBottomSpace();
-                        $(".pp__bottom-space-btn").addClass("active");
+                        $(".pp__bottom-space-btn").bootstrapToggle('on');
                     } else {
                         pixelPerfect.deleteBottomSpace();
-                        $(".pp__bottom-space-btn").removeClass("active");
+                        $(".pp__bottom-space-btn").bootstrapToggle('off');
                     }
                 }
             });
@@ -1676,13 +1609,15 @@ jQuery(function($) {
                 var ls = session.getLocalSessionParams(true);
 
                 if(ls && "showBottomSpace" in ls) {
+                    pp__bottomSpaceBtn__stop_recursion = false;
                     if(ls.showBottomSpace) {
                         pixelPerfect.insertBottomSpace();
-                        $(".pp__bottom-space-btn").addClass("active");
+                        $(".pp__bottom-space-btn").bootstrapToggle('on');
                     } else {
                         pixelPerfect.deleteBottomSpace();
-                        $(".pp__bottom-space-btn").removeClass("active");
+                        $(".pp__bottom-space-btn").bootstrapToggle('off');
                     }
+                    pp__bottomSpaceBtn__stop_recursion = true;
                 }
             }
 
@@ -2057,214 +1992,6 @@ jQuery(function($) {
             });
         })();
 
-        /****************************************************/
-        /*Быстрая калибровка стилей*/
-        /****************************************************/
-        (function() {
-            var files = {};
-            var lastEditPath = null;
-
-            //require("ace/lib/fixoldbrowsers");
-
-            //require("ace/multi_select");
-            //require("ace/ext/spellcheck");
-            //require("./acedemo/inline_editor");
-            //require("./acedemo/dev_util");
-            //require("./acedemo/file_drop");
-
-            //var config = require("ace/config");
-            //config.init();
-            //var env = {};
-
-            //var dom = require("ace/lib/dom");
-            var net = require("ace/lib/net");
-            //var lang = require("ace/lib/lang");
-            //var useragent = require("ace/lib/useragent");
-
-            //var event = require("ace/lib/event");
-            //var theme = require("ace/theme/textmate");
-            //var EditSession = require("ace/edit_session").EditSession;
-            //var UndoManager = require("ace/undomanager").UndoManager;
-
-            //var HashHandler = require("ace/keyboard/hash_handler").HashHandler;
-
-            //var Renderer = require("ace/virtual_renderer").VirtualRenderer;
-            //var Editor = require("ace/editor").Editor;
-
-            //var whitespace = require("ace/ext/whitespace");
-
-            //var doclist = require("./acedemo/doclist");
-            var modelist = require("ace/ext/modelist");
-            //var themelist = require("ace/ext/themelist");
-            ////var layout = require("./acedemo/layout");
-            //var TokenTooltip = require("./acedemo/token_tooltip").TokenTooltip;
-            //var util = require("./acedemo/util");
-            //var saveOption = util.saveOption;
-            //var fillDropdown = util.fillDropdown;
-            //var bindCheckbox = util.bindCheckbox;
-            //var bindDropdown = util.bindDropdown;
-
-            //var ElasticTabstopsLite = require("ace/ext/elastic_tabstops_lite").ElasticTabstopsLite;
-
-            //var IncrementalSearch = require("ace/incremental_search").IncrementalSearch;
-
-            //var workerModule = require("ace/worker/worker_client");
-
-            var range = require("ace/range").Range;
-
-            /*********** create editor ***************************/
-            var editor = require("ace/ace").edit($(".f-c-style__editor").get(0));
-            editor.setTheme("ace/theme/textmate");
-            editor.renderer.setShowGutter(false);
-            //Emmet
-            var Emmet = require("ace/ext/emmet");
-            net.loadScript("https://cloud9ide.github.io/emmet-core/emmet.js", function() {
-                Emmet.setCore(window.emmet);
-                editor.setOption("enableEmmet", true);
-            });
-            //Сниппеты
-            require("ace/ext/language_tools");
-            editor.setOptions({
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: false,
-                enableSnippets: true
-            });
-
-            editor.setReadOnly(true);
-            editor.$blockScrolling = Infinity;
-
-            //Чтоб срабатывал фокус приклике или комбинации клавиш - редактор запоминает что он был в фокусе и при blur событии window он размываеться но при событии focus обьекта window
-            // он опять фокусируеться и если при фокусеровке на окне браузера пользователь кликал по редактору то он не кликнет по маске чтоб редактор сфокусировался а кликнет по какомуто месту
-            // в уже сфокусированном редакторе и таким образом пользователь может ненарошно выделить нежелательный код - поэтому мы расфокусируем его "полностью" методом blur
-            $(window).on("blur", function(){
-                editor.blur();
-            });
-
-            //Фокусировка при комбинациях или клике по маске
-            $(".f-c-style__mask").on("click", function(){
-                editor.focus();
-            });
-
-            $('body').on('keydown', handlerEditorFocusKeyPress);
-            pageManagerVisualizator.$container.on( "pmv.load.iframe", function(){
-                $('#'+(pageManagerVisualizator._options.nameIFrame)).contents().find("body").on('keydown', handlerEditorFocusKeyPress);
-            });
-            function handlerEditorFocusKeyPress(e) {
-                if(mouseKeyPressed) {
-                    if(e.which == 70 && !e.ctrlKey && !e.shiftKey && !e.altKey)
-                    {
-                        editor.focus();
-
-                        e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
-                    }
-                }
-            }
-
-            var cursorMovedToEditor = false;
-            $(".f-c-style__editor-wrap").on({
-                "mouseenter": function() {cursorMovedToEditor = true; expandEditor()},
-                "mouseleave": function() {cursorMovedToEditor = false; expandEditor()}
-            });
-
-            var editorFocused = false;
-            editor.on("focus", function(){$(".f-c-style__mask").hide(); editorFocused = true; expandEditor()});
-            editor.on("blur", function(){$(".f-c-style__mask").show(); editorFocused = false; expandEditor()});
-
-            function expandEditor() {
-                if(cursorMovedToEditor && editorFocused) {
-                    $(".f-c-style__editor-wrap").width(320)/*.height(320)*/;
-                    //$(".f-c-style__editor").height(300);
-                } else {
-                    $(".f-c-style__editor-wrap").width(120)/*.height(240)*/;
-                    //$(".f-c-style__editor").height(220);
-                }
-                editor.resize();
-            }
-
-            var stopRecursion = false;
-            var stylesModify = false;
-            var modifyData;
-            TabstopManager_attach = function() {
-                TabstopManager_attached = true;
-            }
-            TabstopManager_detach = function() {
-                TabstopManager_attached = false;
-                if(stylesModify) {
-                    handlerModifyStile();
-                }
-            }
-            socket.on('modifyStile', function(data) {
-                modifyData = data;
-                if(!TabstopManager_attached) {
-                    handlerModifyStile();
-                } else {
-                    stylesModify = true;
-                }
-            });
-            function handlerModifyStile () {
-                stylesModify = false;
-                var data = modifyData;
-                editor.setReadOnly(false);
-
-                lastEditPath = data.file.path;
-
-                if(!(data.file.path in files)) {
-                    files[data.file.path] = {};
-                    files[data.file.path].session = require("ace/ace").createEditSession( data.file.string, modelist.getModeForPath(data.file.path).mode );
-                }
-                files[data.file.path].data = data;
-
-                editor.setSession(files[data.file.path].session);
-
-                stopRecursion = true;
-                editor.setValue(data.file.string);
-                stopRecursion = false;
-
-                $(".f-c-style__count-cursors .label").text(data.file.cursors.length);
-
-                if(data.file.cursors.length) {
-                    var firstRow;
-                    editor.clearSelection();
-                    data.file.cursors.forEach(function(el, i, arr) {
-                        var pos = editor.getSession().getDocument().indexToPosition(el, 0);
-                        if(firstRow === undefined) {
-                            firstRow = pos.row;
-                        }
-                        editor.getSession().getSelection().addRange(new range(pos.row, pos.column, pos.row, pos.column));
-                    });
-
-                    //Скроллим к строке и так чтоб она была по центру вертикали
-                    setTimeout(function() {
-                        var scrollRow = firstRow - Math.floor((editor.getLastVisibleRow() - editor.getFirstVisibleRow()) / 2);
-                        if(scrollRow < 0) {scrollRow = 0}
-                        editor.scrollToRow(scrollRow);
-                    }, 1);
-
-                    //editor.focus();
-                }
-            }
-
-            editor.on("change", function(){
-                if(!stopRecursion) {
-                    socket.emit('modifyStileNotification');
-                }
-            });
-
-            socket.on('getStile', function() {
-                socket.emit("sendStile", {
-                    path: lastEditPath,
-                    string: editor.getValue()
-                });
-            });
-
-            setTimeout(function() {
-                socket.emit("getLastStyleData");
-            }, 1);
-            $(window).on("focus", function(){
-                socket.emit("getLastStyleData");
-            });
-        })();
-
         //Первое применение сессии
         crossModulesFunctions["session.applyAllParamsLocalSession"](false);
 
@@ -2287,8 +2014,8 @@ jQuery(function($) {
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
             $('.selectpicker').selectpicker();
+            $('.bootstrap-toggle').bootstrapToggle();
             //==========
         });
     }
-});
 });

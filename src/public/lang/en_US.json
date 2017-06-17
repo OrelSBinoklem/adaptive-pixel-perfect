@@ -6,8 +6,12 @@
   "pp__50p-btn": "Translucent layout superimposed on design",
   "pp__design-btn": "Image of design",
 
-  "pp__flicker-btn": "Function flicker - if the boundaries of the object are fuzzy and difficult to bring it under the design, then you can use this function. It alternately switches layout-design, layout-design, layout-design. Thanks to this, it is possible to determine whether the object is designed exactly for design",
-  "pp__bottom-space-btn": "Adds after the closing body tag an empty block with a certain height so that you can scroll down and see in the design which block should be typed as follows",
+  "pp__bottom-space": "Bottom space:",
+  "pp__bottom-space-btn": {
+    "tooltip": "Adds after the closing body tag an empty block with a certain height so that you can scroll down and see in the design which block should be typed as follows",
+    "on": "on",
+    "off": "off"
+  },
 
   "description-sync": {
     "groups-synchronous": "Synchronization groups:",

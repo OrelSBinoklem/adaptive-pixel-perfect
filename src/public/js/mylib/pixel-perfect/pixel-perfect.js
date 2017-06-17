@@ -226,7 +226,7 @@ var pixelPerfect = function($container, options) {
 
         $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
         $('#'+(____._options.nameIFrame)).contents().find('body').append('<div class="a-pp__bottom-space" style="height: 1200px;"></div>');
-
+        
         ____.checkBottomSpace__interval = setInterval(function() {
             if($('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space + *').length) {
                 $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
@@ -253,7 +253,6 @@ var pixelPerfect = function($container, options) {
             topScroll = $(iframe.window).scrollTop();
 
             if(topScroll >= hDocument - hWindow) {
-                console.log(topScroll, hDocument - hWindow);
                 $(iframe.window).scrollTop(0);
                 $(iframe.window).scrollTop(hDocument - hWindow);
             }
