@@ -1287,7 +1287,7 @@ jQuery(function($) {
                 }
             });
             $("body").on("click click.body.iframe", function (e) {
-                if( $(e.target).closest($(".pp__btn-open-screenshots").add($(".pp__screenshots-menu-window, .pp__screenshots-files-menu-scrollwrap, .pp__screenshot-thumbnail-scrollwrap, .pp__resolutions-menu, #pp__modal-add-resolution, #pp__modal-delete-resolution"))).length == 0 ) {
+                if( $(e.target).closest($(".pp__btn-open-screenshots").add($(".pp__screenshots-menu-window, .pp__screenshots-files-menu-scrollwrap, .pp__screenshot-thumbnail-scrollwrap, .pp__resolutions-menu, #pp__modal-add-resolution, #pp__modal-delete-resolution, .pp__deviation"))).length == 0 ) {
                     $(".pp__btn-open-screenshots").removeClass('active');
                     $(".pp__screenshots-menu-window, .pp__screenshots-files-menu-scrollwrap, .pp__screenshot-thumbnail-scrollwrap").removeClass('open');
                 }
@@ -1355,16 +1355,47 @@ jQuery(function($) {
                 $(".pp__deviation").data("screenshot", _);
                 setParamDeviation($(".pp__deviation"), _.pos, _.l, _.t, _.lpx, _.lper, _.tpx, _.tper);
 
+                $(".pp__btn-open-screenshots").removeClass('active');
+                $(".pp__screenshots-menu-window, .pp__screenshots-files-menu-scrollwrap, .pp__screenshot-thumbnail-scrollwrap").removeClass('open');
                 $('.pp__deviation').addClass("open");
+                deviationWindowBeyondLimit();
             });
             $("body").on("click click.body.iframe", function (e) {
                 if( $(e.target).closest($(".pp__resolutions-screenshots-btn-deviation").add($(".pp__deviation"))).length == 0 ) {
                     $('.pp__deviation').removeClass("open");
                 }
             });
+            //Чтоб окно "pp__deviation" невыходило за границы "shab-right-column"
+            $(window).on("resize", deviationWindowBeyondLimit);
+            function deviationWindowBeyondLimit() {
+                var $el = $('.pp__deviation');
+                if($el.css("display").toLowerCase() != "none") {
+                    var $cont = $('.shab-right-column');
+
+                    var offset = $el.offset();
+                    var el_left =  offset.left;
+                    var el_top =  offset.top;
+                    var el_w =  $el.outerWidth();
+                    var el_h =  $el.outerHeight();
+
+                    offset = $cont.offset();
+                    var cont_left =  offset.left;
+                    var cont_top =  offset.top;
+                    var cont_w =  $cont.outerWidth();
+                    var cont_h =  $cont.outerHeight();
+
+                    if(el_left + el_w > cont_left + cont_w) {
+                        $el.css({left: cont_left + cont_w - el_w});
+                    }
+
+                    if(el_top + el_h > cont_top + cont_h) {
+                        $el.css({top: cont_top + cont_h - el_h});
+                    }
+                }
+            }
 
             //Смена "Static" и "Fixed" в "окне отклонения"
-            $('.pp__screenshots-menu-window').on("click", " .pp__deviation-fixed-or-static label", function(){
+            $('.shab__main-menu-container').on("click", " .pp__deviation-fixed-or-static label", function(){
                 if($(".pp__deviation").data("screenshot") !== undefined) {
                     var pos = ($(this).find(" input").val() == 1)?"static":"fixed";
                     var b = $(".pp__deviation").data("screenshot");
@@ -1382,7 +1413,7 @@ jQuery(function($) {
             });
 
             //Смена положения в сетке в "окне отклонения"
-            $('.pp__screenshots-menu-window').on("click", " .pp__deviation-relative .btn[data-left][data-top]", function(){
+            $('.shab__main-menu-container').on("click", " .pp__deviation-relative .btn[data-left][data-top]", function(){
                 if($(".pp__deviation").data("screenshot") !== undefined) {
                     var b = $(".pp__deviation").data("screenshot");
                     if(!(b.pos == "static" && $(this).attr("data-top") != "top")) {
@@ -1804,8 +1835,9 @@ jQuery(function($) {
                             '</div>' +
                         '</div>' +
                     '</div>';
-                $(".pp__screenshots-menu-window").append(html);
+                $(".pp__resolutions-menu").after(html);
                 refreshSpinner($(".pp__deviation"));
+                $(".pp__deviation").draggable({containment: ".shab-right-column", scroll: false});
             }
             function setParamDeviation($container, pos, l, t, lpx, lper, tpx, tper) {
                 setParamDeviation__relative($container, pos, l, t);
