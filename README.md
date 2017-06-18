@@ -14,7 +14,7 @@ $ npm i adaptive-pixel-perfect --save-dev
 Use the plugin on port 3010 together with browserSync, (pre-create a design folder and add design images to it):
 
 ```js
-var a_pp = require('adaptive-pixel-perfect');
+var a_pp = require('adaptive-pixel-perfect').create();
 var browserSync = require('browser-sync').create();
 
 var port = 3010;
