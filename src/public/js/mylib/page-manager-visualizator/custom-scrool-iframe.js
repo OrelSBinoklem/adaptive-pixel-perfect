@@ -4,7 +4,8 @@ var defaultOptions = {
     nameIFrame: "",
     pixelsScrollableInSeconds: 2000,
     minWOuterScroll: 23,
-    minHOuterScroll: 23
+    minHOuterScroll: 23,
+    permanentVisible: true
 };
 
 var customScrollIFrame = function($container, options) {
@@ -62,6 +63,11 @@ var customScrollIFrame = function($container, options) {
         
         //Первое выполнение
          ____.updateOuterScroll();
+        if(____._options.permanentVisible) {
+            $container.find(' .csif-outer-scroll-v').addClass("active");
+            $container.find(' .csif-outer-scroll-g').addClass("active");
+            $container.find(' .csif-square').addClass("active");
+        }
     }
     
     this._destroy = function() {
@@ -161,45 +167,51 @@ var customScrollIFrame = function($container, options) {
 
     //Добавляем класс "active" на 1 сек
     this.temporarilyVisibleOuterScroll = function(e) {
-        if(!____._fixVisibleOuterScroll) {
-            if(____._temporarilyVisibledOuterScrollTimeout !== null) {
-                clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+        if(!____._options.permanentVisible) {
+            if(!____._fixVisibleOuterScroll) {
+                if(____._temporarilyVisibledOuterScrollTimeout !== null) {
+                    clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+                }
+
+                $container.find(' .csif-outer-scroll-v').addClass("active");
+                $container.find(' .csif-outer-scroll-g').addClass("active");
+                $container.find(' .csif-square').addClass("active");
+
+                ____._temporarilyVisibledOuterScrollTimeout = setTimeout(function() {
+                    $container.find(' .csif-outer-scroll-v').removeClass("active");
+                    $container.find(' .csif-outer-scroll-g').removeClass("active");
+                    $container.find(' .csif-square').removeClass("active");
+                    ____._temporarilyVisibledOuterScrollTimeout = null;
+                }, 1000);
             }
-
-            $container.find(' .csif-outer-scroll-v').addClass("active");
-            $container.find(' .csif-outer-scroll-g').addClass("active");
-            $container.find(' .csif-square').addClass("active");
-
-            ____._temporarilyVisibledOuterScrollTimeout = setTimeout(function() {
-                $container.find(' .csif-outer-scroll-v').removeClass("active");
-                $container.find(' .csif-outer-scroll-g').removeClass("active");
-                $container.find(' .csif-square').removeClass("active");
-                ____._temporarilyVisibledOuterScrollTimeout = null;
-            }, 1000);
         }
     }
 
     //Добавляем класс "active"
     this.visibleOuterScroll = function(e) {
-        ____._fixVisibleOuterScroll = true;
-        $container.find(' .csif-outer-scroll-v').addClass("active");
-        $container.find(' .csif-outer-scroll-g').addClass("active");
-        $container.find(' .csif-square').addClass("active");
-        if(____._temporarilyVisibledOuterScrollTimeout !== null) {
-            clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
-            ____._temporarilyVisibledOuterScrollTimeout = null;
+        if(!____._options.permanentVisible) {
+            ____._fixVisibleOuterScroll = true;
+            $container.find(' .csif-outer-scroll-v').addClass("active");
+            $container.find(' .csif-outer-scroll-g').addClass("active");
+            $container.find(' .csif-square').addClass("active");
+            if(____._temporarilyVisibledOuterScrollTimeout !== null) {
+                clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+                ____._temporarilyVisibledOuterScrollTimeout = null;
+            }
         }
     }
 
     //Удаляем класс "active"
     this.hideOuterScroll = function(e) {
-        ____._fixVisibleOuterScroll = false;
-        $container.find(' .csif-outer-scroll-v').removeClass("active");
-        $container.find(' .csif-outer-scroll-g').removeClass("active");
-        $container.find(' .csif-square').removeClass("active");
-        if(____._temporarilyVisibledOuterScrollTimeout !== null) {
-            clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
-            ____._temporarilyVisibledOuterScrollTimeout = null;
+        if(!____._options.permanentVisible) {
+            ____._fixVisibleOuterScroll = false;
+            $container.find(' .csif-outer-scroll-v').removeClass("active");
+            $container.find(' .csif-outer-scroll-g').removeClass("active");
+            $container.find(' .csif-square').removeClass("active");
+            if(____._temporarilyVisibledOuterScrollTimeout !== null) {
+                clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+                ____._temporarilyVisibledOuterScrollTimeout = null;
+            }
         }
     }
     

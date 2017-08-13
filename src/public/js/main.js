@@ -481,6 +481,7 @@ jQuery(function($) {
                 pixelsScrollableInSeconds: 2000,
                 minWOuterScroll: 16,
                 minHOuterScroll: 16,
+                permanentVisible: true,
                 minWDraggable: 15,
                 minHDraggable: 15,
                 minWIFrame: 320,

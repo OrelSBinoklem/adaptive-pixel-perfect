@@ -6,6 +6,7 @@ var defaultOptions = {
     pixelsScrollableInSeconds: 2000,
     minWOuterScroll: 23,
     minHOuterScroll: 23,
+    permanentVisible: true,
     minWDraggable: 15,
     minHDraggable: 15,
     minWIFrame: 320,
