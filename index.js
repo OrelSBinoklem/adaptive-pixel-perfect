@@ -4,7 +4,6 @@ var express = require('express');
 var http = require('http');
 var fs   = require('fs');
 var path = require('path');
-var through2 = require("through2").obj;
 var gulp = require('gulp');
 var proxy = require('express-http-proxy');
 var externalip = require('externalip');

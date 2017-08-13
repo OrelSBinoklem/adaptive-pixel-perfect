@@ -1,0 +1,157 @@
+.float-panels
+    //скрываем раскрываем
+    .shab__main-menu-container
+        > .gorizontal-separator
+            display: none
+    .pp__resolutions-menu, .pp__btn-open-screenshots, .pmv__select-page-open-list, .pp__flicker-and-bottom-space, .pp__verstka-design
+        display: none
+    .pp__resolutions-menu-float
+        display: block
+    .shab__wrap-mnif
+        top: 0
+        left: 0
+        width: 0
+        height: 0
+        overflow: hidden
+        &.active
+            width: auto
+            height: auto
+    .shab__float-buttons
+        display: block
+        .btn-group-vertical
+            display: block
+        .pmv__select-page-open-list, .pp__btn-open-screenshots
+            display: block
+    .csif-outer-scroll
+        &-v, &-g
+            transition: opacity 0.1s ease-in-out
+            opacity: 0
+            &:hover, &.active
+                opacity: 0.8
+                ~ .csif-square
+                    opacity: 0.8
+    .csif-square
+        transition: opacity 0.1s ease-in-out
+        opacity: 0
+    .pp__resolutions-menu-float
+        .pp__resolutions-list
+            margin-top: 21px
+            margin-bottom: 0
+        .badge
+            display: none
+        .pp__resolution-name-btn
+            padding-top: 1px
+            padding-bottom: 1px
+            &.active
+                color: #337ab7
+    //Вёрстка на всю ширину и двигаем панели
+    .shab-right-column
+        left: 0
+        border-width: 0
+    .pmv-container
+        &-bl, &-bb, &-br
+            width: 0
+            height: 0
+    .pmv-outer-wrap
+        left: 0
+        bottom: 0
+        right: 0
+    .pmv__pages-window, .pp__screenshots-menu-window, .settings__window
+        left: 133px
+    .pp__screenshots-files-menu-scrollwrap
+        left: 616px
+        &-shadow
+            left: 1059px
+    .pp__screenshot-thumbnail-scrollwrap
+        left: 1069px
+    .pp__screenshot-thumbnail-scrollwrap-shadow
+        left: 1278px
+    .mnif-show-space.panel-primary
+        border-radius: 0 4px 4px 4px
+
+    //меню
+    .shab__main-menu-container
+        &.__vertical-top
+            top: 0
+            bottom: auto
+            width: auto
+            padding: 0
+            margin-top: 0!important
+            .a-pp__panels-top
+                display: none
+            ~ .shab__wrap-mnif
+                left: 143px
+            .shab__float-buttons
+                &-row
+                    border-top-right-radius: 0
+                &-right
+                    > .btn:first-child:not(:last-child)
+                        border-top-right-radius: 0
+        &.__vertical-center
+            top: 50%
+            bottom: auto
+            width: auto
+            padding: 0
+        &.__vertical-bottom
+            top: auto
+            bottom: 0
+            width: auto
+            padding: 0
+            margin-top: 0!important
+            .a-pp__panels-bottom
+                display: none
+            .shab__float-buttons
+                &-row
+                    border-bottom-right-radius: 0
+                &-right
+                    > .btn:last-child:not(:first-child)
+                        border-bottom-right-radius: 0
+        .pp__resolution-name-btn-w
+            margin-left: 0
+    .pp__resolutions-menu
+        margin-top: -1px
+    .a-pp__panels
+        &-top
+            position: absolute
+            bottom: 100%
+            border-bottom-left-radius: 0
+            border-bottom-right-radius: 0
+        &-bottom
+            position: absolute
+            top: 100%
+            border-top-left-radius: 0
+            border-top-right-radius: 0
+
+    .shab__float-buttons
+        &-row
+            display: flex
+            background-color: #fff
+            box-shadow: inset 0 0 0 1px #CCCCCC
+            border-radius: 0 4px 4px 0
+        &-left
+            & .shab__float-buttons-left-dimensions
+                color: #c9302c
+                font-weight: bold
+                cursor: default
+            .btn
+                margin-top: -1px
+                border-radius: 0
+        &-right
+            margin-left: -1px
+            > .btn:first-child:not(:last-child)
+                border-top-left-radius: 0
+            > .btn:last-child:not(:first-child)
+                border-bottom-left-radius: 0
+                //border-bottom-right-radius: 0
+    .rif-width, .rif-height
+        display: inline-block
+        width: 27px
+    .rif-width
+        text-align: right
+    .rif-height
+        text-align: left
+    .pmv__select-page-open-list
+        margin-top: 0
+
+.shab__float-buttons-left-dimensions.btn
+    opacity: 1

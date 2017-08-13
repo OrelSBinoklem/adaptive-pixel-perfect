@@ -65,19 +65,18 @@
     <!--main-->
     <link rel="stylesheet" href="/a-pp-public/css/main.css">
     <link rel="stylesheet" href="/a-pp-public/css/simplified-style.css">
+    <link rel="stylesheet" href="/a-pp-public/css/float-panels.css">
     <script type="text/javascript" src="/a-pp-public/js/main.js"></script>
 </head>
-<body>
-
-    <div class="shab__main-menu-container">
-        <div class="mnif__navigator-window"></div>
+<body class="float-panels">
+    <div class="shab__main-menu-container __vertical-center">
         <div class="pp__verstka-design btn-group btn-group-sm btn-group-justified btn-toggle-one-color">
             <a href="#" class="pp__verstka-btn btn btn-primary active" data-btn-color="primary"><span data-toggle="tooltip" data-placement="top" data-original-title="Вёрстка"><i class="fa fa-code"></i></span></a>
             <a href="#" class="pp__50p-btn btn btn-default" data-btn-color="warning"><span data-toggle="tooltip" data-placement="top" data-original-title="Полупрозрачная вёрстка поверх дизайна"><i class="fa fa-clone"></i></span></a>
             <a href="#" class="pp__design-btn btn btn-default" data-btn-color="danger"><span data-toggle="tooltip" data-placement="top" data-original-title="Изображение дизайна"><i class="fa fa-picture-o"></i></span></a>
         </div>
 
-        <!--Кнопки - настройки, мерцание, bottom space-->
+        <!--Настройки-->
         <div class="pp__flicker-and-bottom-space">
             <div class="btn-toolbar">
                 <div class="btn-group btn-group-sm">
@@ -103,8 +102,17 @@
                     <div class="row">
                         <div class="col-xs-6 settings__param-left"><h5 class="text-right"><b class="pp__bottom-space-text">Отступ снизу:</b></h5></div>
                         <div class="col-xs-6 settings__param-right">
-                            <label class="checkbox-inline" data-toggle="tooltip" data-placement="bottom" data-original-title="Добавляет после закрывающего тега body пустой блок с определённой высотой чтоб можно было прокрутить вниз и посмотреть в дизайне какой блок надо верстать следующим">
+                            <label class="checkbox-inline pp__bottom-space-tooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="Добавляет после закрывающего тега body пустой блок с определённой высотой чтоб можно было прокрутить вниз и посмотреть в дизайне какой блок надо верстать следующим">
                                 <input class="bootstrap-toggle pp__bottom-space-btn" type="checkbox" checked data-toggle="toggle" data-width="70">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="gorizontal-separator"></div>
+                    <div class="row">
+                        <div class="col-xs-6 settings__float-panels"><h5 class="text-right"><b class="pp__float-panels-text">Плавающие панели:</b></h5></div>
+                        <div class="col-xs-6 settings__param-right">
+                            <label class="checkbox-inline pp__float-panels-tooltip" data-toggle="tooltip" data-placement="bottom" data-original-title="Айфрейм с вёрсткой становиться на всю ширину и высоту - панели уменьшаються и становяться поверх айфрейма с вёрсткой">
+                                <input class="bootstrap-toggle pp__float-panels-btn" type="checkbox" data-toggle="toggle" data-width="70">
                             </label>
                         </div>
                     </div>
@@ -162,7 +170,7 @@
         <div class="gorizontal-separator"></div>
 
         <!--Страницы-->
-        <button class="pmv__select-page-open-list btn btn-default btn-block">Страницы</button>
+        <button class="pmv__select-page-open-list btn-text btn btn-default btn-block">Страницы</button>
         <div class="pmv__pages-window">
             <div class="pmv__pages-top-menu">
                 <div class="form-inline">
@@ -178,10 +186,11 @@
         </div>
 
         <!--Скриншоты-->
-        <button class="pp__btn-open-screenshots btn btn-default btn-block">Скриншоты</button>
-        <div class="pp__resolutions-menu clearfix">
-            <ul class="pp__resolutions-list"></ul>
+        <button class="pp__btn-open-screenshots btn-text btn btn-default btn-block">Скриншоты</button>
+        <div class="pp__resolutions-menu pp__resolutions-menu-fixed clearfix">
+            <ul class="pp__resolutions-list pp__resolutions-list-fixed"></ul>
         </div>
+        <div class="pp__screenshots-menu-window-shadow"></div>
         <div class="pp__screenshots-menu-window">
             <div class="pp__screenshots-menu-top-panel">
                 <button class="pp__add-resolution-btn btn btn-default btn-sm btn-yellow" data-toggle="tooltip" data-placement="bottom" title="Добавить разрешение"><span class="fa fa-plus-circle"></span></button>
@@ -196,6 +205,30 @@
             <div class="pp__screenshot-thumbnail"></div>
         </div>
         <div class="pp__screenshot-thumbnail-scrollwrap-shadow"></div>
+
+        <div class="shab__float-buttons">
+            <button class="a-pp__panels-top btn btn-primary btn-xs" type="button"><span class="glyphicon glyphicon-chevron-up"></span></button>
+            <div class="shab__float-buttons-row">
+                <div class="shab__float-buttons-left">
+                    <button class="btn btn-default btn-xs disabled shab__float-buttons-left-dimensions"><span class="rif-width">0</span> | <span class="rif-height">0</span></button>
+                    <div class="pp__resolutions-menu pp__resolutions-menu-float">
+                        <ul class="pp__resolutions-list"></ul>
+                    </div>
+                </div>
+                <div class="btn-group-vertical shab__float-buttons-right btn-toggle-one-color">
+                    <button class="pmv__select-page-open-list btn btn-default btn-lg" type="button"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+                    <button class="pp__btn-open-screenshots btn btn-default btn-lg" type="button"><span class="glyphicon glyphicon-picture"></span></button>
+                    <button class="pp__verstka-btn btn btn-primary btn-xs active" data-btn-color="primary"><span data-toggle="tooltip" data-placement="right" data-original-title="Вёрстка"><i class="fa fa-code"></i></span></button>
+                    <button class="pp__50p-btn btn btn-default btn-xs" data-btn-color="warning"><span data-toggle="tooltip" data-placement="right" data-original-title="Полупрозрачная вёрстка поверх дизайна"><i class="fa fa-clone"></i></span></button>
+                    <button class="pp__design-btn btn btn-default btn-xs" data-btn-color="danger"><span data-toggle="tooltip" data-placement="right" data-original-title="Изображение дизайна"><i class="fa fa-picture-o"></i></span></button>
+                    <button class="settings__window-open-btn btn btn-default btn-lg" type="button"><i class="fa fa-cogs"></i></button>
+                </div>
+            </div>
+            <button class="a-pp__panels-bottom btn btn-primary btn-xs" type="button"><span class="glyphicon glyphicon-chevron-down"></span></button>
+        </div>
+    </div>
+    <div class="shab__wrap-mnif">
+        <div class="mnif__navigator-window"></div>
     </div>
 
     <!--Айфрейм-->

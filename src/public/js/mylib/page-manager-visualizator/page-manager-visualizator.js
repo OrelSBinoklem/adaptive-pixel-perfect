@@ -10,6 +10,7 @@ var defaultOptions = {
     minHDraggable: 15,
     minWIFrame: 320,
     minHIFrame: 480,
+    $dimensions: undefined,
     responsiveToMovementOfTheCursorInAConfinedSpace: true,
     movementOfTheCursorInAConfinedSpaceSpred: 10,
     factorDraggableGrid: 0.5,
@@ -42,10 +43,14 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     //Синхронизируем с мап навигатором
     $container.on({
         "pmv.load.iframe": mapNavigatorIFrame.reload,
-        "rif.center-iframe": mapNavigatorIFrame.updateDraggable
+        "rif.center-iframe": function() {
+            mapNavigatorIFrame.updateDraggable();
+            mapNavigatorIFrame.temporarilyVisibleNavigator();
+        }
     });
     //Синхронизируем с ресайзером
     $container.on("pmv.load.iframe", resizeIFrame.reload);
+    $container.one("pmv.load.iframe", resizeIFrame._reloadShowDimensions);
     //Синхронизируем с фиксатором контента при ресайзе
     $container.on({
         "pmv.load.iframe": fixationContentAtResize.reload,
@@ -212,6 +217,11 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     
     this._destroyIFrame = function() {
         $( '#'+(____._options.nameIFrame) ).remove();
+    }
+
+    this.updateModules = function() {
+        customScrollIFrame.updateOuterScroll();
+        resizeIFrame._handlerResize();
     }
 }
 

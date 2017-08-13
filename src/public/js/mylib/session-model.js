@@ -1,5 +1,6 @@
 (function($){
     var sessionModel = function(data, socket) {
+        console.log();
         var ____ = this;
         ____.data = data;
         ____.responseHandlers = {};
@@ -21,6 +22,34 @@
             ____.saveNesteedParamInGlobalSession(o.nesteedName, o.val);
 
             ____.responseHandlers["onChangeLang"]();
+        });
+
+        this.onFloatPanels = function(state) {
+            socket.emit('global.floatPanels', {
+                nesteedName: "floatPanels",
+                val: state
+            });
+
+            ____.saveNesteedParamInGlobalSession("floatPanels", state);
+        }
+        socket.on('global.floatPanels', function(o) {
+            ____.saveNesteedParamInGlobalSession(o.nesteedName, o.val);
+
+            ____.responseHandlers["onFloatPanels"]();
+        });
+
+        this.onFloatPanelsAlign = function(state) {
+            socket.emit('global.floatPanelsAlign', {
+                nesteedName: "floatPanelsAlign",
+                val: state
+            });
+
+            ____.saveNesteedParamInGlobalSession("floatPanelsAlign", state);
+        }
+        socket.on('global.floatPanelsAlign', function(o) {
+            ____.saveNesteedParamInGlobalSession(o.nesteedName, o.val);
+
+            ____.responseHandlers["onFloatPanelsAlign"]();
         });
 
         /*Синхронизации сессий*/

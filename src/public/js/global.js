@@ -122,21 +122,23 @@ function setTranslates(lang, data) {
     langCascade = t;
 
     //Устанавливаем значения
-    $(".pmv__select-page-open-list").text( _l_("pages", t) );
+    $(".pmv__select-page-open-list.btn-text").text( _l_("pages", t) );
 
-    $(".pp__btn-open-screenshots").text( _l_("screenshots", t) );
+    $(".pp__btn-open-screenshots.btn-text").text( _l_("screenshots", t) );
 
     $('.pp__verstka-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__verstka-btn", t));
     $('.pp__50p-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__50p-btn", t));
     $('.pp__design-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__design-btn", t));
 
     $('.pp__bottom-space-text').text(_l_("pp__bottom-space", t));
+    $('.pp__float-panels-text').text(_l_("pp__float-panels", t));
     $('.bootstrap-toggle').bootstrapToggle('destroy');
     $('.bootstrap-toggle').bootstrapToggle({
         on: _l_("pp__bottom-space-btn|on", t),
         off: _l_("pp__bottom-space-btn|off", t)
     });
-    $('.pp__bottom-space-btn [data-toggle="tooltip"]').attr("data-original-title", _l_("pp__bottom-space-btn|tooltip", t));
+    $('.pp__bottom-space-tooltip').attr("data-original-title", _l_("pp__bottom-space-btn|tooltip", t));
+    $('.pp__float-panels-tooltip').attr("data-original-title", _l_("pp__float-panels-btn|tooltip", t));
 
     var ds = "description-sync";
     $('.settings__description-groups-synchronous').text(_l_(ds+"|groups-synchronous", t));
@@ -474,7 +476,7 @@ str.relativeUrlFrom2Absolute = function ( url__1, url__2, isFile__1, isFile__2 )
 /***********************************************/
 $(document).ready(function(){
     $('body').on('click', ' .btn-toggle-one-color', function(){
-        $(this).find(' .btn').removeClass('btn-default btn-primary btn-success btn-info btn-warning btn-danger btn-link')
+        $(this).find(' .btn[data-btn-color]').removeClass('btn-default btn-primary btn-success btn-info btn-warning btn-danger btn-link')
         .each(function(){
             if($(this).hasClass("active"))
             {
@@ -491,7 +493,7 @@ $(document).ready(function(){
         var BTNGroup = $(this).closest('.btn-toggle-one-color').first();
         if(BTNGroup.size())
         {
-            BTNGroup.find(' .btn').removeClass('btn-default btn-primary btn-success btn-info btn-warning btn-danger btn-link')
+            BTNGroup.find(' .btn[data-btn-color]').removeClass('btn-default btn-primary btn-success btn-info btn-warning btn-danger btn-link')
             .each(function(){
                 if($(this).find(' input').prop("checked"))
                 {
@@ -505,8 +507,3 @@ $(document).ready(function(){
         }
     });
 });
-
-//fix - когда меняеш быстро цифры в редакторе калибратора стилей зажавши комбинации клавиш, а потом резко в основном редакторе
-var TabstopManager_attach;
-var TabstopManager_detach;
-var TabstopManager_attached = false;

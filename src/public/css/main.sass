@@ -1,6 +1,7 @@
 .shab__main-menu-container
+    display: none
     position: fixed
-    top: 0
+    top: 125px
     left: 0
     bottom: 0
     width: 120px
@@ -8,10 +9,20 @@
     box-sizing: border-box
     z-index: 1
 
+.shab__float-buttons
+    display: none
+    position: relative
+
+.shab__wrap-mnif
+    position: fixed
+    top: 5px
+    left: 5px
+    z-index: 1
+
 .settings
     &__window
         display: none
-        position: absolute
+        position: fixed
         left: 125px
         top: 0
         bottom: 0
@@ -157,7 +168,7 @@
     &__pages
         &-window
             display: none
-            position: absolute
+            position: fixed
             //+5 бордер правого контейнера
             left: 125px
             top: 0
@@ -386,6 +397,7 @@
 /********************************************/
 .mnif
     &__navigator-window
+        width: 110px
         height: 110px
 
 .pp__resolutions-menu
@@ -419,7 +431,7 @@
         &.active .badge
             background-color: #ec971f
         &-w, &-h
-            width: 36px
+            width: 27px
             display: inline-block
         &-w
             margin-left: 5px
@@ -438,13 +450,23 @@
 
 .pp__screenshots-menu-window
     display: none
-    position: absolute
+    position: fixed
     left: 125px
     top: 0
     bottom: 0
     width: 483px
     box-shadow: inset -16px 0 0 0 #ddd
     background-color: #fff
+    &-shadow
+        display: none
+        position: fixed
+        left: 133px
+        top: 0
+        bottom: 0
+        width: 10px
+        box-shadow: 1px 0 5px 0 rgba(0,0,0,0.5)
+        &.open
+            display: block
     &.open
         display: block
 
@@ -633,7 +655,7 @@
 .pp__screenshots-files
     &-menu-scrollwrap
         display: none
-        position: absolute
+        position: fixed
         //125+336  +  147
         left: 608px
         top: 0
@@ -650,7 +672,7 @@
             background-color: #fff
         &-shadow
             display: none
-            position: absolute
+            position: fixed
             left: 1051px
             top: 0
             bottom: 0
@@ -728,7 +750,7 @@
 .pp__screenshot-thumbnail
     &-scrollwrap
         display: none
-        position: absolute
+        position: fixed
         left: 1061px
         top: 0
         bottom: 0

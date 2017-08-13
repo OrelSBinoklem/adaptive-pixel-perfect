@@ -13,6 +13,13 @@
     "off": "off"
   },
 
+  "pp__float-panels": "Floating panels:",
+  "pp__float-panels-btn": {
+    "tooltip": "Iframe with layout to become the full width and height - the panels decrease and become on top of Iframe with layout",
+    "on": "on",
+    "off": "off"
+  },
+
   "description-sync": {
     "groups-synchronous": "Synchronization groups:",
     "params-synchronous": "Sync params:",

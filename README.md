@@ -45,14 +45,13 @@ The plugin will be available at **http://localhost:3010/?a-pp=1**
 * left mouse button + 1 - 9, 0 (switch between resolutions)
 * left mouse button + W, A, S, D (change the position of the iframe window)
 * left mouse button + Z, X, C (site layout, site layout on top of the design, the design)
-* left mouse button + Q (flicker function)
-* left mouse button + F (activate the editor for quick calibration of styles)
 * Ctrl + R + move mouse (resize iframe)
 
 ## Release Notes
 
 | Release | Notes |
 | --- | --- |
+| 0.5.2 | Added new minify-float stile panels |
 | 0.5.0 | Delete fast calibrator styles, simplified style, delete flicker function, transfer btn bottom space in global settings, (window deviation screenshots opacity 0.7, hide other window after show deviation window, deviation window draggable) |
 | 0.4.0 | Added fast calibrator styles |
 | 0.3.0 | Added a window with settings, added English, moved session groups to the settings window and divided the parameters for more flexible customization |

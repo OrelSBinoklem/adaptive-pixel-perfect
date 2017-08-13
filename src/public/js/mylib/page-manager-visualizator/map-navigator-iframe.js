@@ -17,8 +17,7 @@ var mapNavigatorIFrame = function($container, options) {
     ____._last_cursor_Y = 0;
     ____._last_cursor_X = 0;
 
-    this._create = function()
-    {
+    this._create = function() {
         var $iFrame = $("#"+(____._options.nameIFrame)).contents();
 
         ____._options.$mapNavigatorContainer.append('<div class="mnif-show-space panel panel-primary"><div class="mnif-draggable panel-body"></div></div>');
@@ -29,7 +28,10 @@ var mapNavigatorIFrame = function($container, options) {
         ____._cursor_X = 0;
         ____._draggableTopTemp = 0;
         ____._draggableLeftTemp = 0;
-        
+
+        ____._fixVisibleNavigator = false;
+        ____._temporarilyVisibledNavigatorTimeout = null;
+
         //Установка обработчиков событий
         $iFrame.find('body').on('mousemove', ____._handlerMove);
         $('body').on('mousemove', ____._handlerMove);
@@ -41,7 +43,7 @@ var mapNavigatorIFrame = function($container, options) {
 
         //Инициализация
         ____.updateDraggable();
-    }
+    };
     
     this._destroy = function() {
         ____._options.$mapNavigatorContainer.find(" .mnif-show-space").remove();
@@ -55,23 +57,59 @@ var mapNavigatorIFrame = function($container, options) {
         ____._options.$mapNavigatorContainer.find(" .mnif-draggable").off('mousedown', ____._handlerMouseDown);
         $('body').off('keyup mouseup', ____._handlerUp);
         $iFrame.find('body').off('keyup mouseup', ____._handlerUp);
-    }
+    };
     
     this.reload = function() {
         ____._destroy();
         ____._create();
     }
 
+    //Добавляем класс "active" на 1 сек
+    this.temporarilyVisibleNavigator = function(e) {
+        if(!____._fixVisibleNavigator) {
+            if(____._temporarilyVisibledNavigatorTimeout !== null) {
+                clearTimeout(____._temporarilyVisibledNavigatorTimeout);
+            }
+
+            ____._options.$mapNavigatorContainer.parent().addClass("active");
+
+            ____._temporarilyVisibledNavigatorTimeout = setTimeout(function() {
+                ____._options.$mapNavigatorContainer.parent().removeClass("active");
+                ____._temporarilyVisibledNavigatorTimeout = null;
+            }, 1000);
+        }
+    };
+
+    //Добавляем класс "active"
+    this.visibleNavigator = function(e) {
+        ____._fixVisibleNavigator = true;
+        ____._options.$mapNavigatorContainer.parent().addClass("active");
+        if(____._temporarilyVisibledNavigatorTimeout !== null) {
+            clearTimeout(____._temporarilyVisibledNavigatorTimeout);
+            ____._temporarilyVisibledNavigatorTimeout = null;
+        }
+    };
+
+    //Удаляем класс "active"
+    this.hideNavigator = function(e) {
+        ____._fixVisibleNavigator = false;
+        ____._options.$mapNavigatorContainer.parent().removeClass("active");
+        if(____._temporarilyVisibledNavigatorTimeout !== null) {
+            clearTimeout(____._temporarilyVisibledNavigatorTimeout);
+            ____._temporarilyVisibledNavigatorTimeout = null;
+        }
+    };
+
     this._handlerKeyDown = function(e) {
         if(e.which == 69 && e.ctrlKey && !e.shiftKey && !e.altKey)
         {
             ____._handlerDown(e);
         }
-    }
+    };
 
     this._handlerMouseDown = function(e) {
         ____._handlerDown(e);
-    }
+    };
 
     this._handlerDown = function(e) {
         if( !____._draggable ) {
@@ -100,18 +138,20 @@ var mapNavigatorIFrame = function($container, options) {
             ____._draggableLeftTemp = $container.find(" .pmv-fitting-wrap").position().left;
 
             ____.updateDraggable();
+            ____.visibleNavigator();
         }
 
         if(e.preventDefault){e.preventDefault()}else{e.stop()};e.returnValue = false;e.stopPropagation();return false;
-    }
+    };
 
     this._handlerUp = function(e) {
         if( ____._draggable ) {
             /*var $mnif = ____._options.$mapNavigatorContainer.find(" .mnif-show-space");
             $mnif.css({display: "none"});*/
             ____._draggable = false;
+            ____.hideNavigator();
         }
-    }
+    };
     
     //Обновление карты
     this.updateDraggable = function() {
@@ -220,7 +260,7 @@ var mapNavigatorIFrame = function($container, options) {
         }
 
         $mnif.prepend(html);*/
-    }
+    };
     
     //Обновление скрытого скролла в IFrame
     this._handlerMove = function(e) {
@@ -331,7 +371,7 @@ var mapNavigatorIFrame = function($container, options) {
             
             ____.updateDraggable();
         }
-    }
+    };
 
     this.handlerChangePosIFrameKeyPress = function(e) {
         if((e.which == 87 || e.which == 65 || e.which == 83 || e.which == 68) && !e.ctrlKey && !e.shiftKey && !e.altKey) {
@@ -411,9 +451,10 @@ var mapNavigatorIFrame = function($container, options) {
             }
 
             ____.updateDraggable();
+            ____.temporarilyVisibleNavigator();
         }
     }
-}
+};
 
 modules.mapNavigatorIFrame = mapNavigatorIFrame;
     

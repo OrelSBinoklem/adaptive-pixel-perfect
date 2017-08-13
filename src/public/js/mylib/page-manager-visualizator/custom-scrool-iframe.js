@@ -36,7 +36,10 @@ var customScrollIFrame = function($container, options) {
         ____._cursor_X = 0;
         ____._topScrollIFrameTemp = 0;
         ____._leftScrollIFrameTemp = 0;
-        
+
+        ____._fixVisibleOuterScroll = false;
+        ____._temporarilyVisibledOuterScrollTimeout = null;
+
         //Установка обработчиков событий
         $(window[____._options.nameIFrame].window).on("resize scroll", ____.updateOuterScroll);
         $(window).on("resize", ____.updateOuterScroll);
@@ -152,6 +155,52 @@ var customScrollIFrame = function($container, options) {
         //==========
         $container.find(' .csif-outer-scroll-v .scrolling').css({height: hOuterScroll, marginTop: topMargin});
         $container.find(' .csif-outer-scroll-g .scrolling').css({width: wOuterScroll, marginLeft: leftMargin});
+
+        ____.temporarilyVisibleOuterScroll();
+    }
+
+    //Добавляем класс "active" на 1 сек
+    this.temporarilyVisibleOuterScroll = function(e) {
+        if(!____._fixVisibleOuterScroll) {
+            if(____._temporarilyVisibledOuterScrollTimeout !== null) {
+                clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+            }
+
+            $container.find(' .csif-outer-scroll-v').addClass("active");
+            $container.find(' .csif-outer-scroll-g').addClass("active");
+            $container.find(' .csif-square').addClass("active");
+
+            ____._temporarilyVisibledOuterScrollTimeout = setTimeout(function() {
+                $container.find(' .csif-outer-scroll-v').removeClass("active");
+                $container.find(' .csif-outer-scroll-g').removeClass("active");
+                $container.find(' .csif-square').removeClass("active");
+                ____._temporarilyVisibledOuterScrollTimeout = null;
+            }, 1000);
+        }
+    }
+
+    //Добавляем класс "active"
+    this.visibleOuterScroll = function(e) {
+        ____._fixVisibleOuterScroll = true;
+        $container.find(' .csif-outer-scroll-v').addClass("active");
+        $container.find(' .csif-outer-scroll-g').addClass("active");
+        $container.find(' .csif-square').addClass("active");
+        if(____._temporarilyVisibledOuterScrollTimeout !== null) {
+            clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+            ____._temporarilyVisibledOuterScrollTimeout = null;
+        }
+    }
+
+    //Удаляем класс "active"
+    this.hideOuterScroll = function(e) {
+        ____._fixVisibleOuterScroll = false;
+        $container.find(' .csif-outer-scroll-v').removeClass("active");
+        $container.find(' .csif-outer-scroll-g').removeClass("active");
+        $container.find(' .csif-square').removeClass("active");
+        if(____._temporarilyVisibledOuterScrollTimeout !== null) {
+            clearTimeout(____._temporarilyVisibledOuterScrollTimeout);
+            ____._temporarilyVisibledOuterScrollTimeout = null;
+        }
     }
     
     //Нажатие на вертикальный ползунок
@@ -159,6 +208,7 @@ var customScrollIFrame = function($container, options) {
         ____._Y_Scrollable = true;
         ____._cursor_Y = e.screenY;
         ____._topScrollIFrameTemp = $(window[____._options.nameIFrame].window).scrollTop();
+        ____.visibleOuterScroll();
     }
     
     //Нажатие на горизонтальный ползунок
@@ -166,12 +216,15 @@ var customScrollIFrame = function($container, options) {
         ____._X_Scrollable = true;
         ____._cursor_X = e.screenX;
         ____._leftScrollIFrameTemp = $(window[____._options.nameIFrame].window).scrollLeft();
+        ____.visibleOuterScroll();
     }
     
     //Отпускание мыши с ползунка
     this._handlerUp = function() {
         ____._Y_Scrollable = false;
         ____._X_Scrollable = false;
+
+        ____.hideOuterScroll();
     }
     
     //Обновление скрытого скролла в IFrame
