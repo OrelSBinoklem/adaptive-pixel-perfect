@@ -464,6 +464,8 @@ jQuery(function($) {
                     if( ls && "iframeScroll" in ls ) {
                         pageManagerVisualizator.setScrollIFrame(ls.iframeScroll.left, ls.iframeScroll.top);
                     }
+
+                    pageManagerVisualizator.$container.trigger("session.apply");
                 }
             }
             function applyAllParamsLocalSession(onlyChange) {
@@ -2158,7 +2160,7 @@ jQuery(function($) {
         })();
 
         //Отбражаем главную панель
-        pageManagerVisualizator.$container.one("pmv.load.iframe", function() {
+        pageManagerVisualizator.$container.one("session.apply", function() {//session.apply - при загрузке не всегда есть выбранная страница и фрейм негрузиться но меню надо отобразиить...
             $(".shab__main-menu-container").show(0);
 
             crossModulesFunctions["refreshCenteredFloatMenu"]();
