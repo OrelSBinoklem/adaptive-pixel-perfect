@@ -1,4 +1,5 @@
 'use strict';
+var settings = require('./settings');
 var io = require('socket.io');
 var express = require('express');
 var http = require('http');
@@ -27,7 +28,7 @@ __.prototype.start = function(port, dirDesignScreenshots, browserSyncPort) {
         this.serverInit = true;
 
         this.pageManagerVisualizator = new pageManagerVisualizator();
-        this.pixelPerfect = new pixelPerfect();
+        this.pixelPerfect = new pixelPerfect(settings);
 
         if (browserSyncPort !== undefined) {
             this.browserSyncPort = browserSyncPort;

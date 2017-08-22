@@ -38,6 +38,7 @@
     "image-size": "^0.5.1",
     "quick-local-ip": "^1.0.7",
     "resize-img": "^1.1.2",
+    "run-sequence": "^1.2.2",
     "socket.io": "^1.7.3",
     "through2": "^2.0.3"
   },
