@@ -42,7 +42,9 @@ var customScrollIFrame = function($container, options) {
         ____._temporarilyVisibledOuterScrollTimeout = null;
 
         //Установка обработчиков событий
-        $(window[____._options.nameIFrame].window).on("resize scroll", ____.updateOuterScroll);
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        $(win).on("resize scroll", ____.updateOuterScroll);
         $(window).on("resize", ____.updateOuterScroll);
         
         $container.find(' .csif-outer-scroll-v .scrolling').on('mousedown', ____._handlerDown_Y);
@@ -126,19 +128,21 @@ var customScrollIFrame = function($container, options) {
     
     //Обновление ползунков "Внешнего скролла"
     this.updateOuterScroll = function() {
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
         var $iframe = $('#'+(____._options.nameIFrame)).contents();
         var wWindow, hWindow, wDocument, hDocument, topScroll, leftScroll,
         wOuterScroll, hOuterScroll, hConOuterScroll, wConOuterScroll, topMargin, leftMargin;
         
-        wWindow = $(iframe.window).width();
-        hWindow = $(iframe.window).height();
-        wDocument = $(iframe.document).width();
-        hDocument = $(iframe.document).height();
+        wWindow = $(win).width();
+        hWindow = $(win).height();
+        wDocument = $(doc).width();
+        hDocument = $(doc).height();
         
         //Узнаем прокрутку
-        topScroll = $(iframe.window).scrollTop();
-        leftScroll = $(iframe.window).scrollLeft();
+        topScroll = $(win).scrollTop();
+        leftScroll = $(win).scrollLeft();
         //==========
         
         hConOuterScroll = $container.find(' .csif-outer-scroll-v .scrolling-container').height();
@@ -219,7 +223,9 @@ var customScrollIFrame = function($container, options) {
     this._handlerDown_Y = function(e) {
         ____._Y_Scrollable = true;
         ____._cursor_Y = e.screenY;
-        ____._topScrollIFrameTemp = $(window[____._options.nameIFrame].window).scrollTop();
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        ____._topScrollIFrameTemp = $(win).scrollTop();
         ____.visibleOuterScroll();
     }
     
@@ -227,7 +233,9 @@ var customScrollIFrame = function($container, options) {
     this._handlerDown_X = function(e) {
         ____._X_Scrollable = true;
         ____._cursor_X = e.screenX;
-        ____._leftScrollIFrameTemp = $(window[____._options.nameIFrame].window).scrollLeft();
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        ____._leftScrollIFrameTemp = $(win).scrollLeft();
         ____.visibleOuterScroll();
     }
     
@@ -243,20 +251,22 @@ var customScrollIFrame = function($container, options) {
     this._handlerMove = function(e) {
         if( ____._Y_Scrollable || ____._X_Scrollable )
         {
-            var iframe = window[____._options.nameIFrame];
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
             var $iframe = $("#"+(____._options.nameIFrame)).contents();
             var wWindow, hWindow, wDocument, hDocument, topScroll, leftScroll,
             wOuterScroll, hOuterScroll, hConOuterScroll, wConOuterScroll,
             resTopScroll, resLeftScroll, oneStepVertical, oneStepGorizontal;
             
-            wWindow = $(iframe.window).width();
-            hWindow = $(iframe.window).height();
-            wDocument = $(iframe.document).width();
-            hDocument = $(iframe.document).height();
+            wWindow = $(win).width();
+            hWindow = $(win).height();
+            wDocument = $(doc).width();
+            hDocument = $(doc).height();
             
             //Узнаем прокрутку
-            topScroll = $(iframe.window).scrollTop();
-            leftScroll = $(iframe.window).scrollLeft();
+            topScroll = $(win).scrollTop();
+            leftScroll = $(win).scrollLeft();
             //==========
             
             hConOuterScroll = $container.find(' .csif-outer-scroll-v .scrolling-container').height();
@@ -287,7 +297,7 @@ var customScrollIFrame = function($container, options) {
                 {
                     resTopScroll = hDocument - hWindow;
                 }
-    			$(iframe.window).scrollTop(resTopScroll);
+    			$(win).scrollTop(resTopScroll);
                 $container.trigger("csif.scroll");
             }
             
@@ -303,7 +313,7 @@ var customScrollIFrame = function($container, options) {
                 {
                     resLeftScroll = wDocument - wWindow;
                 }
-    			$(iframe.window).scrollLeft(resLeftScroll);
+    			$(win).scrollLeft(resLeftScroll);
                 $container.trigger("csif.scroll");
             }
         }
@@ -311,10 +321,12 @@ var customScrollIFrame = function($container, options) {
     
     //Верхняя стрелочка
     this._handlerArrowTop = function() {
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        
         $(this).addClass('active');
         
-        var topScroll = $(iframe.window).scrollTop();
+        var topScroll = $(win).scrollTop();
 
         ____.$fix_animate.css({top: topScroll});
         ____.$fix_animate.stop().animate({top: 0}, //По нормальному чтото она непашет - пришлось через зад делать...
@@ -322,11 +334,11 @@ var customScrollIFrame = function($container, options) {
             duration: Math.round(topScroll / ____._options.pixelsScrollableInSeconds * 1000),
             easing: "linear",
             complete: function(){
-				$(iframe.window).scrollTop(0);
+				$(win).scrollTop(0);
                 $container.trigger("csif.scroll");
             },
             step: function(now,fx){
-				$(iframe.window).scrollTop(now);
+				$(win).scrollTop(now);
                 $container.trigger("csif.scroll");
             }
         });
@@ -334,13 +346,15 @@ var customScrollIFrame = function($container, options) {
     
     //Нижняя стрелочка
     this._handlerArrowBottom = function() {
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
         $(this).addClass('active');
         var hWindow, hDocument, topScroll;
         
-        hWindow = $(iframe.window).height();
-        hDocument = $(iframe.document).height();
-        topScroll = $(iframe.window).scrollTop();
+        hWindow = $(win).height();
+        hDocument = $(doc).height();
+        topScroll = $(win).scrollTop();
         
 		var resTopScroll = hDocument - hWindow;
 
@@ -350,21 +364,22 @@ var customScrollIFrame = function($container, options) {
             duration: Math.round((hDocument - hWindow - topScroll) / ____._options.pixelsScrollableInSeconds * 1000),
             easing: "linear",
             complete: function(){
-				$(iframe.window).scrollTop(resTopScroll);
+				$(win).scrollTop(resTopScroll);
                 $container.trigger("csif.scroll");
             },
             step: function(now,fx){
-				$(iframe.window).scrollTop(now);
+				$(win).scrollTop(now);
                 $container.trigger("csif.scroll");
             }
         });
     }
     //Левая стрелочка
     this._handlerArrowLeft = function() {
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
         $(this).addClass('active');
         
-        var leftScroll = $(iframe.window).scrollLeft();
+        var leftScroll = $(win).scrollLeft();
 
         ____.$fix_animate.css({left: leftScroll});
         ____.$fix_animate.stop().animate({left: 0},
@@ -372,11 +387,11 @@ var customScrollIFrame = function($container, options) {
             duration: Math.round(leftScroll / ____._options.pixelsScrollableInSeconds * 1000),
             easing: "linear",
             complete: function(){
-				$(iframe.window).scrollLeft(0);
+				$(win).scrollLeft(0);
                 $container.trigger("csif.scroll");
             },
             step: function(now,fx){
-				$(iframe.window).scrollLeft(now);
+				$(win).scrollLeft(now);
                 $container.trigger("csif.scroll");
             }
         });
@@ -384,13 +399,15 @@ var customScrollIFrame = function($container, options) {
 
     //Правая стрелочка
     this._handlerArrowRight = function() {
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
         $(this).addClass('active');
         var wWindow, wDocument, leftScroll;
         
-        wWindow = $(iframe.window).width();
-        wDocument = $(iframe.document).width();
-        leftScroll = $(iframe.window).scrollLeft();
+        wWindow = $(win).width();
+        wDocument = $(doc).width();
+        leftScroll = $(win).scrollLeft();
         
 		var resLeftScroll = wDocument - wWindow;
 
@@ -400,11 +417,11 @@ var customScrollIFrame = function($container, options) {
             duration: Math.round((wDocument - wWindow - leftScroll) / ____._options.pixelsScrollableInSeconds * 1000),
             easing: "linear",
             complete: function(){
-				$(iframe.window).scrollLeft(resLeftScroll);
+				$(win).scrollLeft(resLeftScroll);
                 $container.trigger("csif.scroll");
             },
             step: function(now,fx){
-				$(iframe.window).scrollLeft(now);
+				$(win).scrollLeft(now);
                 $container.trigger("csif.scroll");
             }
         });
@@ -420,7 +437,7 @@ var customScrollIFrame = function($container, options) {
     this._mouseWheelAnimated = false;
     this._tempWheelAnimated = 0;
     this._handlerMouseWheel = function(e) {
-        if(window[____._options.nameIFrame] !== undefined) {
+        if(____._options.nameIFrame in window) {
             var deltaY;
             if("mozMovementY" in e.originalEvent) {
                 deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
@@ -440,10 +457,11 @@ var customScrollIFrame = function($container, options) {
                     deltaY *= 120;
                 }
             }
+            
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
 
-            var iframe = window[____._options.nameIFrame];
-
-            topScroll = $(iframe.window).scrollTop();
+            topScroll = $(win).scrollTop();
             if( ____._mouseWheelAnimated ) {
                 //Если пользователь резко начал крутить в другую сторону
                 if(sign(____._tempWheelAnimated - topScroll) !== sign(deltaY)) {//IE НЕПОТДЕРЖИВАЕТ "Math.sign"
@@ -472,13 +490,13 @@ var customScrollIFrame = function($container, options) {
                     duration: 100,
                     easing: "linear",
                     complete: function(){
-                        $(iframe.window).scrollTop(____._tempWheelAnimated);
+                        $(win).scrollTop(____._tempWheelAnimated);
                         ____._mouseWheelAnimated = false;
 
                         $container.trigger("csif.scroll");
                     },
                     step: function(now,fx){
-                        $(iframe.window).scrollTop(now);
+                        $(win).scrollTop(now);
 
                         $container.trigger("csif.scroll");
                     }

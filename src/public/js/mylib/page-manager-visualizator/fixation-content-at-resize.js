@@ -31,11 +31,15 @@ var fixationContentAtResize = function($container, options) {
         ____.itemFixationY = undefined;
         
         //Установка обработчиков событий
-        $(window[____._options.nameIFrame].window).on('resize', ____._handlerResize);
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        $(win).on('resize', ____._handlerResize);
     }
     
     this._destroy = function() {
-        $(window[____._options.nameIFrame].window).off('resize', ____._handlerResize);
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        $(win).off('resize', ____._handlerResize);
     }
     
     this.reload = function() {
@@ -48,16 +52,19 @@ var fixationContentAtResize = function($container, options) {
             ____.activeFixation = true;
             ____.$itemFixation = undefined;
 
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
             var $iFrameBody = $("#"+(____._options.nameIFrame)).contents().find('body');
             var xEl, yEl,
                 scrollTop, scrollLeft, wWin, hWin, winY, winX;
 
             //Ищем ближайший по заданым параметрам элемент в видимой части документа (если ненаходим элементов в видимой части экрана то ничё неделаем)
-            wWin = $(window[____._options.nameIFrame].window).width();
-            hWin = $(window[____._options.nameIFrame].window).height();
+            wWin = $(win).width();
+            hWin = $(win).height();
 
-            scrollTop = $(window[____._options.nameIFrame].window).scrollTop();
-            scrollLeft = $(window[____._options.nameIFrame].window).scrollLeft();
+            scrollTop = $(win).scrollTop();
+            scrollLeft = $(win).scrollLeft();
 
             switch( ____._options.gorizontalFixation ) {
                 case "left": winX = 0; break;
@@ -158,7 +165,9 @@ var fixationContentAtResize = function($container, options) {
     
     this._handlerResize = function() {
         if( ____.activeFixation && (____.$itemFixation !== undefined) ) {
-            var scrollTop = $(window[____._options.nameIFrame].window).scrollTop();
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var scrollTop = $(win).scrollTop();
              
             var offset = ____.$itemFixation.offset();
             var tEl = offset.top;
@@ -178,7 +187,7 @@ var fixationContentAtResize = function($container, options) {
                   break;
             }
 
-            $(window[____._options.nameIFrame].window).scrollTop( Math.round( scrollTop + yEl - ____.itemFixationY ) );
+            $(win).scrollTop( Math.round( scrollTop + yEl - ____.itemFixationY ) );
 
             $container.trigger("fcar.scroll");
         }

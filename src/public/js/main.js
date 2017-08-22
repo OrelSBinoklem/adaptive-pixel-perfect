@@ -576,7 +576,9 @@ jQuery(function($) {
 
                 if(pageManagerVisualizator._options.nameIFrame in window) {
                     //Отделение домена от urn
-                    var href = window[pageManagerVisualizator._options.nameIFrame].window.location.href;
+                    var iframe = document.getElementById(pageManagerVisualizator._options.nameIFrame);
+                    var win = iframe.contentWindow || iframe;
+                    var href = win.location.href;
                     var hrefObj = str.parsingUrl(href);
                     var urn = "";
                     urn += hrefObj.protocol + "//" + hrefObj.domain;
@@ -1262,16 +1264,18 @@ jQuery(function($) {
 
             //Запись и отправка данных сессии
             function sendScrollIFrame() {
-                if(window[pageManagerVisualizator._options.nameIFrame] !== undefined) {
-                    var iframe = window[pageManagerVisualizator._options.nameIFrame];
+                if(pageManagerVisualizator._options.nameIFrame in window) {
+                    var iframe = document.getElementById(pageManagerVisualizator._options.nameIFrame);
+                    var win = iframe.contentWindow || iframe;
+                    var doc = iframe.contentDocument || iframe.contentWindow.document;
                     var wWindow, wDocument, leftScroll, l_factor, hWindow, hDocument, topScroll, t_factor;
 
-                    wWindow = $(iframe.window).width();
-                    wDocument = $(iframe.document).width();
-                    hWindow = $(iframe.window).height();
-                    hDocument = $(iframe.document).height();
-                    topScroll = $(iframe.window).scrollTop();
-                    leftScroll = $(iframe.window).scrollLeft();
+                    wWindow = $(win).width();
+                    wDocument = $(doc).width();
+                    hWindow = $(win).height();
+                    hDocument = $(doc).height();
+                    topScroll = $(win).scrollTop();
+                    leftScroll = $(win).scrollLeft();
 
                     if(wDocument - wWindow == 0){l_factor = 0} else {l_factor = leftScroll / (wDocument - wWindow)}
                     if(hDocument - hWindow == 0){t_factor = 0} else {t_factor = topScroll / (hDocument - hWindow)}

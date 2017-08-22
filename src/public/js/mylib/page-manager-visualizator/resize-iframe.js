@@ -33,7 +33,9 @@ var resizeIFrame = function($container, options) {
         $iFrame.find('body').on('keyup', ____._handlerUp);
         
         $(window).on('resize', ____._handlerResize);
-        $(window[____._options.nameIFrame].window).on('resize', ____._handlerResize);
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        $(win).on('resize', ____._handlerResize);
     }
     
     this._destroy = function() {
@@ -49,7 +51,9 @@ var resizeIFrame = function($container, options) {
         $iFrame.find('body').off('keyup', ____._handlerUp);
         
         $(window).off('resize', ____._handlerResize);
-        $(window[____._options.nameIFrame].window).off('resize', ____._handlerResize);
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        $(win).off('resize', ____._handlerResize);
     }
     
     this.reload = function() {

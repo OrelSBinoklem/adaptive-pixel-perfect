@@ -21,12 +21,17 @@ var pixelPerfect = function($container, options) {
         ____.changePositionTemp = {};
         
         //Установка событий
-        $(window[____._options.nameIFrame].window).on("scroll", ____._refreshByScroll);
-        $(window[____._options.nameIFrame].window).on('resize', ____._refreshByResizeDocument);
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        $(win).on("scroll", ____._refreshByScroll);
+        $(win).on('resize', ____._refreshByResizeDocument);
         ____.intervalRefreshByResizeDocument = setInterval(function(){
-            var iframe = window[____._options.nameIFrame];
-            if( ____.wIFrame === null || ____.wIFrame !== Math.round( $(iframe.document).width() ) ) {
-                ____.wIFrame = Math.round( $(iframe.document).width() );
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
+            if( ____.wIFrame === null || ____.wIFrame !== Math.round( $(doc).width() ) ) {
+                ____.wIFrame = Math.round( $(doc).width() );
                 ____._refreshByResizeDocument();
             }
         }, 1000);
@@ -41,23 +46,29 @@ var pixelPerfect = function($container, options) {
     
     this._refreshByScroll = function() {
         var $design = $container.find( " .pp-design" );
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
 
-        if(iframe !== undefined) {
+        if(iframe !== null) {
             $design.find( " .pp-screen-static" ).css({
-                top: "-" + Math.round( $(iframe.window).scrollTop() ) + "px",
-                left: "-" + Math.round( $(iframe.window).scrollLeft() ) + "px"
+                top: "-" + Math.round( $(win).scrollTop() ) + "px",
+                left: "-" + Math.round( $(win).scrollLeft() ) + "px"
             });
         }
     }
     
     this._refreshByResizeDocument = function() {
-        var iframe = window[____._options.nameIFrame];
-        if(iframe !== undefined) {
+        var iframe = document.getElementById(____._options.nameIFrame);
+
+        if(iframe !== null) {
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
+
             var $design = $container.find( " .pp-design" );
 
             $design.find( " .pp-screen-static" ).css({
-                width: Math.round( $(iframe.document).width() )
+                width: Math.round( $(doc).width() )
             });
         }
     }
@@ -245,16 +256,18 @@ var pixelPerfect = function($container, options) {
             $('#'+(____._options.nameIFrame)).contents().find(' .a-pp__bottom-space').remove();
 
             //Хром сохраняет скролл и при возвращении блока сам прокручивает вниз
-            var iframe = window[____._options.nameIFrame];
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
             var hWindow, hDocument, topScroll;
 
-            hWindow = $(iframe.window).height();
-            hDocument = $(iframe.document).height();
-            topScroll = $(iframe.window).scrollTop();
+            hWindow = $(win).height();
+            hDocument = $(doc).height();
+            topScroll = $(win).scrollTop();
 
             if(topScroll >= hDocument - hWindow) {
-                $(iframe.window).scrollTop(0);
-                $(iframe.window).scrollTop(hDocument - hWindow);
+                $(win).scrollTop(0);
+                $(win).scrollTop(hDocument - hWindow);
             }
         }
     }

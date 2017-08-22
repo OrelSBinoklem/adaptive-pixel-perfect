@@ -145,19 +145,21 @@ var pageManagerVisualizator = function($container, sessionModel, options) {
     }
 
     this.setScrollIFrame = function(l_factor, t_factor) {
-        var iframe = window[____._options.nameIFrame];
+        var iframe = document.getElementById(____._options.nameIFrame);
+        var win = iframe.contentWindow || iframe;
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
         var wWindow, wDocument, leftScroll, hWindow, hDocument, topScroll;
 
-        wWindow = $(iframe.window).width();
-        wDocument = $(iframe.document).width();
-        hWindow = $(iframe.window).height();
-        hDocument = $(iframe.document).height();
+        wWindow = $(win).width();
+        wDocument = $(doc).width();
+        hWindow = $(win).height();
+        hDocument = $(doc).height();
 
         leftScroll = Math.round( (wDocument - wWindow) * l_factor );
         topScroll = Math.round( (hDocument - hWindow) * t_factor );
 
-        $(iframe.window).scrollLeft((leftScroll < 0)?0:leftScroll);
-        $(iframe.window).scrollTop((topScroll < 0)?0:topScroll);
+        $(win).scrollLeft((leftScroll < 0)?0:leftScroll);
+        $(win).scrollTop((topScroll < 0)?0:topScroll);
     }
 
     this._create = function() {
