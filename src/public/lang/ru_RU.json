@@ -20,6 +20,13 @@
     "off": "выкл."
   },
 
+  "pp__float-panels-vertical": "Плав. панели положение:",
+  "pp__float-panels-vertical-btn": {
+    "top": "Вверх",
+    "middle": "Центр",
+    "bottom": "Низ"
+  },
+
   "description-sync": {
     "groups-synchronous": "Группы синхронизации:",
     "params-synchronous": "Параметры синхронизации:",

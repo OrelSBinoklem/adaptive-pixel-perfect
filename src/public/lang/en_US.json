@@ -20,6 +20,13 @@
     "off": "off"
   },
 
+  "pp__float-panels-vertical": "Floating panels location:",
+  "pp__float-panels-vertical-btn": {
+    "top": "Top",
+    "middle": "Middle",
+    "bottom": "Bottom"
+  },
+
   "description-sync": {
     "groups-synchronous": "Synchronization groups:",
     "params-synchronous": "Sync params:",

@@ -132,11 +132,15 @@ function setTranslates(lang, data) {
 
     $('.pp__bottom-space-text').text(_l_("pp__bottom-space", t));
     $('.pp__float-panels-text').text(_l_("pp__float-panels", t));
+    $('.pp__float-panels-vertical-text').text(_l_("pp__float-panels-vertical", t));
     $('.bootstrap-toggle').bootstrapToggle('destroy');
     $('.bootstrap-toggle').bootstrapToggle({
         on: _l_("pp__bottom-space-btn|on", t),
         off: _l_("pp__bottom-space-btn|off", t)
     });
+    //$('.settings__float-panels-vertical-btn-top').text(_l_("pp__float-panels-vertical-btn|top", t));
+    //$('.settings__float-panels-vertical-btn-middle').text(_l_("pp__float-panels-vertical-btn|middle", t));
+    //$('.settings__float-panels-vertical-btn-bottom').text(_l_("pp__float-panels-vertical-btn|bottom", t));
     $('.pp__bottom-space-tooltip').attr("data-original-title", _l_("pp__bottom-space-btn|tooltip", t));
     $('.pp__float-panels-tooltip').attr("data-original-title", _l_("pp__float-panels-btn|tooltip", t));
 

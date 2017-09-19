@@ -123,36 +123,34 @@ jQuery(function($) {
             pp__floatPanelsBtn__stop_recursion = true;
 
             //Выравнивание плавающих панелей по вертикали
-            $(".a-pp__panels-top").on("click", function(){
-                if($(".shab__main-menu-container").hasClass("__vertical-center")) {
-                    floatPanelsAlignAddClass("top");
-                    sendFloatPanelsAlign("top");
-                } else {
-                    floatPanelsAlignAddClass("center");
-                    sendFloatPanelsAlign("center");
-                }
+            $(".settings__float-panels-vertical-btn-top").on("click", function(){
+                floatPanelsAlignAddClass("top");
+                sendFloatPanelsAlign("top");
             });
-            $(".a-pp__panels-bottom").on("click", function(){
-                if($(".shab__main-menu-container").hasClass("__vertical-center")) {
-                    floatPanelsAlignAddClass("bottom");
-                    sendFloatPanelsAlign("bottom");
-                } else {
-                    floatPanelsAlignAddClass("center");
-                    sendFloatPanelsAlign("center");
-                }
+            $(".settings__float-panels-vertical-btn-middle").on("click", function(){
+                floatPanelsAlignAddClass("center");
+                sendFloatPanelsAlign("center");
+            });
+            $(".settings__float-panels-vertical-btn-bottom").on("click", function(){
+                floatPanelsAlignAddClass("bottom");
+                sendFloatPanelsAlign("bottom");
             });
 
             function floatPanelsAlignAddClass(state) {
                 $(".shab__main-menu-container").removeClass("__vertical-top __vertical-center __vertical-bottom");
+                $(".settings__float-panels-vertical-btn-top, .settings__float-panels-vertical-btn-middle, .settings__float-panels-vertical-btn-bottom").removeClass("active");
                 switch(state) {
                     case "top":
                         $(".shab__main-menu-container").addClass("__vertical-top");
+                        $(".settings__float-panels-vertical-btn-top").addClass("active");
                         break;
                     case "center":
                         $(".shab__main-menu-container").addClass("__vertical-center");
+                        $(".settings__float-panels-vertical-btn-middle").addClass("active");
                         break;
                     case "bottom":
                         $(".shab__main-menu-container").addClass("__vertical-bottom");
+                        $(".settings__float-panels-vertical-btn-bottom").addClass("active");
                         break;
                 }
                 crossModulesFunctions["refreshCenteredFloatMenu"]();
