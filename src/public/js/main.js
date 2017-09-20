@@ -486,7 +486,7 @@ jQuery(function($) {
                 minHDraggable: 15,
                 minWIFrame: 320,
                 minHIFrame: 480,
-                $dimensions: $(".shab__float-buttons-left-dimensions"),
+                //$dimensions: $(".shab__float-buttons-left-dimensions"),
                 responsiveToMovementOfTheCursorInAConfinedSpace: true,
                 movementOfTheCursorInAConfinedSpaceSpred: 10,
                 factorDraggableGrid: 0.5,
@@ -1059,6 +1059,12 @@ jQuery(function($) {
             });
 
             //Выбор разрешения
+            $(".pp__btn-open-resolutions").on({
+                "mouseenter": function() {$(".pp__resolutions-menu-outer").addClass("_open");},
+                "mouseleave": function() {$(".pp__resolutions-menu-outer").removeClass("_open");}
+            });
+
+            var _temporarilyVisibledTimeout = null;
             $(".pp__resolutions-menu").on("click", " .pp__resolution-name-btn", function(){
                 var $li = $(this).closest(".pp__resolutions-list-item");
 
@@ -1075,6 +1081,19 @@ jQuery(function($) {
                         var n = e.which - 48;
                         var $li = $(".pp__resolutions-list-item[data-n='"+((n == 0)?10:n)+"']");
                         if($li.length) {
+                            //Добавляем класс "active" на 2 сек
+                            if(_temporarilyVisibledTimeout !== null) {
+                                clearTimeout(_temporarilyVisibledTimeout);
+                            }
+
+                            $(".pp__resolutions-menu-outer").addClass("active");
+
+                            _temporarilyVisibledTimeout = setTimeout(function() {
+                                $(".pp__resolutions-menu-outer").removeClass("active");
+                                _temporarilyVisibledTimeout = null;
+                            }, 2000);
+                            //
+
                             handlerSelectResolution($li);
 
                             e = e || window.e; if (e.stopPropagation) {e.stopPropagation()} else {e.cancelBubble = true} e.preventDefault();
@@ -1193,7 +1212,7 @@ jQuery(function($) {
                         html += '<div class="pp__resolutions-list-item-content">' +
                             '<button class="btn btn-default btn-xs btn-block pp__resolution-name-btn '+active+'">' +
                                 '<span class="badge '+((n > 10)?"badge-hidden":"")+'">'+((n > 10)?"":(n == 10)?0:n)+'</span>' +
-                                '<span class="pp__resolution-name-btn-w">'+w+'</span> | <span class="pp__resolution-name-btn-h">'+h+'</span>' +
+                                '<span class="pp__resolution-name-btn-w">'+w+'</span><span class="pp__resolution-name-btn-separator"> | </span><span class="pp__resolution-name-btn-h">'+h+'</span>' +
                             '</button>' +
                             '</div>';
 

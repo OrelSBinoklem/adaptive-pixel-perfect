@@ -51,6 +51,7 @@ The plugin will be available at **http://localhost:3010/?a-pp=1**
 
 | Release | Notes |
 | --- | --- |
+| 0.5.6 | Hidden resolutions menu, show press new button. Hidden sizes iframe |
 | 0.5.5 | Fix escape screenshots of the design in the side and turn off the scroller when reloading browsersync. Fix task sync-thumbnails - add jpeg extension |
 | 0.5.2 | Added new minify-float stile panels |
 | 0.5.0 | Delete fast calibrator styles, simplified style, delete flicker function, transfer btn bottom space in global settings, (window deviation screenshots opacity 0.7, hide other window after show deviation window, deviation window draggable) |

@@ -17,12 +17,14 @@ var resizeIFrame = function($container, options) {
     this._create = function() {
         var $iFrame = $("#"+(____._options.nameIFrame)).contents();
         
-        //$container.append('<div class="rif-show-dimensions panel panel-primary"><div class="panel-body"><span class="rif-width btn btn-default btn-lg">0</span> X <span class="rif-height btn btn-default btn-lg">0</span></div></div>');
+        $container.append('<div class="rif-show-dimensions panel panel-primary"><div class="panel-body"><span class="rif-width btn btn-default btn-lg">0</span> X <span class="rif-height btn btn-default btn-lg">0</span></div></div>');
         
         //Свойства для навигатора
         ____._resize = false;
         ____._cursor_Y = 0;
         ____._cursor_X = 0;
+        ____._fixVisibledDimensions = false;
+        ____._temporarilyVisibledDimensionsTimeout = null;
         
         //Установка обработчиков событий
         $iFrame.find('body').on('mousemove', ____._handlerMove);
@@ -68,12 +70,13 @@ var resizeIFrame = function($container, options) {
             if(!____._resize) {
                 $container.trigger("rifStartResize");
                 //Фиксация в пикселах (чтоб меньше багов при расчётах было) и центрирование
-                /*var $rif = $container.find(" .rif-show-dimensions");
+                var $rif = $container.find(" .rif-show-dimensions");
                 $rif
                 .attr("style", "")
                 .css({display: "block"});
-                var w = $rif.outerWidth();
-                var h = $rif.outerHeight();
+                ____._fixVisibledDimensions = true;
+                var w = Math.ceil($rif.outerWidth() + 1);
+                var h = Math.ceil($rif.outerHeight());
                 var w_c = $container.find(".pmv-outer-wrap").width();
                 var h_c = $container.find(".pmv-outer-wrap").height();
                 
@@ -82,7 +85,7 @@ var resizeIFrame = function($container, options) {
                     height: Math.round( h ),
                     top: Math.round( (h_c - h) / 2 ),
                     left: Math.round( (w_c - w) / 2 ),
-                });*/
+                });
                 
                 ____._resize = true;
                 ____._cursor_X = false;
@@ -98,8 +101,9 @@ var resizeIFrame = function($container, options) {
     //Отпускание клавиш
     this._handlerUp = function(e) {
         if( ____._resize ) {
-            /*var $mnif = $container.find(" .rif-show-dimensions");
-            $mnif.css({display: "none"});*/
+            var $mnif = $container.find(" .rif-show-dimensions");
+            $mnif.css({display: "none"});
+            ____._fixVisibledDimensions = false;
             
             ____._resize = false;
             
@@ -110,6 +114,42 @@ var resizeIFrame = function($container, options) {
     this._handlerResize = function() {
         ____._centerIFrameAndNoEmptySpace();
         ____._reloadShowDimensions();
+    }
+
+    this._showDimensions = function() {
+        //Добавляем класс "active" на 1 сек
+        if(!____._fixVisibledDimensions) {
+            var $mnif = $container.find(" .rif-show-dimensions");
+
+            if(____._temporarilyVisibledDimensionsTimeout !== null) {
+                clearTimeout(____._temporarilyVisibledDimensionsTimeout);
+            }
+
+            if($mnif.is(":hidden")) {
+                console.log("dfdf");
+                $mnif
+                    .attr("style", "")
+                    .css({display: "block"});
+                var w = Math.ceil($mnif.outerWidth() + 1);
+                var h = Math.ceil($mnif.outerHeight());
+                var w_c = $container.find(".pmv-outer-wrap").width();
+                var h_c = $container.find(".pmv-outer-wrap").height();
+
+                $mnif.css({
+                    width: Math.round( w ),
+                    height: Math.round( h ),
+                    top: Math.round( (h_c - h) / 2 ),
+                    left: Math.round( (w_c - w) / 2 ),
+                });
+            }
+            $mnif.css({display: "block"});
+
+            ____._temporarilyVisibledDimensionsTimeout = setTimeout(function() {
+                $mnif.css({display: "none"});
+                ____._temporarilyVisibledDimensionsTimeout = null;
+            }, 1000);
+        }
+        //
     }
     
     //Центрирование iFrame при ресайзе если он меньше контейнера, а также если рамер iFrame больше чем размер контенера то правый край лепим к правому и нижний к нижнему чтобы небыло пустого пространства
@@ -156,8 +196,13 @@ var resizeIFrame = function($container, options) {
         var w =   $fittingWrap.width();
         var h =   $fittingWrap.height();
 
-        ____._options.$dimensions.find(" .rif-width").text( Math.round( w ) );
-        ____._options.$dimensions.find(" .rif-height").text( Math.round( h ) );
+        //____._options.$dimensions.find(" .rif-width").text( Math.round( w ) );
+        //____._options.$dimensions.find(" .rif-height").text( Math.round( h ) );
+        var $rif = $container.find(" .rif-show-dimensions");
+        $rif.find(" .rif-width").text( Math.round( w ) );
+        $rif.find(" .rif-height").text( Math.round( h ) );
+
+        ____._showDimensions();
     }
     
     //Обновление размеров IFrame
