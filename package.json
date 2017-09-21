@@ -1,6 +1,6 @@
 {
   "name": "adaptive-pixel-perfect",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Pixel perfect for multiple resolutions",
   "main": "index.js",
   "repository": {
@@ -12,6 +12,7 @@
   },
   "files": [
     "index.js",
+    "settings.js",
     "lib",
     "public",
     "default-settings"
