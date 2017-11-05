@@ -1,11 +1,13 @@
 (function($){//Модули: 
 //Скролл лучше неуменьшать оно и так идёт поверх контента
+//Недостаток - плагин определяет скрыт скролл или нет по классам в боди и атрибуту style overflow: hidden
 var defaultOptions = {
     nameIFrame: "",
     pixelsScrollableInSeconds: 2000,
     minWOuterScroll: 23,
     minHOuterScroll: 23,
-    permanentVisible: true
+    permanentVisible: true,
+    lookClasses: []
 };
 
 var customScrollIFrame = function($container, options) {
@@ -13,7 +15,7 @@ var customScrollIFrame = function($container, options) {
     var ____ = this;
 
     //хак для плавности скролла в ie11
-    ____.$fix_animate = $( '<div class="csif-fix-animate"></div>' );
+    ____.$fix_animate = $('<div class="csif-fix-animate"></div>');
     
     this._create = function() {
         //Вставка HTML скроллов
@@ -28,7 +30,10 @@ var customScrollIFrame = function($container, options) {
                 }\n\
             </style>\n\
         ');
-        $iFrame.find(' body').css({overflow: "hidden"});
+
+        //Проверять скрывают ли скролл плагины
+        ____.look = false;
+        ____.lookInterval = setInterval(____.checkLook, 100);
         
         //Свойства для ползунков
         ____._Y_Scrollable = false;
@@ -74,6 +79,8 @@ var customScrollIFrame = function($container, options) {
     
     this._destroy = function() {
         var $iFrame = $('#'+(____._options.nameIFrame)).contents();
+
+        if(____.lookInterval !== undefined) {clearInterval(____.lookInterval)}
         
         $container.find(" .csif-outer-scroll-v").remove();
         $container.find(" .csif-outer-scroll-g").remove();
@@ -124,6 +131,29 @@ var customScrollIFrame = function($container, options) {
             </div>\n\
             <div class="csif-square"></div>\n\
         ');
+    }
+
+    //Блокировка скролла если какойто плагин установил свойство overflow в "hidden" для тега body
+    this.checkLook = function() {
+        var lookOld = ____.look;
+        ____.look = false;
+
+        var $body = $('#'+(____._options.nameIFrame)).contents().find('body');
+        for(var i in ____._options.lookClasses) {
+            ____.look = ____.look || $body.hasClass(____._options.lookClasses[i]);
+            if(____.look) {
+                break;
+            }
+        }
+        if($body.attr('style') !== undefined && $body.attr('style') !== null) {
+            ____.look = ____.look || /overflow:\s*hidden\s*;/gi.test($body.attr('style'));
+        }
+
+        if(lookOld !== ____.look) {
+            $container.find(" .csif-outer-scroll-v").toggleClass("csif-look", ____.look);
+            $container.find(" .csif-outer-scroll-g").toggleClass("csif-look", ____.look);
+            $container.find(" .csif-square").toggleClass("csif-look", ____.look);
+        }
     }
     
     //Обновление ползунков "Внешнего скролла"
@@ -249,182 +279,191 @@ var customScrollIFrame = function($container, options) {
     
     //Обновление скрытого скролла в IFrame
     this._handlerMove = function(e) {
-        if( ____._Y_Scrollable || ____._X_Scrollable )
-        {
-            var iframe = document.getElementById(____._options.nameIFrame);
-            var win = iframe.contentWindow || iframe;
-            var doc = iframe.contentDocument || iframe.contentWindow.document;
-            var $iframe = $("#"+(____._options.nameIFrame)).contents();
-            var wWindow, hWindow, wDocument, hDocument, topScroll, leftScroll,
-            wOuterScroll, hOuterScroll, hConOuterScroll, wConOuterScroll,
-            resTopScroll, resLeftScroll, oneStepVertical, oneStepGorizontal;
-            
-            wWindow = $(win).width();
-            hWindow = $(win).height();
-            wDocument = $(doc).width();
-            hDocument = $(doc).height();
-            
-            //Узнаем прокрутку
-            topScroll = $(win).scrollTop();
-            leftScroll = $(win).scrollLeft();
-            //==========
-            
-            hConOuterScroll = $container.find(' .csif-outer-scroll-v .scrolling-container').height();
-            wConOuterScroll = $container.find(' .csif-outer-scroll-g .scrolling-container').width();
-            
-            //Вычисляем размеры элементов "за которые можно прокручивать" на внешнем скролле и отступы для смешения чтоб показать насколько прокручена страница
-            hOuterScroll = hWindow / hDocument * hConOuterScroll;
-            if(hOuterScroll < ____._options.minHOuterScroll)
-            {
-                hOuterScroll = ____._options.minHOuterScroll;
-            }
-            
-            wOuterScroll = wWindow / wDocument * wConOuterScroll;
-            if(wOuterScroll < ____._options.minWOuterScroll)
-            {
-                wOuterScroll = ____._options.minWOuterScroll;
-            }
-            //==========
-            if(____._Y_Scrollable)
-            {
-                oneStepVertical = (hDocument - hWindow) / (hConOuterScroll - hOuterScroll);
-                resTopScroll = Math.round((e.screenY - ____._cursor_Y) * oneStepVertical + ____._topScrollIFrameTemp);
-                if(resTopScroll < 0)
+        if(!____.look) {
+            if( ____._Y_Scrollable || ____._X_Scrollable ) {
+                var iframe = document.getElementById(____._options.nameIFrame);
+                var win = iframe.contentWindow || iframe;
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+                var $iframe = $("#"+(____._options.nameIFrame)).contents();
+                var wWindow, hWindow, wDocument, hDocument, topScroll, leftScroll,
+                    wOuterScroll, hOuterScroll, hConOuterScroll, wConOuterScroll,
+                    resTopScroll, resLeftScroll, oneStepVertical, oneStepGorizontal;
+
+                wWindow = $(win).width();
+                hWindow = $(win).height();
+                wDocument = $(doc).width();
+                hDocument = $(doc).height();
+
+                //Узнаем прокрутку
+                topScroll = $(win).scrollTop();
+                leftScroll = $(win).scrollLeft();
+                //==========
+
+                hConOuterScroll = $container.find(' .csif-outer-scroll-v .scrolling-container').height();
+                wConOuterScroll = $container.find(' .csif-outer-scroll-g .scrolling-container').width();
+
+                //Вычисляем размеры элементов "за которые можно прокручивать" на внешнем скролле и отступы для смешения чтоб показать насколько прокручена страница
+                hOuterScroll = hWindow / hDocument * hConOuterScroll;
+                if(hOuterScroll < ____._options.minHOuterScroll)
                 {
-                    resTopScroll = 0;
+                    hOuterScroll = ____._options.minHOuterScroll;
                 }
-                if(resTopScroll > hDocument - hWindow)
+
+                wOuterScroll = wWindow / wDocument * wConOuterScroll;
+                if(wOuterScroll < ____._options.minWOuterScroll)
                 {
-                    resTopScroll = hDocument - hWindow;
+                    wOuterScroll = ____._options.minWOuterScroll;
                 }
-    			$(win).scrollTop(resTopScroll);
-                $container.trigger("csif.scroll");
-            }
-            
-            if(____._X_Scrollable)
-            {
-                oneStepGorizontal = (wDocument - wWindow) / (wConOuterScroll - wOuterScroll);
-                resLeftScroll = Math.round((e.screenX - ____._cursor_X) * oneStepGorizontal + ____._leftScrollIFrameTemp);
-                if(resLeftScroll < 0)
+                //==========
+                if(____._Y_Scrollable)
                 {
-                    resLeftScroll = 0;
+                    oneStepVertical = (hDocument - hWindow) / (hConOuterScroll - hOuterScroll);
+                    resTopScroll = Math.round((e.screenY - ____._cursor_Y) * oneStepVertical + ____._topScrollIFrameTemp);
+                    if(resTopScroll < 0)
+                    {
+                        resTopScroll = 0;
+                    }
+                    if(resTopScroll > hDocument - hWindow)
+                    {
+                        resTopScroll = hDocument - hWindow;
+                    }
+                    $(win).scrollTop(resTopScroll);
+                    $container.trigger("csif.scroll");
                 }
-                if(resLeftScroll > wDocument - wWindow)
+
+                if(____._X_Scrollable)
                 {
-                    resLeftScroll = wDocument - wWindow;
+                    oneStepGorizontal = (wDocument - wWindow) / (wConOuterScroll - wOuterScroll);
+                    resLeftScroll = Math.round((e.screenX - ____._cursor_X) * oneStepGorizontal + ____._leftScrollIFrameTemp);
+                    if(resLeftScroll < 0)
+                    {
+                        resLeftScroll = 0;
+                    }
+                    if(resLeftScroll > wDocument - wWindow)
+                    {
+                        resLeftScroll = wDocument - wWindow;
+                    }
+                    $(win).scrollLeft(resLeftScroll);
+                    $container.trigger("csif.scroll");
                 }
-    			$(win).scrollLeft(resLeftScroll);
-                $container.trigger("csif.scroll");
             }
         }
     }
     
     //Верхняя стрелочка
     this._handlerArrowTop = function() {
-        var iframe = document.getElementById(____._options.nameIFrame);
-        var win = iframe.contentWindow || iframe;
-        
-        $(this).addClass('active');
-        
-        var topScroll = $(win).scrollTop();
+        if(!____.look) {
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
 
-        ____.$fix_animate.css({top: topScroll});
-        ____.$fix_animate.stop().animate({top: 0}, //По нормальному чтото она непашет - пришлось через зад делать...
-        {
-            duration: Math.round(topScroll / ____._options.pixelsScrollableInSeconds * 1000),
-            easing: "linear",
-            complete: function(){
-				$(win).scrollTop(0);
-                $container.trigger("csif.scroll");
-            },
-            step: function(now,fx){
-				$(win).scrollTop(now);
-                $container.trigger("csif.scroll");
-            }
-        });
+            $(this).addClass('active');
+
+            var topScroll = $(win).scrollTop();
+
+            ____.$fix_animate.css({top: topScroll});
+            ____.$fix_animate.stop().animate({top: 0}, //По нормальному чтото она непашет - пришлось через зад делать...
+                {
+                    duration: Math.round(topScroll / ____._options.pixelsScrollableInSeconds * 1000),
+                    easing: "linear",
+                    complete: function(){
+                        $(win).scrollTop(0);
+                        $container.trigger("csif.scroll");
+                    },
+                    step: function(now,fx){
+                        $(win).scrollTop(now);
+                        $container.trigger("csif.scroll");
+                    }
+                });
+        }
     }
     
     //Нижняя стрелочка
     this._handlerArrowBottom = function() {
-        var iframe = document.getElementById(____._options.nameIFrame);
-        var win = iframe.contentWindow || iframe;
-        var doc = iframe.contentDocument || iframe.contentWindow.document;
-        $(this).addClass('active');
-        var hWindow, hDocument, topScroll;
-        
-        hWindow = $(win).height();
-        hDocument = $(doc).height();
-        topScroll = $(win).scrollTop();
-        
-		var resTopScroll = hDocument - hWindow;
+        if(!____.look) {
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
+            $(this).addClass('active');
+            var hWindow, hDocument, topScroll;
 
-        ____.$fix_animate.css({top: topScroll});
-        ____.$fix_animate.stop().animate({top: resTopScroll},
-        {
-            duration: Math.round((hDocument - hWindow - topScroll) / ____._options.pixelsScrollableInSeconds * 1000),
-            easing: "linear",
-            complete: function(){
-				$(win).scrollTop(resTopScroll);
-                $container.trigger("csif.scroll");
-            },
-            step: function(now,fx){
-				$(win).scrollTop(now);
-                $container.trigger("csif.scroll");
-            }
-        });
+            hWindow = $(win).height();
+            hDocument = $(doc).height();
+            topScroll = $(win).scrollTop();
+
+            var resTopScroll = hDocument - hWindow;
+
+            ____.$fix_animate.css({top: topScroll});
+            ____.$fix_animate.stop().animate({top: resTopScroll},
+                {
+                    duration: Math.round((hDocument - hWindow - topScroll) / ____._options.pixelsScrollableInSeconds * 1000),
+                    easing: "linear",
+                    complete: function(){
+                        $(win).scrollTop(resTopScroll);
+                        $container.trigger("csif.scroll");
+                    },
+                    step: function(now,fx){
+                        $(win).scrollTop(now);
+                        $container.trigger("csif.scroll");
+                    }
+                });
+        }
     }
     //Левая стрелочка
     this._handlerArrowLeft = function() {
-        var iframe = document.getElementById(____._options.nameIFrame);
-        var win = iframe.contentWindow || iframe;
-        $(this).addClass('active');
-        
-        var leftScroll = $(win).scrollLeft();
+        if(!____.look) {
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            $(this).addClass('active');
 
-        ____.$fix_animate.css({left: leftScroll});
-        ____.$fix_animate.stop().animate({left: 0},
-        {
-            duration: Math.round(leftScroll / ____._options.pixelsScrollableInSeconds * 1000),
-            easing: "linear",
-            complete: function(){
-				$(win).scrollLeft(0);
-                $container.trigger("csif.scroll");
-            },
-            step: function(now,fx){
-				$(win).scrollLeft(now);
-                $container.trigger("csif.scroll");
-            }
-        });
+            var leftScroll = $(win).scrollLeft();
+
+            ____.$fix_animate.css({left: leftScroll});
+            ____.$fix_animate.stop().animate({left: 0},
+                {
+                    duration: Math.round(leftScroll / ____._options.pixelsScrollableInSeconds * 1000),
+                    easing: "linear",
+                    complete: function(){
+                        $(win).scrollLeft(0);
+                        $container.trigger("csif.scroll");
+                    },
+                    step: function(now,fx){
+                        $(win).scrollLeft(now);
+                        $container.trigger("csif.scroll");
+                    }
+                });
+        }
     }
 
     //Правая стрелочка
     this._handlerArrowRight = function() {
-        var iframe = document.getElementById(____._options.nameIFrame);
-        var win = iframe.contentWindow || iframe;
-        var doc = iframe.contentDocument || iframe.contentWindow.document;
-        $(this).addClass('active');
-        var wWindow, wDocument, leftScroll;
-        
-        wWindow = $(win).width();
-        wDocument = $(doc).width();
-        leftScroll = $(win).scrollLeft();
-        
-		var resLeftScroll = wDocument - wWindow;
+        if(!____.look) {
+            var iframe = document.getElementById(____._options.nameIFrame);
+            var win = iframe.contentWindow || iframe;
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
+            $(this).addClass('active');
+            var wWindow, wDocument, leftScroll;
 
-        ____.$fix_animate.css({left: leftScroll});
-        ____.$fix_animate.stop().animate({left: resLeftScroll},
-        {
-            duration: Math.round((wDocument - wWindow - leftScroll) / ____._options.pixelsScrollableInSeconds * 1000),
-            easing: "linear",
-            complete: function(){
-				$(win).scrollLeft(resLeftScroll);
-                $container.trigger("csif.scroll");
-            },
-            step: function(now,fx){
-				$(win).scrollLeft(now);
-                $container.trigger("csif.scroll");
-            }
-        });
+            wWindow = $(win).width();
+            wDocument = $(doc).width();
+            leftScroll = $(win).scrollLeft();
+
+            var resLeftScroll = wDocument - wWindow;
+
+            ____.$fix_animate.css({left: leftScroll});
+            ____.$fix_animate.stop().animate({left: resLeftScroll},
+                {
+                    duration: Math.round((wDocument - wWindow - leftScroll) / ____._options.pixelsScrollableInSeconds * 1000),
+                    easing: "linear",
+                    complete: function(){
+                        $(win).scrollLeft(resLeftScroll);
+                        $container.trigger("csif.scroll");
+                    },
+                    step: function(now,fx){
+                        $(win).scrollLeft(now);
+                        $container.trigger("csif.scroll");
+                    }
+                });
+        }
     }
     
     //Убрать мышку со стрелочки
@@ -437,70 +476,72 @@ var customScrollIFrame = function($container, options) {
     this._mouseWheelAnimated = false;
     this._tempWheelAnimated = 0;
     this._handlerMouseWheel = function(e) {
-        if(____._options.nameIFrame in window) {
-            var deltaY;
-            if("mozMovementY" in e.originalEvent) {
-                deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
-                deltaY *= 40;
-            } else if( /rv\:11/.test(navigator.userAgent) ) {
-                if( (e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta) > 0 ) {
-                    deltaY = 120;
-                } else {
-                    deltaY = -120;
-                }
-            } else if( /Firefox\//.test(navigator.userAgent) ) {
-                deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
-                deltaY *= 40;
-            } else {
-                deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
-                if(Math.abs(deltaY) < 50) {
-                    deltaY *= 120;
-                }
-            }
-            
-            var iframe = document.getElementById(____._options.nameIFrame);
-            var win = iframe.contentWindow || iframe;
-
-            topScroll = $(win).scrollTop();
-            if( ____._mouseWheelAnimated ) {
-                //Если пользователь резко начал крутить в другую сторону
-                if(sign(____._tempWheelAnimated - topScroll) !== sign(deltaY)) {//IE НЕПОТДЕРЖИВАЕТ "Math.sign"
-                    ____._tempWheelAnimated = topScroll + deltaY;
-                } else {
-                    ____._tempWheelAnimated += deltaY;
-                }
-            } else {
-                ____._tempWheelAnimated = topScroll + deltaY;
-            }
-            function sign(number) {
-                if( number > 0 ) {
-                    return 1;
-                } else if( number === 0 ) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            }
-
-            ____._mouseWheelAnimated = true;
-
-            ____.$fix_animate.css({top: topScroll});
-            ____.$fix_animate.stop().animate({top: ____._tempWheelAnimated},
-                {
-                    duration: 100,
-                    easing: "linear",
-                    complete: function(){
-                        $(win).scrollTop(____._tempWheelAnimated);
-                        ____._mouseWheelAnimated = false;
-
-                        $container.trigger("csif.scroll");
-                    },
-                    step: function(now,fx){
-                        $(win).scrollTop(now);
-
-                        $container.trigger("csif.scroll");
+        if(!____.look) {
+            if(____._options.nameIFrame in window) {
+                var deltaY;
+                if("mozMovementY" in e.originalEvent) {
+                    deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
+                    deltaY *= 40;
+                } else if( /rv\:11/.test(navigator.userAgent) ) {
+                    if( (e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta) > 0 ) {
+                        deltaY = 120;
+                    } else {
+                        deltaY = -120;
                     }
-                });
+                } else if( /Firefox\//.test(navigator.userAgent) ) {
+                    deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
+                    deltaY *= 40;
+                } else {
+                    deltaY = e.originalEvent.deltaY || -1 * e.originalEvent.wheelDelta;
+                    if(Math.abs(deltaY) < 50) {
+                        deltaY *= 120;
+                    }
+                }
+
+                var iframe = document.getElementById(____._options.nameIFrame);
+                var win = iframe.contentWindow || iframe;
+
+                topScroll = $(win).scrollTop();
+                if( ____._mouseWheelAnimated ) {
+                    //Если пользователь резко начал крутить в другую сторону
+                    if(sign(____._tempWheelAnimated - topScroll) !== sign(deltaY)) {//IE НЕПОТДЕРЖИВАЕТ "Math.sign"
+                        ____._tempWheelAnimated = topScroll + deltaY;
+                    } else {
+                        ____._tempWheelAnimated += deltaY;
+                    }
+                } else {
+                    ____._tempWheelAnimated = topScroll + deltaY;
+                }
+                function sign(number) {
+                    if( number > 0 ) {
+                        return 1;
+                    } else if( number === 0 ) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                }
+
+                ____._mouseWheelAnimated = true;
+
+                ____.$fix_animate.css({top: topScroll});
+                ____.$fix_animate.stop().animate({top: ____._tempWheelAnimated},
+                    {
+                        duration: 100,
+                        easing: "linear",
+                        complete: function(){
+                            $(win).scrollTop(____._tempWheelAnimated);
+                            ____._mouseWheelAnimated = false;
+
+                            $container.trigger("csif.scroll");
+                        },
+                        step: function(now,fx){
+                            $(win).scrollTop(now);
+
+                            $container.trigger("csif.scroll");
+                        }
+                    });
+            }
         }
     }
 }

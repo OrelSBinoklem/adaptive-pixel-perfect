@@ -9,6 +9,8 @@
     box-sizing: border-box
     background-color: #bbb
     overflow: hidden
+    &.csif-look
+        display: none
 
 =user-select-none()
     -moz-user-select: none
@@ -20,6 +22,8 @@
 
 .csif-outer-scroll
     &-v, &-g
+        &.csif-look
+            display: none
         +user-select-none()
         *
             +user-select-none()

@@ -126,7 +126,6 @@ var resizeIFrame = function($container, options) {
             }
 
             if($mnif.is(":hidden")) {
-                console.log("dfdf");
                 $mnif
                     .attr("style", "")
                     .css({display: "block"});

@@ -482,6 +482,7 @@ jQuery(function($) {
                 minWOuterScroll: 16,
                 minHOuterScroll: 16,
                 permanentVisible: true,
+                lookClasses: ['modal-open', 'is-reveal-open', 'dimmed'],
                 minWDraggable: 15,
                 minHDraggable: 15,
                 minWIFrame: 320,
